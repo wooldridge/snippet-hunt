@@ -38,5 +38,29 @@
   <source src="audio/error.wav" type="audio/wav">
 </audio>
 
+<script>
+$(function () {
+
+  var APP = APP || {};
+
+  var config = {};
+
+  navigator.geolocation.getCurrentPosition(function (position) {
+    var myLat = position.coords.latitude;
+    var myLon = position.coords.longitude;
+    var config = {};
+    APP.admin = new APP.Admin(config);
+    APP.admin.getConfig();
+    APP.game = new APP.Game(config);
+    admin.displayForm();
+  });
+
+  APP.admin = new APP.Admin()
+  APP.game = new APP.Game(config);
+  APP.game.initialize();
+
+});
+</script>
+
 </body>
 </html>

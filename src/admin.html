@@ -62,6 +62,8 @@
 <script>
 $(function () {
 
+  var APP = APP || {};
+
   navigator.geolocation.getCurrentPosition(function (position) {
     var myLat = position.coords.latitude;
     var myLon = position.coords.longitude;
@@ -75,8 +77,8 @@ $(function () {
       numThings: 10,
       mapStyle: 'retro'
     };
-    var admin = new APP.Admin(config);
-    admin.displayForm();
+    APP.admin = new APP.Admin(config);
+    APP.admin.displayForm();
   });
 
 });
