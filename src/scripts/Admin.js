@@ -19,7 +19,8 @@ APP.Admin = function (config) {
       lon2,
       map,
       mapOptions,
-      mapBounds,
+      rectBounds,
+      gameBounds,
       rectangle,
       ne,
       sw,
@@ -80,7 +81,7 @@ APP.Admin = function (config) {
         mapOptions);
 
     // Configure and draw rectangle overlay
-    mapBounds = new google.maps.LatLngBounds(
+    rectBounds = new google.maps.LatLngBounds(
       new google.maps.LatLng(lat1, lon1),
       new google.maps.LatLng(lat2, lon2)
     );
@@ -91,7 +92,7 @@ APP.Admin = function (config) {
       strokeWeight: 3,
       fillColor: '#CCCCCC',
       fillOpacity: 0.25,
-      bounds: mapBounds,
+      bounds: rectBounds,
       editable: true,
       draggable: true
     });
@@ -197,12 +198,12 @@ APP.Admin = function (config) {
   /**
    * Create one or more Things.
    * @param num Number of Things to add (optional)
-   * @param bounds Game bounds
+   * @param gameBounds Game bounds
    */
-  addThings = function (num, bounds) {
+  addThings = function (num, gameBounds) {
       var thing;
       config = { id: nextId };
-      thing = new APP.Thing(config, bounds);
+      thing = new APP.Thing(config, gameBounds);
       nextId++;
       var url = 'http://' + mlhost + ':' + mlport + '/v1/documents?uri=' + thing.getId();
       var json = {
@@ -222,12 +223,12 @@ APP.Admin = function (config) {
           }
       }).done(function (data) {
           console.log('Thing posted: ' + json);
+          num--;
           if (num === 0) {
               console.log('Triggering addThingsDone');
               $('#' + mapConfig.id).trigger('addThingsDone');
           } else {
-              num--;
-              addThings(num, bounds);
+              addThings(num, gameBounds);
           }
       }).error(function (data) {
           console.log(data);
@@ -239,8 +240,17 @@ APP.Admin = function (config) {
    */
   $('#adminForm button').click(function (ev) {
     console.log('submit clicked');
+    ev.preventDefault();
+    ev.stopPropagation();
     setConfig();
-    addThings(numThings, mapBounds);
+    var boundsConfig = {
+      lat1: lat1,
+      lon1: lon1,
+      lat2: lat2,
+      lon2: lon2
+    };
+    gameBounds = APP.Bounds(boundsConfig);
+    addThings($('#numThings').val(), gameBounds);
     return false;
   });
 
