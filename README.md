@@ -2,8 +2,8 @@
 
 AR Game is an augmented reality game played on a Google Map.
 
-In the game, the user explores a map of the local world and interacts
-with items overlaid on the map.
+The user explores a map of the local world and interacts with items
+overlaid on the map.
 
 The game uses *MarkLogic Server* as a database, *NodeJS* for server-side
 scripting, and *jQuery* and the *Google Maps JavaScript API v3* for client-side
@@ -23,9 +23,9 @@ at: `http://localhost:8000/appservices/`
 4. In the root directory, run `npm install` to load dependencies.
 5. In the `options` directory, run `node options` to define search options for
 the REST server.
-6. In the root directory, start the middle-tier NodeJS Express server to serve
-the application and handle REST calls: `node server`
-6. In a web browser, open the project, e.g.: `http://localhost:9055`
+6. In the root directory, run `node server` to start the middle-tier NodeJS Express
+server to serve the application and handle REST calls.
+6. In a web browser, open the project: `http://localhost:9055`
 7. When the browser asks for permission to access location information, allow
 it.
-8. You can edit server settings in `config.js`.
+8. You can edit server settings here: `config.js`
