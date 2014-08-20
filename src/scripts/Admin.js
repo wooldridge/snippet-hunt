@@ -31,13 +31,13 @@ APP.Admin = function (config) {
       config,
       url,
       json,
+      nextId,
 
       // methods
-      setMeas,
+      displayForm,
       setConfig,
       getConfig,
-      handleSubmit,
-      displayForm;
+      addThings;
 
   // initialize
   config = config || {};
@@ -56,6 +56,7 @@ APP.Admin = function (config) {
   lat2 = config.lat2 || 0;
   lon2 = config.lon2 || 0;
   mapStyle = config.mapStyle || styleIds[0];
+  nextId = config.nextId || 1001;
 
   /**
    * Display admin form.
@@ -193,9 +194,53 @@ APP.Admin = function (config) {
     });
   }
 
+  /**
+   * Create one or more Things.
+   * @param num Number of Things to add (optional)
+   * @param bounds Game bounds
+   */
+  addThings = function (num, bounds) {
+      var thing;
+      config = { id: nextId };
+      thing = new APP.Thing(config, bounds);
+      nextId++;
+      var url = 'http://' + mlhost + ':' + mlport + '/v1/documents?uri=' + thing.getId();
+      var json = {
+          id: thing.getId(),
+          lat: thing.getLat(),
+          lon: thing.getLon()
+      };
+      json = JSON.stringify(json);
+      $.ajax({
+          type: 'PUT',
+          url: url,
+          data: json,
+          // IMPORTANT: Do not set 'dataType: "json"' since REST server
+          // returns an empty body on success, which is invalid JSON
+          headers: {
+              'content-type': 'application/json'
+          }
+      }).done(function (data) {
+          console.log('Thing posted: ' + json);
+          if (num === 0) {
+              console.log('Triggering addThingsDone');
+              $('#' + mapConfig.id).trigger('addThingsDone');
+          } else {
+              num--;
+              addThings(num, bounds);
+          }
+      }).error(function (data) {
+          console.log(data);
+      });
+  };
+
+  /**
+   * Handle form submit.
+   */
   $('#adminForm button').click(function (ev) {
     console.log('submit clicked');
     setConfig();
+    addThings(numThings, mapBounds);
     return false;
   });
 
