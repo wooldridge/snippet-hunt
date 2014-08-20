@@ -17,8 +17,8 @@
 <script type="text/javascript" src="scripts/Game.js"></script>
 <script type="text/javascript" src="scripts/Map.js"></script>
 <script type="text/javascript" src="scripts/MapStyles.js"></script>
-<script type="text/javascript" src="scripts/Utils.js"></script>
-<script type="text/javascript" src="scripts/admin.js"></script>
+<script type="text/javascript" src="scripts/Thing.js"></script>
+<script type="text/javascript" src="scripts/Admin.js"></script>
 </head>
 <body>
 
@@ -61,8 +61,6 @@
 
 <script>
 $(function () {
-
-  var APP = APP || {};
 
   navigator.geolocation.getCurrentPosition(function (position) {
     var myLat = position.coords.latitude;
