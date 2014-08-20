@@ -23,6 +23,7 @@ APP.Thing = function (config, gameBounds) {
         getDistBetwPoints,
         deg2rad,
         lateId,
+        getMarker,
         showMarker;
 
     // initialize properties
@@ -107,11 +108,21 @@ APP.Thing = function (config, gameBounds) {
       }, 1000);
     }
 
+    getMarker = function () {
+      if (marker) {
+        return marker;
+      } else {
+        return null;
+      }
+    }
+
     /**
      * Show a Thing marker on a Google Map
+     * @param map The Google Map
+     * @param {boolean} interactive Add event handling (true or false)
      * @returns The longitude
      */
-    showMarker = function (map) {
+    showMarker = function (map, interactive) {
         var pos = new google.maps.LatLng(getLat(), getLon());
         marker = new google.maps.Marker({
           position: pos,
@@ -120,37 +131,39 @@ APP.Thing = function (config, gameBounds) {
           title: getLat().toString()+', '+getLon(),
           icon: 'images/coin.png'
         });
-        google.maps.event.addListener(marker, 'click', function(ev) {
-          var player = APP.map.getPlayer();
-          var dist = getDistBetwPoints(
-            getLat(),
-            getLon(),
-            player.position.k,
-            player.position.B
-          );
-          marker.setIcon('images/coin_flipped.png')
-          var msg;
-          if (dist * 1000 > limit) {
-            msg = 'Thing not in range';
-            var errorAudio = $("#errorAudio")[0];
-            errorAudio.play();
-            setTimeout(function() {
-              marker.setIcon('images/coin.png')
-            }, 500);
-            $('#msg').show().html('Out of range').fadeOut(1000);
-          } else {
-            msg = 'Thing in range';
-            var okAudio = $("#okAudio")[0];
-            okAudio.play();
-            setTimeout(function() {
-              marker.setMap(null);
-            }, 200);
-            $('#msg').show().html('Coin collected').fadeOut(1000);
-            APP.game.changeScore(1);
-            APP.game.displayScore();
-          }
-          console.log(msg);
-        });
+        if (interactive !== false) {
+          google.maps.event.addListener(marker, 'click', function(ev) {
+            var player = APP.map.getPlayer();
+            var dist = getDistBetwPoints(
+              getLat(),
+              getLon(),
+              player.position.k,
+              player.position.B
+            );
+            marker.setIcon('images/coin_flipped.png')
+            var msg;
+            if (dist * 1000 > limit) {
+              msg = 'Thing not in range';
+              var errorAudio = $("#errorAudio")[0];
+              errorAudio.play();
+              setTimeout(function() {
+                marker.setIcon('images/coin.png')
+              }, 500);
+              $('#msg').show().html('Out of range').fadeOut(1000);
+            } else {
+              msg = 'Thing in range';
+              var okAudio = $("#okAudio")[0];
+              okAudio.play();
+              setTimeout(function() {
+                marker.setMap(null);
+              }, 200);
+              $('#msg').show().html('Coin collected').fadeOut(1000);
+              APP.game.changeScore(1);
+              APP.game.displayScore();
+            }
+            console.log(msg);
+          });
+        }
     };
 
     // Public API
@@ -160,8 +173,10 @@ APP.Thing = function (config, gameBounds) {
         getLat: getLat,
         getLon: getLon,
         getDistBetwPoints: getDistBetwPoints,
+        getMarker: getMarker,
         showMarker: showMarker,
-        limit: limit
+        limit: limit,
+        marker: marker
     };
 
 };

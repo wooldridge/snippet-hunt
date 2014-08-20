@@ -33,12 +33,16 @@ APP.Admin = function (config) {
       url,
       json,
       nextId,
+      thing,
+      things,
+      allMarkers,
 
       // methods
       displayForm,
       setConfig,
       getConfig,
-      addThings;
+      addThings,
+      clearThings;
 
   // initialize
   config = config || {};
@@ -58,6 +62,8 @@ APP.Admin = function (config) {
   lon2 = config.lon2 || 0;
   mapStyle = config.mapStyle || styleIds[0];
   nextId = config.nextId || 1001;
+  things = [];
+  allMarkers = [];
 
   /**
    * Display admin form.
@@ -201,9 +207,9 @@ APP.Admin = function (config) {
    * @param gameBounds Game bounds
    */
   addThings = function (num, gameBounds) {
-      var thing;
       config = { id: nextId };
       thing = new APP.Thing(config, gameBounds);
+      things.push(thing);
       nextId++;
       var url = 'http://' + mlhost + ':' + mlport + '/v1/documents?uri=' + thing.getId();
       var json = {
@@ -226,7 +232,7 @@ APP.Admin = function (config) {
           num--;
           if (num === 0) {
               console.log('Triggering addThingsDone');
-              $('#' + mapConfig.id).trigger('addThingsDone');
+              $('#map-canvas-admin').trigger('addThingsDone');
           } else {
               addThings(num, gameBounds);
           }
@@ -234,6 +240,15 @@ APP.Admin = function (config) {
           console.log(data);
       });
   };
+
+  clearThings = function () {
+    for (var i = 0; i < things.length; i++) {
+      var m = things[i].getMarker();
+      m.setMap(null);
+      things[i].marker = null;
+    }
+    things = [];
+  }
 
   /**
    * Handle form submit.
@@ -244,13 +259,19 @@ APP.Admin = function (config) {
     ev.stopPropagation();
     setConfig();
     var boundsConfig = {
-      lat1: lat1,
-      lon1: lon1,
-      lat2: lat2,
-      lon2: lon2
+      lat1: parseFloat($('#lat1').val()),
+      lon1: parseFloat($('#lon1').val()),
+      lat2: parseFloat($('#lat2').val()),
+      lon2: parseFloat($('#lon2').val())
     };
     gameBounds = APP.Bounds(boundsConfig);
+    clearThings();
     addThings($('#numThings').val(), gameBounds);
+    $('#map-canvas-admin').on('addThingsDone', function () {
+      for (var i = 0; i < things.length; i++) {
+        things[i].showMarker(map, false);
+      }
+    });
     return false;
   });
 
