@@ -1,0 +1,36 @@
+User: A user in the environment that can interact with objects
+	name
+	id
+	lat
+	long
+	score
+	
+Object: An item in the environment that can be interacted upon by users
+	name
+	id
+	type
+	value
+	lat
+	long
+	owner
+	
+Environment: A bounded geographic space containing users and objects
+	center
+	radius
+	
+	
+	
+Interactions
+	User
+		changeLat - user lat changes
+		changeLong - lat changes
+		getObject - object owner changes
+		leaveObject - object owner changes
+	Object
+		changeLat - object lat changes
+		changeLong - object long changes
+		changeValue - value changes
+		changeType - type changes
+	Environment
+		updateUser
+		updateObject

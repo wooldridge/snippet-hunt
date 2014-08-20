@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="initial-scale=1">
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1,
+               maximum-scale=1,
+               user-scalable=0"
+/>
+<title>AR Game Admin</title>
+<link type="text/css" href="styles/styles.css" rel="stylesheet">
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?AIzaSyDUsZCP04vN4oxSQBcHmz1YGbTq8RTMEvw"></script>
+<script type="text/javascript" src="scripts/Bounds.js"></script>
+<script type="text/javascript" src="scripts/Game.js"></script>
+<script type="text/javascript" src="scripts/Map.js"></script>
+<script type="text/javascript" src="scripts/MapStyles.js"></script>
+<script type="text/javascript" src="scripts/Utils.js"></script>
+<script type="text/javascript" src="scripts/admin.js"></script>
+</head>
+<body>
+
+<div id="container">
+
+  <form id="adminForm">
+    <div id="map-canvas-admin"></div>
+    <h2>AR Game Setup</h2>
+    <div>
+      <label># of Things</label>
+      <input id="numThings" type="text" name="numThings" />
+    </div>
+    <div>
+      <label>Latitude 1</label>
+      <input id="lat1" type="text" name="lat1" />
+    </div>
+    <div>
+      <label>Longitude 1</label>
+      <input id="lon1" type="text" name="lon1" />
+    </div>
+    <div>
+      <label>Latitude 2</label>
+      <input id="lat2" type="text" name="lat2" />
+    </div>
+    <div>
+      <label>Longitude 2</label>
+      <input id="lon2" type="text" name="lon2" />
+    </div>
+    <div>
+      <label>Map Style</label>
+      <select id="mapStyles" name="mapStyle"></select>
+    </div>
+    <div>
+      <label>&nbsp;</label>
+      <button>Save Game</button>
+    </div>
+  </form>
+
+</div>
+
+<script>
+$(function () {
+
+  navigator.geolocation.getCurrentPosition(function (position) {
+    var myLat = position.coords.latitude;
+    var myLon = position.coords.longitude;
+    var config = {
+      myLat: myLat,
+      myLon: myLon,
+      lat1: myLat - 0.0007,
+      lon1: myLon - 0.001,
+      lat2: myLat + 0.0007,
+      lon2: myLon + 0.001,
+      numThings: 10,
+      mapStyle: 'retro'
+    };
+    var admin = new APP.Admin(config);
+    admin.displayForm();
+  });
+
+});
+</script>
+
+</body>
+</html>

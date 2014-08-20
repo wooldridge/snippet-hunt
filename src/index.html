@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="initial-scale=1">
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1,
+               maximum-scale=1,
+               user-scalable=0"
+/>
+<title>AR Game</title>
+<link type="text/css" href="styles/styles.css" rel="stylesheet">
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?AIzaSyDUsZCP04vN4oxSQBcHmz1YGbTq8RTMEvw"></script>
+<script type="text/javascript" src="scripts/Bounds.js"></script>
+<script type="text/javascript" src="scripts/Game.js"></script>
+<script type="text/javascript" src="scripts/Map.js"></script>
+<script type="text/javascript" src="scripts/MapStyles.js"></script>
+<script type="text/javascript" src="scripts/Player.js"></script>
+<script type="text/javascript" src="scripts/Thing.js"></script>
+<script type="text/javascript" src="scripts/geolocationmarker.js"></script>
+<script type="text/javascript" src="scripts/init.js"></script>
+</head>
+<body>
+
+<div id="info-container">Score: <span id="score"></span> <span id="msg"></span></div>
+
+<div id="map-canvas"></div>
+
+<audio id="okAudio" preload="auto">
+  <source src="audio/ok.mp3" type="audio/mpeg">
+  <source src="audio/ok.wav" type="audio/wav">
+</audio>
+
+<audio id="errorAudio" preload="auto">
+  <source src="audio/error.mp3" type="audio/mpeg">
+  <source src="audio/error.wav" type="audio/wav">
+</audio>
+
+</body>
+</html>

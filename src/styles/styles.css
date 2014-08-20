@@ -1,0 +1,77 @@
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+#map-canvas {
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+}
+#info-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  background-color: #eee;
+  z-index: 100;
+  font-size: 1.0em;
+}
+#score {
+  font-weight: bold;
+}
+#msg {
+  font-weight: normal;
+  padding-left: 10px;
+  color: #999;
+}
+#container {
+  width: 1030px;
+  padding: 20px;
+}
+form#adminForm {
+  padding: 20px;
+}
+form#adminForm div {
+  display: block;
+}
+form#adminForm label {
+  display: block;
+  position: relative;
+  float: left;
+  text-align: right;
+  padding-right: 10px;
+  margin-top: 7px;
+  width: 100px;
+}
+form#adminForm input,
+form#adminForm select,
+form#adminForm button {
+  font-size: 18px;
+}
+form#adminForm input {
+  width: 130px;
+}
+form#adminForm input#numThings {
+  width: 70px;
+}
+form#adminForm button {
+  width: 120px;
+}
+form#adminForm input#numThings,
+form#adminForm input#lon2,
+form#adminForm select#mapStyles {
+  margin-bottom: 20px;
+}
+#map-canvas-admin {
+  position: relative;
+  float: right;
+  height: 500px;
+  width: 680px;
+  padding: 0px
+}
