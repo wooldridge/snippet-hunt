@@ -5,7 +5,7 @@ var APP = APP || {};
  * @constructor
  * @param config A configuration object.
  */
-APP.Thing = function (config, bounds) {
+APP.Thing = function (config, gameBounds) {
     'use strict';
         // properties
     var id,
@@ -13,6 +13,7 @@ APP.Thing = function (config, bounds) {
         lon,
         marker,
         limit,
+        gameBounds,
 
         // methods
         getId,
@@ -31,7 +32,7 @@ APP.Thing = function (config, bounds) {
 
     id = config.id || '';
 
-    var coords = bounds.getRandCoords();
+    var coords = gameBounds.getRandCoords();
 
     if (config.lat) {
         lat = config.lat;
