@@ -66,6 +66,33 @@ app.get('/v1/search', function(req, res){
   });
 });
 
+// get a document: /v1/documents?uri=[uri] GET
+app.get('/v1/documents', function(req, res){
+  var url = 'http://' + config.mlhost + ':' + config.mlport +
+            '/v1/documents?' + buildQuery(req);
+  request({
+    method: "GET",
+    url: url,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    auth: auth
+  }, function (error, response, body) {
+    if (response) {
+      if ((response.statusCode >= 200) && (response.statusCode < 300)) {
+      res.set('Content-Type', 'application/json');
+        res.send(JSON.parse(body));
+      } else {
+        console.log('Error: '+ response.statusCode);
+        console.log(body);
+        res.status(response.statusCode).send();
+      }
+    } else {
+      console.log('Error: No response object');
+    }
+  });
+});
+
 // Add a document: /v1/documents POST
 app.post('/v1/documents', function(req, res){
   var url = 'http://' + config.mlhost + ':' + config.mlport +
