@@ -13,6 +13,7 @@
 <link type="text/css" href="styles/styles.css" rel="stylesheet">
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?AIzaSyDUsZCP04vN4oxSQBcHmz1YGbTq8RTMEvw"></script>
+<script type="text/javascript" src="scripts/Admin.js"></script>
 <script type="text/javascript" src="scripts/Bounds.js"></script>
 <script type="text/javascript" src="scripts/Game.js"></script>
 <script type="text/javascript" src="scripts/Map.js"></script>
@@ -20,7 +21,6 @@
 <script type="text/javascript" src="scripts/Player.js"></script>
 <script type="text/javascript" src="scripts/Thing.js"></script>
 <script type="text/javascript" src="scripts/geolocationmarker.js"></script>
-<script type="text/javascript" src="scripts/init.js"></script>
 </head>
 <body>
 
@@ -41,23 +41,20 @@
 <script>
 $(function () {
 
-  var APP = APP || {};
-
-  var config = {};
-
   navigator.geolocation.getCurrentPosition(function (position) {
     var myLat = position.coords.latitude;
     var myLon = position.coords.longitude;
-    var config = {};
-    APP.admin = new APP.Admin(config);
-    APP.admin.getConfig();
-    APP.game = new APP.Game(config);
-    admin.displayForm();
+    var myConfig = {
+      myLat: myLat,
+      myLon: myLon
+    };
+    APP.admin = new APP.Admin();
+    APP.admin.getConfig(function (config) {
+      $.extend(config, myConfig);
+      APP.game = new APP.Game(config);
+      APP.game.initialize();
+    });
   });
-
-  APP.admin = new APP.Admin()
-  APP.game = new APP.Game(config);
-  APP.game.initialize();
 
 });
 </script>

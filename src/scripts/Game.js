@@ -17,6 +17,9 @@ APP.Game = function (config) {
         mlport,
         mluser,
         mlpass,
+        myLat,
+        myLon,
+        mapOptions,
         numThings,
         searchResults,
         bounds,
@@ -24,33 +27,11 @@ APP.Game = function (config) {
         score,
 
         // methods
-        saveToDb,
         getById,
-        getAll,
-        addThings,
-        getThings,
+        getAllThings,
         displayScore,
         changeScore,
         initialize;
-
-    // initialize properties
-    /**
-     * Get the value of a URL parameter.
-     * @param name Name of the parameter.
-     * @param defaultVal Default value to return if no parameter found.
-     * @returns The parameter value (or the default value).
-     */
-    getParameterByName = function (name, defaultVal) {
-        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-        var regexS = "[\\?&]" + name + "=([^&#]*)";
-        var regex = new RegExp(regexS);
-        var results = regex.exec(window.location.search);
-        if (results === null) {
-            return defaultVal ? defaultVal : '';
-        } else {
-            return decodeURIComponent(results[1].replace(/\+/g, " "));
-        }
-    };
 
    /**
     * boundsConfig describes the playing space
@@ -58,15 +39,20 @@ APP.Game = function (config) {
     * @example work: 37.507278, -122.246814
     */
     boundsConfig = {
-      lat1: parseFloat(getParameterByName('lat1', 37.506)),   // south horiz
-      lon1: parseFloat(getParameterByName('lon1', -122.248)), // west vert
-      lat2: parseFloat(getParameterByName('lat2', 37.508)),   // north horiz
-      lon2: parseFloat(getParameterByName('lon2', -122.246))  // east vert
+      lat1: config.lat1,
+      lon1: config.lon1,
+      lat2: config.lat2,
+      lon2: config.lon2
     }
+
+    myLat = config.myLat || 0;
+    myLon = config.myLon || 0;
 
     mapConfig = {
       id: 'map-canvas', // HTML container for map, no preceding '#'
-      style: getParameterByName('mapStyle', 'subtleGrayscale')
+      style: config.mapStyle,
+      myLat: myLat,
+      myLon: myLon
     }
 
     things = [];
@@ -84,36 +70,9 @@ APP.Game = function (config) {
     //mluser = config.mluser || 'admin';
     //mlpass = config.mlpass || 'admin';
 
-    numThings = parseInt(getParameterByName('numThings', 10));
+    numThings = config.numThings;
 
     score = config.score || 0;
-
-
-    /**
-     * Save a Thing to the database.
-     * @param json A JSON representation of the Thing
-     */
-    saveToDb = function (thing) {
-        var url = 'http://' + mlhost + ':' + mlport + '/v1/documents?uri=' + thing.getId();
-        var json = {
-            id: thing.getId(),
-            lat: thing.getLat(),
-            lon: thing.getLon()
-        };
-        json = JSON.stringify(json);
-        $.ajax({
-            type: 'PUT',
-            url: url,
-            data: json,
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).done(function (data) {
-            console.log('Thing posted: ' + json);
-        }).error(function (data) {
-            console.log(data);
-        });
-    };
 
     /**
      * Get a Thing from the database.
@@ -139,76 +98,30 @@ APP.Game = function (config) {
     /**
      * Get all Things from the database.
      */
-    getAll = function () {
+    getAllThings = function () {
         // http://localhost:8077/v1/search?format=json&options=argame&pageLength=2
         var url = 'http://' + mlhost + ':' + mlport + '/v1/search';
-            url += '?format=json&options=argame&pageLength=' + numThings;
+            url += '?format=json&options=argame';
+            url += '&collection=thing&pageLength=' + numThings;
         console.log('getAll url: ' + url);
         $.ajax({
             type: 'GET',
             url: url
         }).done(function (data) {
             console.log('Results retrieved: ' + JSON.stringify(data));
-            searchResults = data;
-            $('#' + mapConfig.id).trigger('getAllDone');
+            for (var i = 0; i < data.results.length; i++) {
+                var thingConfig = {
+                    id: data.results[i].metadata[0].id,
+                    lat: data.results[i].metadata[1].lat,
+                    lon: data.results[i].metadata[2].lon
+                };
+                var t = new APP.Thing(thingConfig);
+                things.push(t);
+            }
+            $('#' + mapConfig.id).trigger('getAllThingsDone');
         }).error(function (data) {
             console.log(data);
         });
-    };
-
-    /**
-     * Create one or more Things.
-     * @todo Move this to a separate admin step.
-     * @param num Number of Things to add (optional)
-     */
-    addThings = function (num, bounds) {
-        var thing;
-        config = { id: nextId };
-        thing = new APP.Thing(config, bounds);
-        things.push(thing);
-        nextId++;
-        var url = 'http://' + mlhost + ':' + mlport + '/v1/documents?uri=' + thing.getId();
-        var json = {
-            id: thing.getId(),
-            lat: thing.getLat(),
-            lon: thing.getLon()
-        };
-        json = JSON.stringify(json);
-        $.ajax({
-            type: 'PUT',
-            url: url,
-            data: json,
-            // IMPORTANT: Do not set 'dataType: "json"' since REST server
-            // returns an empty body on success, which is invalid JSON
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).done(function (data) {
-            console.log('Thing posted: ' + json);
-            if (num === 0) {
-                console.log('Triggering addThingsDone');
-                $('#' + mapConfig.id).trigger('addThingsDone');
-            } else {
-                num--;
-                addThings(num, bounds);
-            }
-        }).error(function (data) {
-            console.log(data);
-        });
-    };
-
-    /**
-     * Get the Things in the game.
-     * @returns An array of Things.
-     */
-    getThings = function () {
-        /* for (var i = 0; i < things.length; i++) {
-            console.log('Thing lat: ' + things[i].getLat() + ' lon: ' + things[i].getLon());
-        } */
-        for (var i = 0; i < things.length; i++) {
-            getById(things[i].getId());
-        }
-        return things;
     };
 
     /**
@@ -233,22 +146,26 @@ APP.Game = function (config) {
             APP.map.showPlayer();
         });
         $('#' + mapConfig.id).on('showPlayerDone', function () {
-            addThings(numThings, APP.bounds);
+            getAllThings();
         });
-        $('#' + mapConfig.id).on('addThingsDone', function () {
-            APP.map.showMarkers(things);
+        $('#' + mapConfig.id).on('getAllThingsDone', function () {
+             APP.map.showMarkers(things);
         });
         APP.bounds = new APP.Bounds(boundsConfig);
         APP.map = new APP.Map(mapConfig, APP.bounds);
         APP.map.showMap();
-        displayScore();
+        // mapOptions = {
+        //   center: new google.maps.LatLng(myLat, myLon),
+        //   zoom: 18
+        // };
+        // map = new google.maps.Map(document.getElementById('map-canvas'),
+        //   mapOptions);
+        //   displayScore();
     };
 
     // Public API
     return {
-        addThings: addThings,
-        getThings: getThings,
-        getAll: getAll,
+        getAllThings: getAllThings,
         initialize: initialize,
         displayScore: displayScore,
         changeScore: changeScore,
