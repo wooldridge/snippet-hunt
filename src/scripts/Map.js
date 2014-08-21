@@ -9,9 +9,11 @@ APP.Map = function (config, bounds) {
   'use strict';
       // properties
   var id, // HTML container ID, e.g. 'map-canvas'
-      style,
+      mapStyles,
       mapOptions,
       map,
+      myLat,
+      myLon,
       player,
 
       // methods
@@ -28,7 +30,7 @@ APP.Map = function (config, bounds) {
   mapOptions = config.mapOptions || {};
 
   getMapOptions = function () {
-    style = new APP.MapStyles();
+    mapStyles = new APP.MapStyles();
     var options = {
       center: new google.maps.LatLng(bounds.getCenterLat(), bounds.getCenterLon()),
       zoom: 18,
@@ -45,14 +47,18 @@ APP.Map = function (config, bounds) {
       maxZoom: 20,
       minZoom: 5,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
-      styles: style.getStyle(config.style)
+      styles: mapStyles.getStyle(config.style)
     };
     $.extend(mapOptions, options);
     return mapOptions;
   };
 
   showMap = function () {
-    map = new google.maps.Map(document.getElementById(id), getMapOptions());
+    var tmpOpts = {
+      center: new google.maps.LatLng(config.myLat, config.myLon),
+      zoom: 18
+    };
+    map = new google.maps.Map(document.getElementById(id), tmpOpts);
     $('#' + id).trigger('showMapDone');
   };
 
