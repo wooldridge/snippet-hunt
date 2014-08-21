@@ -66,14 +66,15 @@ $(function () {
     var myLat = position.coords.latitude;
     var myLon = position.coords.longitude;
     var config = {
+      numThings: 10,
       myLat: myLat,
       myLon: myLon,
       lat1: myLat - 0.0007,
       lon1: myLon - 0.001,
       lat2: myLat + 0.0007,
       lon2: myLon + 0.001,
-      numThings: 10,
-      mapStyle: 'retro'
+      mapStyle: 'retro',
+      mapZoom: 18
     };
     APP.admin = new APP.Admin(config);
     APP.admin.displayForm();

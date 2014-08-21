@@ -33,7 +33,9 @@ APP.Thing = function (config, gameBounds) {
 
     id = config.id || '';
 
-    var coords = gameBounds.getRandCoords();
+    if (gameBounds) {
+      var coords = gameBounds.getRandCoords();
+    }
 
     if (config.lat) {
         lat = config.lat;
