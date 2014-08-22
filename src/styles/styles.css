@@ -15,8 +15,8 @@ body {
 #info-container {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
+  left: 100px;
+  width: 300px;
   padding: 10px;
   background-color: #eee;
   z-index: 100;
