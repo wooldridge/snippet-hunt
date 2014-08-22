@@ -129,13 +129,13 @@ APP.Thing = function (config, gameBounds) {
         marker = new google.maps.Marker({
           position: pos,
           anchor: new google.maps.Point(8, 8),
-          map: map,
+          map: map.getMap(),
           title: getLat().toString()+', '+getLon(),
           icon: 'images/coin.png'
         });
         if (interactive !== false) {
           google.maps.event.addListener(marker, 'click', function(ev) {
-            var player = APP.map.getPlayer();
+            var player = map.getPlayer();
             var dist = getDistBetwPoints(
               getLat(),
               getLon(),

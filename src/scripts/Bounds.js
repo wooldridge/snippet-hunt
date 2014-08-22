@@ -14,6 +14,10 @@ APP.Bounds = function (config) {
       lon2, // east vert
 
       // methods
+      getLat1,
+      getLon1,
+      getLat2,
+      getLon2,
       getLatSpan,
       getLonSpan,
       getRandCoords,
@@ -28,6 +32,34 @@ APP.Bounds = function (config) {
   lon1 = config.lon1 || 0;
   lat2 = config.lat2 || 0;
   lon2 = config.lon2 || 0;
+
+ /**
+  * Get lat1.
+  */
+  getLat1 = function () {
+    return lat1;
+  };
+
+ /**
+  * Get lon1.
+  */
+  getLon1 = function () {
+    return lon1;
+  };
+
+ /**
+  * Get lat2.
+  */
+  getLat2 = function () {
+    return lat2;
+  };
+
+ /**
+  * Get lon2.
+  */
+  getLon2 = function () {
+    return lon2;
+  };
 
  /**
   * Get the length of the latitude span in degrees.
@@ -69,6 +101,10 @@ APP.Bounds = function (config) {
 
   // Public API
   return {
+    getLat1: getLat1,
+    getLon1: getLon1,
+    getLat2: getLat2,
+    getLon2: getLon2,
     getRandCoords: getRandCoords,
     getCenterLat: getCenterLat,
     getCenterLon: getCenterLon

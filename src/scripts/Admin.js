@@ -9,6 +9,9 @@ APP.Admin = function (config) {
   'use strict';
       // properties
   var config,
+      boundsConfig,
+      bounds,
+      mapConfig,
       map,
       mapOptions,
       mapStyles,
@@ -45,6 +48,28 @@ APP.Admin = function (config) {
   things = [];
   allMarkers = [];
 
+ /**
+  * boundsConfig describes the map space
+  * @example home: 37.885454, -122.063447
+  * @example work: 37.507278, -122.246814
+  */
+  boundsConfig = {
+    lat1: config.lat1,
+    lon1: config.lon1,
+    lat2: config.lat2,
+    lon2: config.lon2
+  }
+
+  mapConfig = {
+    id: config.mapCanvasId,
+    style: config.mapStyle,
+    mapStyles: config.mapStyles,
+    myLat: config.myLat,
+    myLon: config.myLon,
+    mapOptions: config.mapOptions,
+    rectOptions: config.rectOptions
+  }
+
   /**
    * Display admin view.
    */
@@ -57,74 +82,43 @@ APP.Admin = function (config) {
     $('#lat2').val(config.lat2);
     $('#lon2').val(config.lon2);
 
-    // Configure and draw map
-    mapOptions = {
-      center: new google.maps.LatLng(config.myLat, config.myLon),
-    };
-    $.extend(mapOptions, config.mapOptions);
+    bounds = new APP.Bounds(boundsConfig);
+    map = new APP.Map(mapConfig, bounds);
+    map.showMap();
 
-    map = new google.maps.Map(document.getElementById(
-      config.mapCanvasId),
-      mapOptions
-    );
+    map.showRectangle();
 
-    // Configure and draw rectangle overlay
-    rectBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(config.lat1, config.lon1),
-      new google.maps.LatLng(config.lat2, config.lon2)
-    );
-
-    rectOptions = {
-      bounds: rectBounds,
-      editable: true,
-      draggable: true
-    }
-    $.extend(rectOptions, config.rectOptions);
-
-    rectangle = new google.maps.Rectangle(rectOptions);
-
-    rectangle.setMap(map);
-
-    // Populate styles menu and load map types
     mapStyleIds = config.mapStyles.getStyles();
     defaultStyleId = mapStyleIds[config.mapStyleIndex];
+    map.loadMapTypes(mapStyleIds);
+    map.setMapType(defaultStyleId);
 
-    mapTypes = {};
+    // Populate styles menu
     $.each(mapStyleIds, function (i, s) {
       $('#mapStyles').append($('<option>', {
           value: s,
           text: s
       }));
-      mapTypes[s] = new google.maps.StyledMapType(
-        config.mapStyles.getStyle(s),
-        {
-          map: map,
-          name: s
-        }
-      );
-      map.mapTypes.set(s, mapTypes[s]);
     });
     // Initial style setting
-    map.setMapTypeId(defaultStyleId);
     $('#mapStyles').val(defaultStyleId);
 
     // Handle styles menu change
     // @see http://stackoverflow.com/questions/3121400/google-maps-v3-how-to-change-the-map-style-based-on-zoom-level
     $('#mapStyles').change(function (ev) {
-      selStyleId = ev.target.selectedOptions[0].value;
-      map.setMapTypeId(selStyleId);
       console.log('map styles changed: ' + selStyleId);
+      selStyleId = ev.target.selectedOptions[0].value;
+      map.setMapType(selStyleId);
     });
 
     // Handle rectangle change
     // @see https://developers.google.com/maps/documentation/javascript/examples/rectangle-event
-    google.maps.event.addListener(rectangle, 'bounds_changed', function (event) {
-      var ne = rectangle.getBounds().getNorthEast();
-      var sw = rectangle.getBounds().getSouthWest();
-      $('#lat1').val(sw.lat());
-      $('#lon1').val(ne.lng());
-      $('#lat2').val(ne.lat());
-      $('#lon2').val(sw.lng());
+    $('#' + config.mapCanvasId).on('rectChanged', function (ev, lat1, lon1, lat2, lon2) {
+      console.log('map rect changed');
+      $('#lat1').val(lat1);
+      $('#lon1').val(lon1);
+      $('#lat2').val(lat2);
+      $('#lon2').val(lon2);
     });
   }
 

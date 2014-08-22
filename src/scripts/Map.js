@@ -26,7 +26,8 @@ APP.Map = function (config, bounds) {
       showRectangle,
       showMarkers,
       showPlayer,
-      getPlayer;
+      getPlayer,
+      getMap;
 
   // initialize properties
   config = config || {};
@@ -36,7 +37,6 @@ APP.Map = function (config, bounds) {
   getMapOptions = function () {
     var options = {
       center: new google.maps.LatLng(config.myLat, config.myLon),
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
       styles: config.mapStyles.getStyle(config.style)
     };
     $.extend(options, config.mapOptions);
@@ -48,6 +48,7 @@ APP.Map = function (config, bounds) {
     $('#' + id).trigger('showMapDone');
   };
 
+  // @see https://developers.google.com/maps/documentation/javascript/maptypes
   loadMapTypes = function (mapStyleIds) {
     $.each(mapStyleIds, function (i, s) {
       mapType = new google.maps.StyledMapType(
@@ -67,25 +68,29 @@ APP.Map = function (config, bounds) {
 
   showRectangle = function () {
     rectBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(config.lat1, config.lon1),
-      new google.maps.LatLng(config.lat2, config.lon2)
+      new google.maps.LatLng(bounds.getLat1(), bounds.getLon1()),
+      new google.maps.LatLng(bounds.getLat2(), bounds.getLon2())
     );
-
     rectOptions = {
       bounds: rectBounds,
       editable: true,
       draggable: true
     }
     $.extend(rectOptions, config.rectOptions);
-
     rectangle = new google.maps.Rectangle(rectOptions);
-
     rectangle.setMap(map);
+    // Handle rectangle change
+    // @see https://developers.google.com/maps/documentation/javascript/examples/rectangle-event
+    google.maps.event.addListener(rectangle, 'bounds_changed', function (event) {
+      var ne = rectangle.getBounds().getNorthEast();
+      var sw = rectangle.getBounds().getSouthWest();
+      $('#' + id).trigger('rectChanged', [sw.lat(), ne.lng(), ne.lat(), sw.lng()]);
+    });
   }
 
   showMarkers = function (things) {
     for (var i = 0; i < things.length; i++) {
-      things[i].showMarker(map);
+      things[i].showMarker(this, true);
     }
     $('#' + id).trigger('showMarkersDone');
   };
@@ -105,6 +110,10 @@ APP.Map = function (config, bounds) {
     return player
   };
 
+  getMap = function () {
+    return map
+  };
+
   // Public API
   return {
     showMap: showMap,
@@ -113,7 +122,8 @@ APP.Map = function (config, bounds) {
     showRectangle: showRectangle,
     showMarkers: showMarkers,
     showPlayer: showPlayer,
-    getPlayer: getPlayer
+    getPlayer: getPlayer,
+    getMap: getMap
   };
 
 };
