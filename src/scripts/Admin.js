@@ -9,29 +9,18 @@ APP.Admin = function (config) {
   'use strict';
       // properties
   var config,
-      mlhost,
-      mlport,
-      fileName,
-      numThings,
-      myLat,
-      myLon,
-      lat1,
-      lon1,
-      lat2,
-      lon2,
       map,
-      mapCanvasId,
-      mapZoom,
       mapOptions,
       mapStyles,
-      mapStyle,
+      defaultStyleId,
       mapStyleIds,
       selStyleId,
       mapTypes,
       styles,
-      rectBounds,
       gameBounds,
       rectangle,
+      rectOptions,
+      rectBounds,
       ne,
       sw,
       url,
@@ -51,25 +40,6 @@ APP.Admin = function (config) {
   // initialize
   config = config || {};
 
-  mlhost = config.mlhost || 'localhost';
-  mlport = config.mlport || 9055;
-  fileName = config.fileName || 'config.json';
-
-  numThings = config.numThings || 10;
-  myLat = config.myLat || 0;
-  myLon = config.myLon || 0;
-  lat1 = config.lat1 || 0;
-  lon1 = config.lon1 || 0;
-  lat2 = config.lat2 || 0;
-  lon2 = config.lon2 || 0;
-
-  mapCanvasId = config.mapCanvasId || 'map-canvas-admin';
-  mapZoom = config.mapZoom || 18;
-
-  mapStyles = new APP.MapStyles();
-  mapStyleIds = mapStyles.getStyles();
-  mapStyle = config.mapStyleId || mapStyleIds[config.mapStyleIndex];
-
   nextId = config.nextId || 1001;
   things = [];
   allMarkers = [];
@@ -80,41 +50,44 @@ APP.Admin = function (config) {
   display = function () {
 
     // Set form field values
-    $('#numThings').val(numThings);
-    $('#lat1').val(lat1);
-    $('#lon1').val(lon1);
-    $('#lat2').val(lat2);
-    $('#lon2').val(lon2);
+    $('#numThings').val(config.numThings);
+    $('#lat1').val(config.lat1);
+    $('#lon1').val(config.lon1);
+    $('#lat2').val(config.lat2);
+    $('#lon2').val(config.lon2);
 
     // Configure and draw map
     mapOptions = {
-      center: new google.maps.LatLng(myLat, myLon),
-      zoom: mapZoom
+      center: new google.maps.LatLng(config.myLat, config.myLon),
     };
+    $.extend(mapOptions, config.mapOptions);
 
-    map = new google.maps.Map(document.getElementById(mapCanvasId),
-        mapOptions);
+    map = new google.maps.Map(document.getElementById(
+      config.mapCanvasId),
+      mapOptions
+    );
 
     // Configure and draw rectangle overlay
     rectBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(lat1, lon1),
-      new google.maps.LatLng(lat2, lon2)
+      new google.maps.LatLng(config.lat1, config.lon1),
+      new google.maps.LatLng(config.lat2, config.lon2)
     );
 
-    rectangle = new google.maps.Rectangle({
-      strokeColor: '#666666',
-      strokeOpacity: 0.8,
-      strokeWeight: 3,
-      fillColor: '#CCCCCC',
-      fillOpacity: 0.25,
+    rectOptions = {
       bounds: rectBounds,
       editable: true,
       draggable: true
-    });
+    }
+    $.extend(rectOptions, config.rectOptions);
+
+    rectangle = new google.maps.Rectangle(rectOptions);
 
     rectangle.setMap(map);
 
     // Populate styles menu and load map types
+    mapStyleIds = config.mapStyles.getStyles();
+    defaultStyleId = mapStyleIds[config.mapStyleIndex];
+
     mapTypes = {};
     $.each(mapStyleIds, function (i, s) {
       $('#mapStyles').append($('<option>', {
@@ -122,7 +95,7 @@ APP.Admin = function (config) {
           text: s
       }));
       mapTypes[s] = new google.maps.StyledMapType(
-        mapStyles.getStyle(s),
+        config.mapStyles.getStyle(s),
         {
           map: map,
           name: s
@@ -130,8 +103,9 @@ APP.Admin = function (config) {
       );
       map.mapTypes.set(s, mapTypes[s]);
     });
-    map.setMapTypeId(mapStyle);
-    $('#mapStyles').val(mapStyle);
+    // Initial style setting
+    map.setMapTypeId(defaultStyleId);
+    $('#mapStyles').val(defaultStyleId);
 
     // Handle styles menu change
     // @see http://stackoverflow.com/questions/3121400/google-maps-v3-how-to-change-the-map-style-based-on-zoom-level
@@ -165,7 +139,7 @@ APP.Admin = function (config) {
       mapStyle: $('#mapStyles').val(),
       numThings: $('#numThings').val()
     };
-    url = 'http://' + mlhost + ':' + mlport + '/v1/documents?uri=' + fileName;
+    url = 'http://' + config.mlhost + ':' + config.mlport + '/v1/documents?uri=' + config.fileName;
     url += '&collection=config'
     json = JSON.stringify(configToSave);
     $.ajax({
@@ -192,7 +166,7 @@ APP.Admin = function (config) {
    * Get config info from db.
    */
   getConfig = function (callback) {
-    url = 'http://' + mlhost + ':' + mlport + '/v1/documents?uri=' + fileName;
+    url = 'http://' + config.mlhost + ':' + config.mlport + '/v1/documents?uri=' + config.fileName;
     $.ajax({
         type: 'GET',
         url: url,
@@ -220,7 +194,7 @@ APP.Admin = function (config) {
       thing = new APP.Thing(config, gameBounds);
       things.push(thing);
       nextId++;
-      var url = 'http://' + mlhost + ':' + mlport;
+      var url = 'http://' + config.mlhost + ':' + config.mlport;
           url += '/v1/documents?uri=' + thing.getId();
           url += '&collection=thing';
       var json = {
@@ -243,7 +217,7 @@ APP.Admin = function (config) {
           num--;
           if (num === 0) {
               console.log('Triggering putThingsDone');
-              $('#' + mapCanvasId).trigger('putThingsDone');
+              $('#' + config.mapCanvasId).trigger('putThingsDone');
           } else {
               putThings(num, gameBounds);
           }
@@ -278,7 +252,7 @@ APP.Admin = function (config) {
     gameBounds = APP.Bounds(boundsConfig);
     clearThings();
     putThings($('#numThings').val(), gameBounds);
-    $('#' + mapCanvasId).on('addThingsDone', function () {
+    $('#' + config.mapCanvasId).on('addThingsDone', function () {
       for (var i = 0; i < things.length; i++) {
         things[i].showMarker(map, false);
       }
