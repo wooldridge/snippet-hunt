@@ -19,7 +19,8 @@ APP.Config = function (myLat, myLon) {
         host: 'localhost',
         port: 9055,
         myLat: myLat,
-        myLon: myLon
+        myLon: myLon,
+        mapStyles: new APP.MapStyles()
       },
       admin: {
         mapCanvasId: 'map-canvas-admin',
@@ -34,8 +35,15 @@ APP.Config = function (myLat, myLon) {
         mapStyleIndex: 0,
         nextId: 1001,
         fileName: 'config.json',
-        mapConfig: {
+        mapOptions: {
           zoom: 18
+        },
+        rectOptions: {
+          strokeColor: '#666666',
+          strokeOpacity: 0.8,
+          strokeWeight: 3,
+          fillColor: '#CCCCCC',
+          fillOpacity: 0.25
         }
       },
       game: {
