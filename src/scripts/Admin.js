@@ -165,28 +165,6 @@ APP.Admin = function (config) {
   }
 
   /**
-   * Get config info from db.
-   */
-  getConfig = function (callback) {
-    url = 'http://' + config.host + ':' + config.port + '/v1/documents?uri=' + config.fileName;
-    $.ajax({
-        type: 'GET',
-        url: url,
-        data: json,
-        headers: {
-            'content-type': 'application/json'
-        }
-    }).done(function (json) {
-        console.log('Config retrieved: ' + json);
-        if (callback) {
-          callback(json);
-        }
-    }).error(function (data) {
-        console.log('Error: ' + json);
-    });
-  }
-
-  /**
    * Put things to db.
    * @param num Number of Things to add
    * @param gameBounds Game bounds

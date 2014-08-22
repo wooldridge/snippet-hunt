@@ -9,15 +9,18 @@ APP.Config = function (myLat, myLon) {
     'use strict';
         // properties
     var config,
+        url,
 
         // methods
-        get;
+        get,
+        getSavedConfig;
 
     // initialize properties
     config = {
       global: {
         host: 'localhost',
         port: 9055,
+        fileName: 'config.json',
         myLat: myLat,
         myLon: myLon,
         mapStyles: new APP.MapStyles()
@@ -31,10 +34,8 @@ APP.Config = function (myLat, myLon) {
         lon1: myLon - 0.001,
         lat2: myLat + 0.0007,
         lon2: myLon + 0.001,
-        mapStyle: 'retro',
         mapStyleIndex: 0,
         nextId: 1001,
-        fileName: 'config.json',
         mapOptions: {
           zoom: 18
         },
@@ -47,7 +48,13 @@ APP.Config = function (myLat, myLon) {
         }
       },
       game: {
-
+        mapCanvasId: 'map-canvas',
+        scoreId: 'score',
+        // mapConfig: {
+        //   //style: config.mapStyle,
+        //   myLat: myLat,
+        //   myLon: myLon
+        // }
       }
     };
 
@@ -62,9 +69,32 @@ APP.Config = function (myLat, myLon) {
       return result;
     };
 
+    /**
+     * Get saved config info from db.
+     */
+    getSavedConfig = function (callback) {
+      url = 'http://' + config.global.host + ':' + config.global.port;
+      url += '/v1/documents?uri=' + config.global.fileName;
+      $.ajax({
+          type: 'GET',
+          url: url,
+          headers: {
+              'content-type': 'application/json'
+          }
+      }).done(function (json) {
+          console.log('Config retrieved: ' + json);
+          if (callback) {
+            callback(json);
+          }
+      }).error(function (data) {
+          console.log('Error: ' + json);
+      });
+    }
+
     // Public API
     return {
-        get: get
+      get: get,
+      getSavedConfig: getSavedConfig
     };
 
 };

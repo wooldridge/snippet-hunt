@@ -12,13 +12,6 @@ APP.Game = function (config) {
         boundsConfig,
         mapConfig,
         things,
-        nextId,
-        mlhost,
-        mlport,
-        mluser,
-        mlpass,
-        myLat,
-        myLon,
         mapOptions,
         numThings,
         searchResults,
@@ -45,26 +38,20 @@ APP.Game = function (config) {
       lon2: config.lon2
     }
 
-    myLat = config.myLat || 0;
-    myLon = config.myLon || 0;
-
     mapConfig = {
       id: 'map-canvas', // HTML container for map, no preceding '#'
       style: config.mapStyle,
-      myLat: myLat,
-      myLon: myLon
+      myLat: config.myLat,
+      myLon: config.myLon
     }
 
     things = [];
 
-    nextId = config.nextId || 1001; // IDs for Thing objects
-
    /**
     * MarkLogic config
     */
-    //mlhost = config.mlhost || '10.0.0.8';
-    mlhost = config.mlhost || 'localhost';
-    mlport = config.mlport || 9055;
+    // mlhost = config.mlhost || 'localhost';
+    // mlport = config.mlport || 9055;
     // NOTE: ML REST authentication turned off (application-level)
     // with default role of 'admin'
     //mluser = config.mluser || 'admin';
@@ -79,7 +66,7 @@ APP.Game = function (config) {
      * @param id The ID of the thing.
      */
     getById = function (id) {
-        var url = 'http://' + mlhost + ':' + mlport + '/v1/documents?uri=' + id;
+        var url = 'http://' + config.host + ':' + config.port + '/v1/documents?uri=' + id;
         $.ajax({
             type: 'GET',
             url: url,
@@ -89,7 +76,7 @@ APP.Game = function (config) {
             }
         }).done(function (data) {
             console.log('Thing retrieved: ' + JSON.stringify(data));
-            $('#' + mapConfig.id).trigger('getByIdDone');
+            $('#' + config.mapCanvasId).trigger('getByIdDone');
         }).error(function (data) {
             console.log(data);
         });
@@ -100,9 +87,9 @@ APP.Game = function (config) {
      */
     getAllThings = function () {
         // http://localhost:8077/v1/search?format=json&options=argame&pageLength=2
-        var url = 'http://' + mlhost + ':' + mlport + '/v1/search';
+        var url = 'http://' + config.host + ':' + config.port + '/v1/search';
             url += '?format=json&options=argame';
-            url += '&collection=thing&pageLength=' + numThings;
+            url += '&collection=thing&pageLength=' + config.numThings;
         console.log('getAll url: ' + url);
         $.ajax({
             type: 'GET',
@@ -118,7 +105,7 @@ APP.Game = function (config) {
                 var t = new APP.Thing(thingConfig);
                 things.push(t);
             }
-            $('#' + mapConfig.id).trigger('getAllThingsDone');
+            $('#' + config.mapCanvasId).trigger('getAllThingsDone');
         }).error(function (data) {
             console.log(data);
         });
@@ -128,7 +115,7 @@ APP.Game = function (config) {
      * Display the score in the UI.
      */
     displayScore = function () {
-        $('#score').html(score.toString());
+        $('#' + config.scoreId).html(score.toString());
     };
 
     /**
@@ -149,7 +136,7 @@ APP.Game = function (config) {
             getAllThings();
         });
         $('#' + mapConfig.id).on('getAllThingsDone', function () {
-             APP.map.showMarkers(things);
+            APP.map.showMarkers(things);
         });
         APP.bounds = new APP.Bounds(boundsConfig);
         APP.map = new APP.Map(mapConfig, APP.bounds);

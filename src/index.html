@@ -15,6 +15,7 @@
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?AIzaSyDUsZCP04vN4oxSQBcHmz1YGbTq8RTMEvw"></script>
 <script type="text/javascript" src="scripts/Admin.js"></script>
 <script type="text/javascript" src="scripts/Bounds.js"></script>
+<script type="text/javascript" src="scripts/Config.js"></script>
 <script type="text/javascript" src="scripts/Game.js"></script>
 <script type="text/javascript" src="scripts/Map.js"></script>
 <script type="text/javascript" src="scripts/MapStyles.js"></script>
@@ -46,16 +47,12 @@
 $(function () {
 
   navigator.geolocation.getCurrentPosition(function (position) {
-    var myLat = position.coords.latitude;
-    var myLon = position.coords.longitude;
-    var myConfig = {
-      myLat: myLat,
-      myLon: myLon
-    };
-    APP.admin = new APP.Admin();
-    APP.admin.getConfig(function (config) {
-      $.extend(config, myConfig);
-      APP.game = new APP.Game(config);
+    APP.config = new APP.Config(
+      position.coords.latitude,
+      position.coords.longitude
+    );
+    APP.config.getSavedConfig(function (savedConfig) {
+      APP.game = new APP.Game($.extend(APP.config.get('game'), savedConfig));
       APP.game.initialize();
     });
   });
