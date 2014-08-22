@@ -13,6 +13,7 @@
 <link type="text/css" href="styles/styles.css" rel="stylesheet">
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?AIzaSyDUsZCP04vN4oxSQBcHmz1YGbTq8RTMEvw"></script>
+<script type="text/javascript" src="scripts/Config.js"></script>
 <script type="text/javascript" src="scripts/Bounds.js"></script>
 <script type="text/javascript" src="scripts/Game.js"></script>
 <script type="text/javascript" src="scripts/Map.js"></script>
@@ -61,25 +62,14 @@
 
 <script>
 $(function () {
-
   navigator.geolocation.getCurrentPosition(function (position) {
-    var myLat = position.coords.latitude;
-    var myLon = position.coords.longitude;
-    var config = {
-      numThings: 10,
-      myLat: myLat,
-      myLon: myLon,
-      lat1: myLat - 0.0007,
-      lon1: myLon - 0.001,
-      lat2: myLat + 0.0007,
-      lon2: myLon + 0.001,
-      mapStyle: 'retro',
-      mapZoom: 18
-    };
-    APP.admin = new APP.Admin(config);
-    APP.admin.displayForm();
+    APP.config = new APP.Config(
+      position.coords.latitude,
+      position.coords.longitude
+    );
+    APP.admin = new APP.Admin(APP.config.get('admin'));
+    APP.admin.display();
   });
-
 });
 </script>
 

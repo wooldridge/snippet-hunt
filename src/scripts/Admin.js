@@ -42,7 +42,7 @@ APP.Admin = function (config) {
       allMarkers,
 
       // methods
-      displayForm,
+      display,
       putConfig,
       getConfig,
       putThings,
@@ -68,16 +68,16 @@ APP.Admin = function (config) {
 
   mapStyles = new APP.MapStyles();
   mapStyleIds = mapStyles.getStyles();
-  mapStyle = config.mapStyle || mapStyleIds[0];
+  mapStyle = config.mapStyleId || mapStyleIds[config.mapStyleIndex];
 
   nextId = config.nextId || 1001;
   things = [];
   allMarkers = [];
 
   /**
-   * Display admin form.
+   * Display admin view.
    */
-  displayForm = function () {
+  display = function () {
 
     // Set form field values
     $('#numThings').val(numThings);
@@ -289,7 +289,7 @@ APP.Admin = function (config) {
 
   // Public API
   return {
-      displayForm: displayForm,
+      display: display,
       getConfig: getConfig
   };
 
