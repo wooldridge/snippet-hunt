@@ -37,6 +37,7 @@ APP.Game = function (config) {
     mapConfig = {
       id: config.mapCanvasId,
       style: config.mapStyle,
+      mapStyles: config.mapStyles,
       myLat: config.myLat,
       myLon: config.myLon,
       mapOptions: {
