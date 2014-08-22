@@ -27,6 +27,7 @@ APP.Admin = function (config) {
       json,
       nextId,
       thing,
+      thingConfig,
       things,
       allMarkers,
 
@@ -139,7 +140,7 @@ APP.Admin = function (config) {
       mapStyle: $('#mapStyles').val(),
       numThings: $('#numThings').val()
     };
-    url = 'http://' + config.mlhost + ':' + config.mlport + '/v1/documents?uri=' + config.fileName;
+    url = 'http://' + config.host + ':' + config.port + '/v1/documents?uri=' + config.fileName;
     url += '&collection=config'
     json = JSON.stringify(configToSave);
     $.ajax({
@@ -156,6 +157,7 @@ APP.Admin = function (config) {
           $('#adminForm button').html("Game Saved");
           $('#adminForm button').prop('disabled', true);
           rectangle.setEditable(false);
+          rectangle.setDraggable(false);
         }, 800);
     }).error(function (data) {
         console.log('Config put error: ' + data);
@@ -166,7 +168,7 @@ APP.Admin = function (config) {
    * Get config info from db.
    */
   getConfig = function (callback) {
-    url = 'http://' + config.mlhost + ':' + config.mlport + '/v1/documents?uri=' + config.fileName;
+    url = 'http://' + config.host + ':' + config.port + '/v1/documents?uri=' + config.fileName;
     $.ajax({
         type: 'GET',
         url: url,
@@ -190,11 +192,11 @@ APP.Admin = function (config) {
    * @param gameBounds Game bounds
    */
   putThings = function (num, gameBounds) {
-      config = { id: nextId };
-      thing = new APP.Thing(config, gameBounds);
+      thingConfig = { id: nextId };
+      thing = new APP.Thing(thingConfig, gameBounds);
       things.push(thing);
       nextId++;
-      var url = 'http://' + config.mlhost + ':' + config.mlport;
+      var url = 'http://' + config.host + ':' + config.port;
           url += '/v1/documents?uri=' + thing.getId();
           url += '&collection=thing';
       var json = {
@@ -240,8 +242,6 @@ APP.Admin = function (config) {
    */
   $('#adminForm button').click(function (ev) {
     console.log('submit clicked');
-    ev.preventDefault();
-    ev.stopPropagation();
     putConfig();
     var boundsConfig = {
       lat1: parseFloat($('#lat1').val()),
@@ -252,12 +252,11 @@ APP.Admin = function (config) {
     gameBounds = APP.Bounds(boundsConfig);
     clearThings();
     putThings($('#numThings').val(), gameBounds);
-    $('#' + config.mapCanvasId).on('addThingsDone', function () {
+    $('#' + config.mapCanvasId).on('putThingsDone', function () {
       for (var i = 0; i < things.length; i++) {
         things[i].showMarker(map, false);
       }
     });
-
     return false;
   });
 
