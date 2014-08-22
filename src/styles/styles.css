@@ -68,6 +68,10 @@ form#adminForm input#lon2,
 form#adminForm select#mapStyles {
   margin-bottom: 20px;
 }
+#gameLink {
+  padding-left: 130px;
+  display: none;
+}
 #map-canvas-admin {
   position: relative;
   float: right;

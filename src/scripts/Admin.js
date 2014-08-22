@@ -139,12 +139,6 @@ APP.Admin = function (config) {
         }
     }).done(function (data) {
         console.log('Config posted: ' + json);
-        $('#adminForm button').html("Saving...");
-        setTimeout(function () {
-          $('#adminForm button').html("Game Saved");
-          $('#adminForm button').prop('disabled', true);
-          map.disableRectangle();
-        }, 800);
     }).error(function (data) {
         console.log('Config put error: ' + data);
     });
@@ -207,6 +201,8 @@ APP.Admin = function (config) {
   $('#adminForm button').click(function (ev) {
     console.log('submit clicked');
     putConfig();
+    map.disableRectangle();
+    $('#adminForm button').html("Saving...");
     var boundsConfig = {
       lat1: parseFloat($('#lat1').val()),
       lon1: parseFloat($('#lon1').val()),
@@ -221,6 +217,11 @@ APP.Admin = function (config) {
         things[i].showMarker(map, false);
       }
     });
+    setTimeout(function () {
+      $('#adminForm button').html("Game Saved");
+      $('#adminForm button').prop('disabled', true);
+      $('#gameLink').show();
+    }, 800);
     return false;
   });
 
