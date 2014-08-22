@@ -9,7 +9,7 @@ APP.Map = function (config, bounds) {
   'use strict';
       // properties
   var id, // HTML container ID, e.g. 'map-canvas'
-      mapStyles,
+      mapType,
       map,
       myLat,
       myLon,
@@ -18,6 +18,8 @@ APP.Map = function (config, bounds) {
       // methods
       getMapOptions,
       showMap,
+      loadMapTypes,
+      setMapType,
       showMarkers,
       showPlayer,
       getPlayer;
@@ -42,27 +44,22 @@ APP.Map = function (config, bounds) {
     $('#' + id).trigger('showMapDone');
   };
 
-  // loadMapTypes = function (mapStyleIds) {
-  //   mapStyles = new APP.MapStyles();
-  //   var options = {
-  //     center: new google.maps.LatLng(config.myLat, config.myLon),
-  //     mapTypeId: google.maps.MapTypeId.ROADMAP,
-  //     styles: mapStyles.getStyle(config.style)
-  //   };
-  //   $.extend(options, config.mapOptions);
-  //   return options;
-  // };
+  loadMapTypes = function (mapStyleIds) {
+    $.each(mapStyleIds, function (i, s) {
+      mapType = new google.maps.StyledMapType(
+        config.mapStyles.getStyle(s),
+        {
+          map: map,
+          name: s
+        }
+      );
+      map.mapTypes.set(s, mapType);
+    });
+  };
 
-  // setMapType = function () {
-  //   mapStyles = new APP.MapStyles();
-  //   var options = {
-  //     center: new google.maps.LatLng(config.myLat, config.myLon),
-  //     mapTypeId: google.maps.MapTypeId.ROADMAP,
-  //     styles: mapStyles.getStyle(config.style)
-  //   };
-  //   $.extend(options, config.mapOptions);
-  //   return options;
-  // };
+  setMapType = function (styleId) {
+    map.setMapTypeId(styleId);
+  };
 
   showMarkers = function (things) {
     for (var i = 0; i < things.length; i++) {
