@@ -162,6 +162,7 @@ APP.Thing = function (config, gameBounds) {
               $('#msg').show().html('Coin collected').fadeOut(1000);
               APP.game.changeScore(1);
               APP.game.displayScore();
+              APP.game.removeThing(getId());
             }
             console.log(msg);
           });

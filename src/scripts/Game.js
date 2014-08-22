@@ -18,6 +18,7 @@ APP.Game = function (config) {
         // methods
         getById,
         getAllThings,
+        removeThing,
         displayScore,
         changeScore,
         initialize;
@@ -77,6 +78,27 @@ APP.Game = function (config) {
         }).done(function (data) {
             console.log('Thing retrieved: ' + JSON.stringify(data));
             $('#' + config.mapCanvasId).trigger('getByIdDone');
+        }).error(function (data) {
+            console.log(data);
+        });
+    };
+
+    /**
+     * Remove a Thing from the database.
+     * @param id The ID of the thing.
+     */
+    removeThing = function (id) {
+        var url = 'http://' + config.host + ':' + config.port + '/v1/documents?uri=' + id;
+        $.ajax({
+            type: 'DELETE',
+            url: url,
+            dataType: 'json',
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).done(function (data) {
+            console.log('Thing deleted: ' + id);
+            $('#' + config.mapCanvasId).trigger('removeThingDone');
         }).error(function (data) {
             console.log(data);
         });
@@ -146,6 +168,7 @@ APP.Game = function (config) {
     // Public API
     return {
         getAllThings: getAllThings,
+        removeThing: removeThing,
         initialize: initialize,
         displayScore: displayScore,
         changeScore: changeScore
