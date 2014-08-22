@@ -10,6 +10,9 @@ APP.Map = function (config, bounds) {
       // properties
   var id, // HTML container ID, e.g. 'map-canvas'
       mapType,
+      rectBounds,
+      rectOptions,
+      rectangle,
       map,
       myLat,
       myLon,
@@ -20,6 +23,7 @@ APP.Map = function (config, bounds) {
       showMap,
       loadMapTypes,
       setMapType,
+      showRectangle,
       showMarkers,
       showPlayer,
       getPlayer;
@@ -61,6 +65,24 @@ APP.Map = function (config, bounds) {
     map.setMapTypeId(styleId);
   };
 
+  showRectangle = function () {
+    rectBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(config.lat1, config.lon1),
+      new google.maps.LatLng(config.lat2, config.lon2)
+    );
+
+    rectOptions = {
+      bounds: rectBounds,
+      editable: true,
+      draggable: true
+    }
+    $.extend(rectOptions, config.rectOptions);
+
+    rectangle = new google.maps.Rectangle(rectOptions);
+
+    rectangle.setMap(map);
+  }
+
   showMarkers = function (things) {
     for (var i = 0; i < things.length; i++) {
       things[i].showMarker(map);
@@ -86,6 +108,9 @@ APP.Map = function (config, bounds) {
   // Public API
   return {
     showMap: showMap,
+    loadMapTypes: loadMapTypes,
+    setMapType: setMapType,
+    showRectangle: showRectangle,
     showMarkers: showMarkers,
     showPlayer: showPlayer,
     getPlayer: getPlayer

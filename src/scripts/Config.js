@@ -49,7 +49,7 @@ APP.Config = function (myLat, myLon) {
       },
       game: {
         mapCanvasId: 'map-canvas',
-        scoreId: 'score',
+        scoreId: 'score'
         // mapConfig: {
         //   //style: config.mapStyle,
         //   myLat: myLat,
