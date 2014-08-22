@@ -24,6 +24,7 @@ APP.Map = function (config, bounds) {
       loadMapTypes,
       setMapType,
       showRectangle,
+      disableRectangle,
       showMarkers,
       showPlayer,
       getPlayer,
@@ -86,7 +87,12 @@ APP.Map = function (config, bounds) {
       var sw = rectangle.getBounds().getSouthWest();
       $('#' + id).trigger('rectChanged', [sw.lat(), ne.lng(), ne.lat(), sw.lng()]);
     });
-  }
+  };
+
+  disableRectangle = function () {
+    rectangle.setEditable(false);
+    rectangle.setDraggable(false);
+  };
 
   showMarkers = function (things) {
     for (var i = 0; i < things.length; i++) {
@@ -120,6 +126,7 @@ APP.Map = function (config, bounds) {
     loadMapTypes: loadMapTypes,
     setMapType: setMapType,
     showRectangle: showRectangle,
+    disableRectangle: disableRectangle,
     showMarkers: showMarkers,
     showPlayer: showPlayer,
     getPlayer: getPlayer,
