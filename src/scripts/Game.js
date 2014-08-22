@@ -8,15 +8,11 @@ var APP = APP || {};
 APP.Game = function (config) {
     'use strict';
         // properties
-    var getParameterByName,
-        boundsConfig,
+    var boundsConfig,
         mapConfig,
-        things,
-        mapOptions,
-        numThings,
-        searchResults,
         bounds,
         map,
+        things,
         score,
 
         // methods
@@ -39,25 +35,13 @@ APP.Game = function (config) {
     }
 
     mapConfig = {
-      id: 'map-canvas', // HTML container for map, no preceding '#'
+      id: config.mapCanvasId,
       style: config.mapStyle,
       myLat: config.myLat,
       myLon: config.myLon
     }
 
     things = [];
-
-   /**
-    * MarkLogic config
-    */
-    // mlhost = config.mlhost || 'localhost';
-    // mlport = config.mlport || 9055;
-    // NOTE: ML REST authentication turned off (application-level)
-    // with default role of 'admin'
-    //mluser = config.mluser || 'admin';
-    //mlpass = config.mlpass || 'admin';
-
-    numThings = config.numThings;
 
     score = config.score || 0;
 
@@ -129,25 +113,18 @@ APP.Game = function (config) {
      * Initialize the game.
      */
     initialize = function () {
-        $('#' + mapConfig.id).on('showMapDone', function () {
-            APP.map.showPlayer();
+        $('#' + config.mapCanvasId).on('showMapDone', function () {
+            map.showPlayer();
         });
-        $('#' + mapConfig.id).on('showPlayerDone', function () {
+        $('#' + config.mapCanvasId).on('showPlayerDone', function () {
             getAllThings();
         });
-        $('#' + mapConfig.id).on('getAllThingsDone', function () {
-            APP.map.showMarkers(things);
+        $('#' + config.mapCanvasId).on('getAllThingsDone', function () {
+            map.showMarkers(things);
         });
-        APP.bounds = new APP.Bounds(boundsConfig);
-        APP.map = new APP.Map(mapConfig, APP.bounds);
-        APP.map.showMap();
-        // mapOptions = {
-        //   center: new google.maps.LatLng(myLat, myLon),
-        //   zoom: 18
-        // };
-        // map = new google.maps.Map(document.getElementById('map-canvas'),
-        //   mapOptions);
-        //   displayScore();
+        bounds = new APP.Bounds(boundsConfig);
+        map = new APP.Map(mapConfig, bounds);
+        map.showMap();
     };
 
     // Public API
@@ -155,10 +132,7 @@ APP.Game = function (config) {
         getAllThings: getAllThings,
         initialize: initialize,
         displayScore: displayScore,
-        changeScore: changeScore,
-        searchResults: searchResults,
-        numThings: numThings,
-        mapConfig: mapConfig
+        changeScore: changeScore
     };
 
 };
