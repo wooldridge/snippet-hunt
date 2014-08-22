@@ -38,7 +38,22 @@ APP.Game = function (config) {
       id: config.mapCanvasId,
       style: config.mapStyle,
       myLat: config.myLat,
-      myLon: config.myLon
+      myLon: config.myLon,
+      mapOptions: {
+        zoom: 18,
+        maxZoom: 20,
+        minZoom: 5,
+        panControl: false,
+        zoomControl: true,
+        zoomControlOptions: {
+          style: google.maps.ZoomControlStyle.SMALL,
+          position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        mapTypeControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        overviewMapControl: false
+      }
     }
 
     things = [];

@@ -31,19 +31,6 @@ APP.Map = function (config, bounds) {
     mapStyles = new APP.MapStyles();
     var options = {
       center: new google.maps.LatLng(config.myLat, config.myLon),
-      zoom: 18,
-      panControl: false,
-      zoomControl: true,
-      zoomControlOptions: {
-        style: google.maps.ZoomControlStyle.SMALL,
-        position: google.maps.ControlPosition.TOP_RIGHT
-      },
-      mapTypeControl: false,
-      scaleControl: false,
-      streetViewControl: false,
-      overviewMapControl: false,
-      maxZoom: 20,
-      minZoom: 5,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       styles: mapStyles.getStyle(config.style)
     };
