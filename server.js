@@ -93,7 +93,7 @@ app.get('/v1/documents', function(req, res){
   });
 });
 
-// Add a document: /v1/documents POST
+// Add a document: /v1/documents?uri=[uri] POST
 app.post('/v1/documents', function(req, res){
   var url = 'http://' + config.mlhost + ':' + config.mlport +
 	        '/v1/documents?' + buildQuery(req);
@@ -119,6 +119,32 @@ app.post('/v1/documents', function(req, res){
     } else {
 	  console.log('Error: No response object');
 	}
+  });
+});
+
+// Delete a document: /v1/documents?uri=[uri] DELETE
+app.delete('/v1/documents', function(req, res){
+  var url = 'http://' + config.mlhost + ':' + config.mlport +
+          '/v1/documents?' + buildQuery(req);
+  request({
+    method: "DELETE",
+    url: url,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    auth: auth
+  }, function (error, response, body) {
+    if (response) {
+      if ((response.statusCode >= 200) && (response.statusCode < 300)) {
+        res.send(); // Note: body is empty on success
+      } else {
+        console.log('Error: '+ response.statusCode);
+        console.log(body);
+        res.status(response.statusCode).send();
+      }
+    } else {
+    console.log('Error: No response object');
+  }
   });
 });
 
