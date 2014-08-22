@@ -19,13 +19,7 @@ APP.Admin = function (config) {
       mapStyleIds,
       selStyleId,
       mapTypes,
-      styles,
       gameBounds,
-      rectangle,
-      rectOptions,
-      rectBounds,
-      ne,
-      sw,
       url,
       json,
       nextId,
@@ -37,7 +31,6 @@ APP.Admin = function (config) {
       // methods
       display,
       putConfig,
-      getConfig,
       putThings,
       clearThings;
 
@@ -150,8 +143,7 @@ APP.Admin = function (config) {
         setTimeout(function () {
           $('#adminForm button').html("Game Saved");
           $('#adminForm button').prop('disabled', true);
-          rectangle.setEditable(false);
-          rectangle.setDraggable(false);
+          map.disableRectangle();
         }, 800);
     }).error(function (data) {
         console.log('Config put error: ' + data);
@@ -234,8 +226,7 @@ APP.Admin = function (config) {
 
   // Public API
   return {
-      display: display,
-      getConfig: getConfig
+      display: display
   };
 
 };
