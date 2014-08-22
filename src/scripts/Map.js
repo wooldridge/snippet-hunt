@@ -10,7 +10,6 @@ APP.Map = function (config, bounds) {
       // properties
   var id, // HTML container ID, e.g. 'map-canvas'
       mapStyles,
-      mapOptions,
       map,
       myLat,
       myLon,
@@ -27,12 +26,11 @@ APP.Map = function (config, bounds) {
   config = config || {};
 
   id = config.id || 'map-canvas';
-  mapOptions = config.mapOptions || {};
 
   getMapOptions = function () {
     mapStyles = new APP.MapStyles();
     var options = {
-      center: new google.maps.LatLng(bounds.getCenterLat(), bounds.getCenterLon()),
+      center: new google.maps.LatLng(config.myLat, config.myLon),
       zoom: 18,
       panControl: false,
       zoomControl: true,
@@ -49,16 +47,12 @@ APP.Map = function (config, bounds) {
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       styles: mapStyles.getStyle(config.style)
     };
-    $.extend(mapOptions, options);
-    return mapOptions;
+    $.extend(options, config.mapOptions);
+    return options;
   };
 
   showMap = function () {
-    var tmpOpts = {
-      center: new google.maps.LatLng(config.myLat, config.myLon),
-      zoom: 18
-    };
-    map = new google.maps.Map(document.getElementById(id), tmpOpts);
+    map = new google.maps.Map(document.getElementById(id), getMapOptions());
     $('#' + id).trigger('showMapDone');
   };
 
