@@ -22,6 +22,7 @@ APP.Game = function (config, socket) {
         removeThing,
         displayScore,
         changeScore,
+        displayUser,
         initialize;
 
    /**
@@ -146,6 +147,13 @@ APP.Game = function (config, socket) {
     };
 
     /**
+     * Display the username in the UI.
+     */
+    displayUser = function () {
+        $('#' + config.userId).html(localStorage.getItem('username'));
+    };
+
+    /**
      * Initialize the game.
      */
     initialize = function () {
@@ -158,6 +166,8 @@ APP.Game = function (config, socket) {
         $('#' + config.mapCanvasId).on('getAllThingsDone', function () {
             map.showMarkers(things);
         });
+        displayScore();
+        displayUser();
         bounds = new APP.Bounds(boundsConfig);
         map = new APP.Map(mapConfig, bounds);
         map.showMap();

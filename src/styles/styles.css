@@ -22,7 +22,7 @@ body {
   z-index: 100;
   font-size: 1.0em;
 }
-#score {
+#score, #username {
   font-weight: bold;
 }
 #msg {
@@ -67,6 +67,11 @@ form#adminForm input#numThings,
 form#adminForm input#lon2,
 form#adminForm select#mapStyles {
   margin-bottom: 20px;
+}
+div#usernameForm {
+  position: relative;
+  display: none;
+  z-index: 1000;
 }
 #gameLink {
   padding-left: 130px;

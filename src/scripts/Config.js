@@ -13,7 +13,9 @@ APP.Config = function (myLat, myLon) {
 
         // methods
         get,
-        getSavedConfig;
+        getSavedConfig,
+        getHost,
+        getPort;
 
     // initialize properties
     config = {
@@ -49,7 +51,8 @@ APP.Config = function (myLat, myLon) {
       },
       game: {
         mapCanvasId: 'map-canvas',
-        scoreId: 'score'
+        scoreId: 'score',
+        userId: 'username'
         // mapConfig: {
         //   //style: config.mapStyle,
         //   myLat: myLat,
@@ -91,10 +94,20 @@ APP.Config = function (myLat, myLon) {
       });
     }
 
+    getHost = function () {
+      return config.global.host;
+    }
+
+    getPort = function () {
+      return config.global.port;
+    }
+
     // Public API
     return {
       get: get,
-      getSavedConfig: getSavedConfig
+      getSavedConfig: getSavedConfig,
+      getHost: getHost,
+      getPort: getPort
     };
 
 };
