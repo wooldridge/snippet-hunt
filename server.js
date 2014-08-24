@@ -10,7 +10,7 @@ app.use(express.bodyParser());
 app.all('*', function(req, res, next){
   // use '*' to accept any origin
   res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Methods', 'GET, POST, PUT');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.set('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
   next();
 });
@@ -176,5 +176,12 @@ app.put('/v1/documents', function(req, res){
   });
 });
 
-app.listen(config.port);
+var io = require('socket.io').listen(app.listen(config.port));
 console.log('Express started on port ' + config.port);
+
+io.sockets.on('connection', function (socket) {
+  console.log('connection established');
+  socket.on('thingRemoved', function (data) {
+      io.sockets.emit('thingRemoved', data);
+  });
+});

@@ -24,7 +24,8 @@ APP.Thing = function (config, gameBounds) {
         deg2rad,
         lateId,
         getMarker,
-        showMarker;
+        showMarker,
+        hideMarker;
 
     // initialize properties
     config = config || {};
@@ -122,7 +123,6 @@ APP.Thing = function (config, gameBounds) {
      * Show a Thing marker on a Google Map
      * @param map The Google Map
      * @param {boolean} interactive Add event handling (true or false)
-     * @returns The longitude
      */
     showMarker = function (map, interactive) {
         var pos = new google.maps.LatLng(getLat(), getLon());
@@ -173,6 +173,16 @@ APP.Thing = function (config, gameBounds) {
         }
     };
 
+
+    /**
+     * Hide a Thing marker on a Google Map
+     * @param map The Google Map
+     */
+    hideMarker = function () {
+        marker.setMap(null);
+        console.log('marker hidden: ' + getId());
+    };
+
     // Public API
     return {
         getId: getId,
@@ -182,6 +192,7 @@ APP.Thing = function (config, gameBounds) {
         getDistBetwPoints: getDistBetwPoints,
         getMarker: getMarker,
         showMarker: showMarker,
+        hideMarker: hideMarker,
         limit: limit,
         marker: marker
     };

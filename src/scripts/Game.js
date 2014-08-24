@@ -4,8 +4,9 @@ var APP = APP || {};
  * Class representing a game.
  * @constructor
  * @param config A configuration object.
+ * @param socket A web socket.
  */
-APP.Game = function (config) {
+APP.Game = function (config, socket) {
     'use strict';
         // properties
     var boundsConfig,
@@ -91,14 +92,11 @@ APP.Game = function (config) {
         var url = 'http://' + config.host + ':' + config.port + '/v1/documents?uri=' + id;
         $.ajax({
             type: 'DELETE',
-            url: url,
-            dataType: 'json',
-            headers: {
-                'content-type': 'application/json'
-            }
+            url: url
         }).done(function (data) {
             console.log('Thing deleted: ' + id);
             $('#' + config.mapCanvasId).trigger('removeThingDone');
+            socket.emit('thingRemoved', { 'id': id });
         }).error(function (data) {
             console.log(data);
         });
@@ -163,6 +161,16 @@ APP.Game = function (config) {
         bounds = new APP.Bounds(boundsConfig);
         map = new APP.Map(mapConfig, bounds);
         map.showMap();
+        socket.on('thingRemoved', function (data) {
+            console.log('thingsRemoved received, cycling through things');
+            for (var i = 0; i < things.length; i++) {
+              if (things[i].getId() === data.id) {
+                console.log('thing to hide found, calling things[i].hideMarker()');
+                things[i].hideMarker();
+                break;
+              }
+            }
+        });
     };
 
     // Public API

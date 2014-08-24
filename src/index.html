@@ -22,6 +22,7 @@
 <script type="text/javascript" src="scripts/Player.js"></script>
 <script type="text/javascript" src="scripts/Thing.js"></script>
 <script type="text/javascript" src="scripts/geolocationmarker.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 </head>
 <body>
 
@@ -55,8 +56,10 @@ $(function () {
       position.coords.latitude,
       position.coords.longitude
     );
+    // For realtime communication betw server and players
+    var socket = io.connect('http://10.0.0.8:9055');
     APP.config.getSavedConfig(function (savedConfig) {
-      APP.game = new APP.Game($.extend(APP.config.get('game'), savedConfig));
+      APP.game = new APP.Game($.extend(APP.config.get('game'), savedConfig), socket);
       APP.game.initialize();
     });
   });

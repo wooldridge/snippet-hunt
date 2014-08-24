@@ -11,6 +11,7 @@
     "http-proxy": "0.10.x",
     "corsproxy": "0.2.x",
     "request": "2.x",
-    "express": "3.x"
+    "express": "^3.16.7",
+    "socket.io": "^1.0.6"
   }
 }
