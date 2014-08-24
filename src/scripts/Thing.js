@@ -146,16 +146,20 @@ APP.Thing = function (config, gameBounds) {
             var msg;
             if (dist * 1000 > limit) {
               msg = 'Thing not in range';
-              var errorAudio = $("#errorAudio")[0];
-              errorAudio.play();
+              var sndE = new Audio("audio/error.wav");
+              sndE.play();
+              // var errorAudio = $("#errorAudio")[0];
+              // errorAudio.play();
               setTimeout(function() {
                 marker.setIcon('images/coin.png')
               }, 500);
               $('#msg').show().html('Out of range').fadeOut(1000);
             } else {
               msg = 'Thing in range';
-              var okAudio = $("#okAudio")[0];
-              okAudio.play();
+              var sndO = new Audio("audio/ok.wav");
+              sndO.play();
+              // var okAudio = $("#okAudio")[0];
+              // okAudio.play();
               setTimeout(function() {
                 marker.setMap(null);
               }, 200);
