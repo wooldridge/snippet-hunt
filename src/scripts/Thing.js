@@ -146,7 +146,7 @@ APP.Thing = function (config, gameBounds) {
             var msg;
             if (dist * 1000 > limit) {
               msg = 'Thing not in range';
-              var sndE = new Audio("audio/error.wav");
+              var sndE = new Audio("audio/error2.mp3");
               sndE.play();
               // var errorAudio = $("#errorAudio")[0];
               // errorAudio.play();
@@ -156,7 +156,7 @@ APP.Thing = function (config, gameBounds) {
               $('#msg').show().html('Out of range').fadeOut(1000);
             } else {
               msg = 'Thing in range';
-              var sndO = new Audio("audio/ok.wav");
+              var sndO = new Audio("audio/ok2.mp3");
               sndO.play();
               // var okAudio = $("#okAudio")[0];
               // okAudio.play();
@@ -165,6 +165,7 @@ APP.Thing = function (config, gameBounds) {
               }, 200);
               $('#msg').show().html('Coin collected').fadeOut(1000);
               APP.game.changeScore(1);
+              $('#map-canvas').trigger('scoreChanged');
               APP.game.displayScore();
               APP.game.removeThing(getId());
             }

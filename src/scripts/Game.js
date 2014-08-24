@@ -15,6 +15,7 @@ APP.Game = function (config, socket) {
         map,
         things,
         score,
+        user,
 
         // methods
         getById,
@@ -23,6 +24,7 @@ APP.Game = function (config, socket) {
         displayScore,
         changeScore,
         displayUser,
+        getUser,
         initialize;
 
    /**
@@ -111,7 +113,7 @@ APP.Game = function (config, socket) {
         var url = 'http://' + config.host + ':' + config.port + '/v1/search';
             url += '?format=json&options=argame';
             url += '&collection=thing&pageLength=' + config.numThings;
-        console.log('getAll url: ' + url);
+        console.log('getAllThings url: ' + url);
         $.ajax({
             type: 'GET',
             url: url
@@ -133,17 +135,44 @@ APP.Game = function (config, socket) {
     };
 
     /**
+     * Get a user from the database.
+     */
+    getUser = function (id) {
+        var url = 'http://' + config.host + ':' + config.port + '/v1/documents?uri=user_' + id;
+        console.log('getUser url: ' + url);
+        $.ajax({
+            type: 'GET',
+            url: url
+        }).done(function (data) {
+            console.log('User retrieved: ' + JSON.stringify(data));
+            localStorage.setItem('username', data.username);
+            localStorage.setItem('userId', data.id);
+            localStorage.setItem('score', data.score);
+            var userConfig = {
+                username: data.username,
+                id: data.id,
+                score: data.score
+            }
+            user = new APP.User(userConfig);
+            $('#' + config.mapCanvasId).trigger('getUserDone');
+        }).error(function (data) {
+            console.log(data);
+        });
+    };
+
+    /**
      * Display the score in the UI.
      */
     displayScore = function () {
-        $('#' + config.scoreId).html(score.toString());
+        //$('#' + config.scoreId).html(score.toString());
+        $('#' + config.scoreId).html(user.getScore());
     };
 
     /**
      * Change the score.
      */
     changeScore = function (n) {
-        score += n;
+        user.changeScore(n, displayScore);
     };
 
     /**
@@ -157,6 +186,13 @@ APP.Game = function (config, socket) {
      * Initialize the game.
      */
     initialize = function () {
+        $('#' + config.mapCanvasId).on('getUserDone', function () {
+            displayScore();
+            displayUser();
+            bounds = new APP.Bounds(boundsConfig);
+            map = new APP.Map(mapConfig, bounds);
+            map.showMap();
+        });
         $('#' + config.mapCanvasId).on('showMapDone', function () {
             map.showPlayer();
         });
@@ -166,11 +202,14 @@ APP.Game = function (config, socket) {
         $('#' + config.mapCanvasId).on('getAllThingsDone', function () {
             map.showMarkers(things);
         });
-        displayScore();
-        displayUser();
-        bounds = new APP.Bounds(boundsConfig);
-        map = new APP.Map(mapConfig, bounds);
-        map.showMap();
+
+        if(!localStorage.getItem('userId')) {
+        //if(true) {
+            $('#usernameModal').modal({});
+        } else {
+            getUser(localStorage.getItem('userId'));
+        }
+
         socket.on('thingRemoved', function (data) {
             console.log('thingsRemoved received, cycling through things');
             for (var i = 0; i < things.length; i++) {
@@ -181,6 +220,24 @@ APP.Game = function (config, socket) {
               }
             }
         });
+
+        $('#usernameForm button').click(function () {
+            var userConfig = {
+              username: $('#usernameInput').val(),
+            }
+            user = new APP.User(userConfig);
+            user.saveUser(function () {
+                $('#usernameModal').modal('hide');
+                localStorage.setItem('username', user.getUsername());
+                localStorage.setItem('userId', user.getId());
+                $('#' + config.mapCanvasId).trigger('getUserDone');
+            });
+            return false;
+        });
+
+          $('#map-canvas').on('scoreChanged', function () {
+
+          });
     };
 
     // Public API
@@ -189,7 +246,8 @@ APP.Game = function (config, socket) {
         removeThing: removeThing,
         initialize: initialize,
         displayScore: displayScore,
-        changeScore: changeScore
+        changeScore: changeScore,
+        getUser: getUser
     };
 
 };

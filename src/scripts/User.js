@@ -22,9 +22,9 @@ APP.User = function (config) {
     // initialize properties
     config = config || {};
 
-    id = config.id;
+    id = config.id || 2002;
     username = config.username;
-    score = config.score;
+    score = config.score || 0;
 
     /**
      * Get the ID
@@ -53,13 +53,15 @@ APP.User = function (config) {
     /**
      * Change the score.
      */
-    changeScore = function (n) {
+    changeScore = function (n, callback) {
         score += n;
+        saveUser(callback);
     };
 
-    saveUser = function () {
+    saveUser = function (callback) {
       var url = 'http://' + APP.config.getHost() + ':' + APP.config.getPort();
-          url += '/v1/documents?uri=user.json';
+          url += '/v1/documents?uri=user_' + getId();
+          url += '&collection=user';
       var json = {
           id: getId(),
           username: getUsername(),
@@ -77,7 +79,9 @@ APP.User = function (config) {
           }
       }).done(function (data) {
           console.log('User posted: ' + data);
-          $('#usernameForm').hide();
+          if(callback) {
+            callback();
+          }
       }).error(function (data) {
           console.log(data);
       });

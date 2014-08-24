@@ -91,20 +91,10 @@
   <source src="audio/ambient.mp3" type="audio/mpeg">
 </audio>
 
+<button type="button" data-toggle="modal" data-target="#myModal">Launch modal</button>
+
 <script>
 $(function () {
-
-  $('#usernameForm button').click(function () {
-    localStorage.setItem('username', $('#username').val());
-    var userConfig = {
-      id: 2002,
-      username: $('#usernameInput').val(),
-      score: 0
-    }
-    var user = new APP.User(userConfig);
-    user.saveUser();
-    return false;
-  });
 
   navigator.geolocation.getCurrentPosition(function (position) {
     APP.config = new APP.Config(
@@ -114,10 +104,6 @@ $(function () {
     // For realtime communication betw server and players
     var socket = io.connect('http://10.0.0.8:9055');
     APP.config.getSavedConfig(function (savedConfig) {
-      //if(!localStorage.getItem('username')) {
-      if(true) {
-        $('#usernameForm').show();
-      }
       APP.game = new APP.Game($.extend(APP.config.get('game'), savedConfig), socket);
       APP.game.initialize();
     });

@@ -155,7 +155,7 @@ APP.Admin = function (config) {
       things.push(thing);
       nextId++;
       var url = 'http://' + config.host + ':' + config.port;
-          url += '/v1/documents?uri=' + thing.getId();
+          url += '/v1/documents?uri=thing_' + thing.getId();
           url += '&collection=thing';
       var json = {
           id: thing.getId(),
