@@ -21,6 +21,7 @@
 <script type="text/javascript" src="scripts/MapStyles.js"></script>
 <script type="text/javascript" src="scripts/Player.js"></script>
 <script type="text/javascript" src="scripts/Thing.js"></script>
+<script type="text/javascript" src="scripts/User.js"></script>
 <script type="text/javascript" src="scripts/geolocationmarker.js"></script>
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 </head>
@@ -67,27 +68,13 @@ $(function () {
 
   $('#usernameForm button').click(function () {
     localStorage.setItem('username', $('#username').val());
-    var url = 'http://' + APP.config.getHost() + ':' + APP.config.getPort();
-        url += '/v1/documents?uri=user.json';
-    var json = {
-        username: $('#usernameInput').val()
-    };
-    json = JSON.stringify(json);
-    $.ajax({
-        type: 'PUT',
-        url: url,
-        data: json,
-        // IMPORTANT: Do not set 'dataType: "json"' since REST server
-        // returns an empty body on success, which is invalid JSON
-        headers: {
-            'content-type': 'application/json'
-        }
-    }).done(function (data) {
-        console.log('User posted: ' + data);
-        $('#usernameForm').hide();
-    }).error(function (data) {
-        console.log(data);
-    });
+    var userConfig = {
+      id: 2002,
+      username: $('#usernameInput').val(),
+      score: 0
+    }
+    var user = new APP.User(userConfig);
+    user.saveUser();
     return false;
   });
 
@@ -99,7 +86,8 @@ $(function () {
     // For realtime communication betw server and players
     var socket = io.connect('http://10.0.0.8:9055');
     APP.config.getSavedConfig(function (savedConfig) {
-      if(!localStorage.getItem('username')) {
+      //if(!localStorage.getItem('username')) {
+      if(true) {
         $('#usernameForm').show();
       }
       APP.game = new APP.Game($.extend(APP.config.get('game'), savedConfig), socket);

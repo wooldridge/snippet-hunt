@@ -58,6 +58,9 @@ APP.Config = function (myLat, myLon) {
         //   myLat: myLat,
         //   myLon: myLon
         // }
+      },
+      user: {
+        score: 0
       }
     };
 
