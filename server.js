@@ -93,7 +93,7 @@ app.get('/v1/documents', function(req, res){
   });
 });
 
-// Add a document: /v1/documents?uri=[uri] POST
+// Post a document: /v1/documents?uri=[uri] POST
 app.post('/v1/documents', function(req, res){
   var url = 'http://' + config.mlhost + ':' + config.mlport +
 	        '/v1/documents?' + buildQuery(req);
@@ -148,7 +148,7 @@ app.delete('/v1/documents', function(req, res){
   });
 });
 
-// Add a document: /v1/documents PUT
+// Put a document: /v1/documents PUT
 app.put('/v1/documents', function(req, res){
   var url = 'http://' + config.mlhost + ':' + config.mlport +
           '/v1/documents?' + buildQuery(req);
