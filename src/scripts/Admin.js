@@ -22,7 +22,6 @@ APP.Admin = function (config) {
       gameBounds,
       url,
       json,
-      nextId,
       thing,
       thingConfig,
       things,
@@ -32,12 +31,12 @@ APP.Admin = function (config) {
       display,
       putConfig,
       putThings,
-      clearThings;
+      postThings,
+      removeAllThings;
 
   // initialize
   config = config || {};
 
-  nextId = config.nextId || 1001;
   things = [];
   allMarkers = [];
 
@@ -150,10 +149,10 @@ APP.Admin = function (config) {
    * @param gameBounds Game bounds
    */
   putThings = function (num, gameBounds) {
-      thingConfig = { id: nextId };
-      thing = new APP.Thing(thingConfig, gameBounds);
+      //thingConfig = { id: nextThingId };
+      thing = new APP.Thing({}, gameBounds);
       things.push(thing);
-      nextId++;
+      //nextThingId++;
       var url = 'http://' + config.host + ':' + config.port;
           url += '/v1/documents?uri=thing_' + thing.getId();
           url += '&collection=thing';
@@ -173,7 +172,7 @@ APP.Admin = function (config) {
               'content-type': 'application/json'
           }
       }).done(function (data) {
-          console.log('Thing posted: ' + json);
+          console.log('Thing put: ' + json);
           num--;
           if (num === 0) {
               console.log('Triggering putThingsDone');
@@ -186,21 +185,59 @@ APP.Admin = function (config) {
       });
   };
 
-  clearThings = function () {
-    for (var i = 0; i < things.length; i++) {
-      var m = things[i].getMarker();
-      m.setMap(null);
-      things[i].marker = null;
-    }
-    things = [];
-  }
+  /**
+   * Post things to db.
+   * @param num Number of Things to add
+   * @param gameBounds Game bounds
+   */
+  postThings = function (num, gameBounds) {
+      thingConfig = {};
+      thing = new APP.Thing(thingConfig, gameBounds);
+      var url = 'http://' + config.host + ':' + config.port;
+          url += '/v1/documents?extension=json&directory=/things/&collection=things';
+      var json = {
+          lat: thing.getLat(),
+          lon: thing.getLon()
+      };
+      json = JSON.stringify(json);
+      $.ajax({
+          type: 'POST',
+          url: url,
+          data: json,
+          // IMPORTANT: Do not set 'dataType: "json"' since REST server
+          // returns an empty body on success, which is invalid JSON
+          headers: {
+              'content-type': 'application/json'
+          }
+      }).done(function (data) {
+          console.log('Thing posted: ' + json);
+          // /v1/documents?uri=/things/4123628437005578381.json
+          thing.setId(data.location.substring(26, 45));
+          things.push(thing);
+          num--;
+          if (num === 0) {
+              console.log('Triggering putThingsDone');
+              $('#' + config.mapCanvasId).trigger('postThingsDone');
+          } else {
+              postThings(num, gameBounds);
+          }
+      }).error(function (data) {
+          console.log(data);
+      });
+  };
+
+  /**
+   * Clear all Things from the database.
+   */
+  removeAllThings = function () {
+      // TBD
+  };
 
   /**
    * Handle form submit.
    */
   $('#adminForm button').click(function (ev) {
     console.log('submit clicked');
-    putConfig();
     map.disableRectangle();
     $('#adminForm button').html("Saving...");
     var boundsConfig = {
@@ -210,13 +247,19 @@ APP.Admin = function (config) {
       lon2: parseFloat($('#lon2').val())
     };
     gameBounds = APP.Bounds(boundsConfig);
-    clearThings();
-    putThings($('#numThings').val(), gameBounds);
-    $('#' + config.mapCanvasId).on('putThingsDone', function () {
+    //putThings($('#numThings').val(), gameBounds);
+    $('#' + config.mapCanvasId).on('removeAllThingsDone', function () {
+      postThings($('#numThings').val(), gameBounds);
+    });
+    $('#' + config.mapCanvasId).on('postThingsDone', function () {
       for (var i = 0; i < things.length; i++) {
         things[i].showMarker(map, false);
       }
+      // put config after things saved for correct nextThingId
+      putConfig();
     });
+    removeAllThings();
+
     setTimeout(function () {
       $('#adminForm button').html("Game Saved");
       $('#adminForm button').prop('disabled', true);
