@@ -17,12 +17,12 @@ APP.User = function (config) {
         getUsername,
         getScore,
         changeScore,
-        saveUser;
+        saveNewUser,
+        updateUser;
 
     // initialize properties
     config = config || {};
 
-    id = config.id || 2002;
     username = config.username;
     score = config.score || 0;
 
@@ -55,15 +55,44 @@ APP.User = function (config) {
      */
     changeScore = function (n, callback) {
         score += n;
-        saveUser(callback);
+        updateUser(localStorage.getItem('userId'));
     };
 
-    saveUser = function (callback) {
+    saveNewUser = function (callback) {
       var url = 'http://' + APP.config.getHost() + ':' + APP.config.getPort();
-          url += '/v1/documents?uri=user_' + getId();
-          url += '&collection=user';
+          url += '/v1/documents?extension=json&directory=/users/';
+      console.log('saveNewUser url: ' + url);
       var json = {
-          id: getId(),
+          username: getUsername(),
+          score: getScore()
+      };
+      json = JSON.stringify(json);
+      $.ajax({
+          type: 'POST',
+          url: url,
+          data: json,
+          // IMPORTANT: Do not set 'dataType: "json"' since REST server
+          // returns an empty body on success, which is invalid JSON
+          headers: {
+              'content-type': 'application/json'
+          }
+      }).done(function (data) {
+          console.log('User posted: ' + data);
+          // /v1/documents?uri=4123628437005578381.json
+          id = data.location.substring(25, 45);
+          if(callback) {
+            callback();
+          }
+      }).error(function (data) {
+          console.log(data);
+      });
+    };
+
+    updateUser = function (id) {
+      var url = 'http://' + APP.config.getHost() + ':' + APP.config.getPort();
+          url += '/v1/documents?uri=/users/' + id + '.json';
+      console.log('updateUser url: ' + url);
+      var json = {
           username: getUsername(),
           score: getScore()
       };
@@ -78,14 +107,14 @@ APP.User = function (config) {
               'content-type': 'application/json'
           }
       }).done(function (data) {
-          console.log('User posted: ' + data);
-          if(callback) {
-            callback();
-          }
+          console.log('User updated: ' + id);
+          console.log('Triggering updateUserDone');
+          $('#map-canvas').trigger('updateUserDone');
       }).error(function (data) {
           console.log(data);
       });
     };
+
 
     // Public API
     return {
@@ -93,7 +122,8 @@ APP.User = function (config) {
         getUsername: getUsername,
         getScore: getScore,
         changeScore: changeScore,
-        saveUser: saveUser
+        saveNewUser: saveNewUser,
+        updateUser: updateUser
     };
 
 };

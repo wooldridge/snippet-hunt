@@ -13,6 +13,7 @@ APP.Game = function (config, socket) {
         mapConfig,
         bounds,
         map,
+        thing,
         things,
         score,
         user,
@@ -89,10 +90,11 @@ APP.Game = function (config, socket) {
 
     /**
      * Remove a Thing from the database.
-     * @param id The ID of the thing.
+     * @param id The ID of the Thing.
      */
     removeThing = function (id) {
-        var url = 'http://' + config.host + ':' + config.port + '/v1/documents?uri=' + id;
+        var url = 'http://' + config.host + ':' + config.port;
+            url += '/v1/documents?uri=/things/' + id + '.json';
         $.ajax({
             type: 'DELETE',
             url: url
@@ -112,7 +114,7 @@ APP.Game = function (config, socket) {
         // http://localhost:8077/v1/search?format=json&options=argame&pageLength=2
         var url = 'http://' + config.host + ':' + config.port + '/v1/search';
             url += '?format=json&options=argame';
-            url += '&collection=thing&pageLength=' + config.numThings;
+            url += '&directory=/things/&pageLength=' + config.numThings;
         console.log('getAllThings url: ' + url);
         $.ajax({
             type: 'GET',
@@ -121,12 +123,12 @@ APP.Game = function (config, socket) {
             console.log('Results retrieved: ' + JSON.stringify(data));
             for (var i = 0; i < data.results.length; i++) {
                 var thingConfig = {
-                    id: data.results[i].metadata[0].id,
-                    lat: data.results[i].metadata[1].lat,
-                    lon: data.results[i].metadata[2].lon
+                    id: data.results[i].uri.substring(8, 27),
+                    lat: data.results[i].metadata[0].lat,
+                    lon: data.results[i].metadata[1].lon
                 };
-                var t = new APP.Thing(thingConfig);
-                things.push(t);
+                thing = new APP.Thing(thingConfig);
+                things.push(thing);
             }
             $('#' + config.mapCanvasId).trigger('getAllThingsDone');
         }).error(function (data) {
@@ -135,22 +137,22 @@ APP.Game = function (config, socket) {
     };
 
     /**
-     * Get a user from the database.
+     * Get a User from the database.
+     * @param id The ID of the User.
      */
     getUser = function (id) {
-        var url = 'http://' + config.host + ':' + config.port + '/v1/documents?uri=user_' + id;
+        var url = 'http://' + config.host + ':' + config.port;
+            url += '/v1/documents?uri=/users/' + id + '.json';
         console.log('getUser url: ' + url);
         $.ajax({
             type: 'GET',
             url: url
         }).done(function (data) {
             console.log('User retrieved: ' + JSON.stringify(data));
-            localStorage.setItem('username', data.username);
-            localStorage.setItem('userId', data.id);
-            localStorage.setItem('score', data.score);
+            localStorage.setItem('userId', id);
             var userConfig = {
+                id: id,
                 username: data.username,
-                id: data.id,
                 score: data.score
             }
             user = new APP.User(userConfig);
@@ -179,7 +181,7 @@ APP.Game = function (config, socket) {
      * Display the username in the UI.
      */
     displayUser = function () {
-        $('#' + config.userId).html(localStorage.getItem('username'));
+        $('#' + config.userId).html(user.getUsername());
     };
 
     /**
@@ -226,9 +228,8 @@ APP.Game = function (config, socket) {
               username: $('#usernameInput').val(),
             }
             user = new APP.User(userConfig);
-            user.saveUser(function () {
+            user.saveNewUser(function () {
                 $('#usernameModal').modal('hide');
-                localStorage.setItem('username', user.getUsername());
                 localStorage.setItem('userId', user.getId());
                 $('#' + config.mapCanvasId).trigger('getUserDone');
             });
