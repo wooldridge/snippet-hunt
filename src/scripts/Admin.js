@@ -231,6 +231,7 @@ APP.Admin = function (config) {
    */
   removeAllThings = function () {
       // TBD
+      $('#' + config.mapCanvasId).trigger('removeAllThingsDone');
   };
 
   /**

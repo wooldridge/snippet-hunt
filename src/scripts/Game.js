@@ -159,6 +159,7 @@ APP.Game = function (config, socket) {
             $('#' + config.mapCanvasId).trigger('getUserDone');
         }).error(function (data) {
             console.log(data);
+            $('#' + config.mapCanvasId).trigger('getUserError');
         });
     };
 
@@ -188,6 +189,9 @@ APP.Game = function (config, socket) {
      * Initialize the game.
      */
     initialize = function () {
+        $('#' + config.mapCanvasId).on('getUserError', function () {
+            $('#usernameModal').modal({});
+        });
         $('#' + config.mapCanvasId).on('getUserDone', function () {
             displayScore();
             displayUser();
