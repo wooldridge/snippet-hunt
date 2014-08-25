@@ -25,7 +25,9 @@ APP.Config = function (myLat, myLon) {
         fileName: 'config.json',
         myLat: myLat,
         myLon: myLon,
-        mapStyles: new APP.MapStyles()
+        mapStyles: new APP.MapStyles(),
+        nextThingId: 1001,
+        nextUserId: 1001
       },
       admin: {
         mapCanvasId: 'map-canvas-admin',
@@ -37,7 +39,6 @@ APP.Config = function (myLat, myLon) {
         lat2: myLat + 0.0007,
         lon2: myLon + 0.001,
         mapStyleIndex: 0,
-        nextId: 1001,
         mapOptions: {
           zoom: 18
         },
