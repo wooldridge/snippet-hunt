@@ -110,7 +110,15 @@ app.post('/v1/documents', function(req, res){
     if (response) {
       if ((response.statusCode >= 200) && (response.statusCode < 300)) {
         res.set('Content-Type', 'application/json');
-        res.send(body);
+        // response may or may not have body
+        if(body) {
+          console.log(JSON.stringify(body));
+          res.send(body);
+        // if not, send headers, they include ML-generated URI in location
+        } else {
+          console.log(JSON.stringify(response.headers));
+          res.send(response.headers);
+        }
       } else {
         console.log('Error: '+ response.statusCode);
 	      console.log(body);
