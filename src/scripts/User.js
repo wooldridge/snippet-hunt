@@ -51,7 +51,7 @@ APP.User = function (config) {
     };
 
     /**
-     * Change the score.
+     * Change the user's score.
      */
     changeScore = function (n, callback) {
         score += n;
@@ -71,15 +71,13 @@ APP.User = function (config) {
           type: 'POST',
           url: url,
           data: json,
-          // IMPORTANT: Do not set 'dataType: "json"' since REST server
-          // returns an empty body on success, which is invalid JSON
           headers: {
-              'content-type': 'application/json'
+            'content-type': 'application/json'
           }
       }).done(function (data) {
           console.log('User posted: ' + data);
-          // /v1/documents?uri=4123628437005578381.json
-          id = data.location.substring(25, 45);
+          // data.location: /v1/documents?uri=/users/4123628437005578381.json
+          id = data.location.slice(0, data.location.length - 5).substring(25);
           if(callback) {
             callback();
           }
@@ -101,10 +99,8 @@ APP.User = function (config) {
           type: 'PUT',
           url: url,
           data: json,
-          // IMPORTANT: Do not set 'dataType: "json"' since REST server
-          // returns an empty body on success, which is invalid JSON
           headers: {
-              'content-type': 'application/json'
+            'content-type': 'application/json'
           }
       }).done(function (data) {
           console.log('User updated: ' + id);
