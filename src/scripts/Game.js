@@ -123,7 +123,8 @@ APP.Game = function (config, socket) {
             console.log('Results retrieved: ' + JSON.stringify(data));
             for (var i = 0; i < data.results.length; i++) {
                 var thingConfig = {
-                    id: data.results[i].uri.substring(8, 27),
+                    // uri: /things/10499283988025584566.json
+                    id: data.results[i].uri.slice(0, data.results[i].uri.length - 5).substring(8),
                     lat: data.results[i].metadata[0].lat,
                     lon: data.results[i].metadata[1].lon
                 };
@@ -167,7 +168,6 @@ APP.Game = function (config, socket) {
      * Display the score in the UI.
      */
     displayScore = function () {
-        //$('#' + config.scoreId).html(score.toString());
         $('#' + config.scoreId).html(user.getScore());
     };
 
