@@ -212,7 +212,7 @@ APP.Admin = function (config) {
       }).done(function (data) {
           console.log('Thing posted: ' + json);
           // /v1/documents?uri=/things/4123628437005578381.json
-          thing.setId(data.location.substring(26, 45));
+          thing.setId(data.location.slice(0, data.location.length - 5).substring(26));
           things.push(thing);
           num--;
           if (num === 0) {
@@ -238,7 +238,6 @@ APP.Admin = function (config) {
    * Handle form submit.
    */
   $('#adminForm button').click(function (ev) {
-    console.log('submit clicked');
     map.disableRectangle();
     $('#adminForm button').html("Saving...");
     var boundsConfig = {
@@ -248,7 +247,6 @@ APP.Admin = function (config) {
       lon2: parseFloat($('#lon2').val())
     };
     gameBounds = APP.Bounds(boundsConfig);
-    //putThings($('#numThings').val(), gameBounds);
     $('#' + config.mapCanvasId).on('removeAllThingsDone', function () {
       postThings($('#numThings').val(), gameBounds);
     });
