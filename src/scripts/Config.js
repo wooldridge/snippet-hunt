@@ -20,6 +20,7 @@ APP.Config = function (myLat, myLon) {
     // initialize properties
     config = {
       global: {
+        //host: '172.16.12.136',
         host: '10.0.0.8',
         port: 9055,
         fileName: 'config.json',
