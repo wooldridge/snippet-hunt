@@ -1,0 +1,22 @@
+{
+  "name": "argame",
+  "version": "0.0.0",
+  "homepage": "https://github.com/wooldridge/argame",
+  "authors": [
+    "Mike Wooldridge <mike@hellion.org>"
+  ],
+  "description": "An augmented reality game.",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "chai": "~1.9.1",
+    "jquery": "~2.1.1",
+    "mocha": "~1.21.4"
+  }
+}
