@@ -38,6 +38,8 @@ app.use(express.compress()); // gzip compression
 
 // Serve static files
 app.use(express.static(__dirname + '/src', { maxAge: oneDay }));
+app.use('/bower_components', express.static(__dirname + '/bower_components'));
+app.use('/test', express.static(__dirname + '/test'));
 
 // Make a search request: /v1/search GET
 app.get('/v1/search', function(req, res){
@@ -114,10 +116,11 @@ app.post('/v1/documents', function(req, res){
         if(body) {
           console.log(JSON.stringify(body));
           res.send(body);
-        // if not, send headers, they include ML-generated URI in location
+        // if not, send response (which includes ML-generated URI in location)
         } else {
           console.log(JSON.stringify(response.headers));
-          res.send(response.headers);
+          //res.send(response.headers);
+          res.send(response);
         }
       } else {
         console.log('Error: '+ response.statusCode);
@@ -144,7 +147,7 @@ app.delete('/v1/documents', function(req, res){
   }, function (error, response, body) {
     if (response) {
       if ((response.statusCode >= 200) && (response.statusCode < 300)) {
-        res.send(); // Note: body is empty on success
+        res.send(response); // Note: body is empty on success
       } else {
         console.log('Error: '+ response.statusCode);
         console.log(body);
@@ -172,7 +175,7 @@ app.put('/v1/documents', function(req, res){
   }, function (error, response, body) {
     if (response) {
       if ((response.statusCode >= 200) && (response.statusCode < 300)) {
-        res.send(); // Note: body is empty on success
+        res.send(response); // Note: body is empty on success
       } else {
         console.log('Error: '+ response.statusCode);
         console.log(body);
