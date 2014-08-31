@@ -10,12 +10,18 @@ APP.Config = function (myLat, myLon) {
         // properties
     var config,
         url,
+        myLat,
+        myLon,
 
         // methods
         get,
         getSavedConfig,
         getHost,
         getPort;
+
+    // initialize
+    myLat = myLat || 0;
+    myLon = myLon || 0;
 
     // initialize properties
     config = {
@@ -26,7 +32,6 @@ APP.Config = function (myLat, myLon) {
         fileName: 'config.json',
         myLat: myLat,
         myLon: myLon,
-        mapStyles: new APP.MapStyles(),
         nextThingId: 1001,
         nextUserId: 1001
       },
@@ -65,6 +70,10 @@ APP.Config = function (myLat, myLon) {
         score: 0
       }
     };
+
+    if (APP.MapStyles) {
+      config.global.mapStyles = new APP.MapStyles();
+    }
 
     /**
      * Get a configuration
