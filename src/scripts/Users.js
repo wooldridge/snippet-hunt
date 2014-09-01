@@ -64,7 +64,7 @@ APP.Users = function (config) {
    */
   getUser = function (id, callback) {
     var url = 'http://' + config.getHost() + ':' + config.getPort();
-      url += '/v1/documents?uri=/users/' + id + '.json';
+      url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
     console.log('User.getUser url: ' + url);
     $.ajax({
       type: 'GET',
@@ -88,7 +88,7 @@ APP.Users = function (config) {
    */
   getAllUsers = function (callback) {
     var url = 'http://' + config.getHost() + ':' + config.getPort();
-      url += '/v1/documents?uri=/users/' + id + '.json';
+      url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
     console.log('User.get url: ' + url);
     $.ajax({
       type: 'GET',
@@ -112,7 +112,7 @@ APP.Users = function (config) {
    */
   updateUser = function (id, user, callback) {
     var url = 'http://' + config.getHost() + ':' + config.getPort();
-      url += '/v1/documents?uri=/users/' + id + '.json';
+      url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
     console.log('User.updateUser url: ' + url);
     var json = JSON.stringify(user);
     $.ajax({
@@ -141,7 +141,7 @@ APP.Users = function (config) {
    */
   deleteUser = function (id, callback) {
     var url = 'http://' + config.getHost() + ':' + config.getPort();
-      url += '/v1/documents?uri=/users/' + id + '.json';
+      url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
     console.log('User.deleteUser url: ' + url);
     $.ajax({
       type: 'DELETE',
