@@ -4,7 +4,7 @@ describe("UserMgr", function() {
 
   this.timeout(5000);
 
-  var config = APP.Config();
+  var config = APP.ConfigMgr();
   var user = {
     username: 'testname',
     score: 0

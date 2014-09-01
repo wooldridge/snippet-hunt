@@ -4,7 +4,7 @@ describe("ThingMgr", function() {
 
   this.timeout(5000);
 
-  var config = APP.Config();
+  var config = APP.ConfigMgr();
   var boundsConfig = {
     lat1: 37.885454 - 0.0007,
     lon1: -122.063447 - 0.001,
