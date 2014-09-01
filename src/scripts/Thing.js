@@ -3,9 +3,9 @@ var APP = APP || {};
 /**
  * Class representing an Thing.
  * @constructor
- * @param config A configuration object.
+ * @param config A Thing config object.
  */
-APP.Thing = function (config, gameBounds) {
+APP.Thing = function (config) {
     'use strict';
         // properties
     var id,
@@ -19,7 +19,9 @@ APP.Thing = function (config, gameBounds) {
         getId,
         setId,
         getLat,
+        setLat,
         getLon,
+        setLon,
         getDistBetwPoints,
         deg2rad,
         lateId,
@@ -33,21 +35,8 @@ APP.Thing = function (config, gameBounds) {
     // location: 37.886, -122.064
 
     id = config.id || '';
-
-    if (gameBounds) {
-      var coords = gameBounds.getRandCoords();
-    }
-
-    if (config.lat) {
-        lat = config.lat;
-    } else {
-        lat = coords.lat;
-    }
-    if (config.lon) {
-        lon = config.lon;
-    } else {
-        lon = coords.lon;
-    }
+    lat = config.lat;
+    lon = config.lon;
 
     // Limit for interacting with Thing (in meters)
     limit = config.limit || 21;
@@ -77,11 +66,27 @@ APP.Thing = function (config, gameBounds) {
     };
 
     /**
+     * Set the latitude
+     * @param newLat The new latitude
+     */
+    setLat = function (newLat) {
+        lat = newLat;
+    };
+
+    /**
      * Get the longitude
      * @returns The longitude
      */
     getLon = function () {
         return lon;
+    };
+
+    /**
+     * Set the longitude
+     * @param newLon The new longitude
+     */
+    setLon = function (newLon) {
+        lon = newLon;
     };
 
     getDistBetwPoints = function (lat1,lon1,lat2,lon2) {
@@ -189,7 +194,9 @@ APP.Thing = function (config, gameBounds) {
         getId: getId,
         setId: setId,
         getLat: getLat,
+        setLat: setLat,
         getLon: getLon,
+        setLon: setLon,
         getDistBetwPoints: getDistBetwPoints,
         getMarker: getMarker,
         showMarker: showMarker,
