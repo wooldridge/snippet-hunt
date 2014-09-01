@@ -55,11 +55,14 @@ APP.Admin = function (config) {
   mapConfig = {
     id: config.mapCanvasId,
     style: config.mapStyle,
-    mapStyles: config.mapStyles,
     myLat: config.myLat,
     myLon: config.myLon,
     mapOptions: config.mapOptions,
     rectOptions: config.rectOptions
+  }
+
+  if (config.mapStyles) {
+    mapConfig.mapStyles = config.mapStyles;
   }
 
   /**
