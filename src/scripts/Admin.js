@@ -194,38 +194,18 @@ APP.Admin = function (config) {
    * @param gameBounds Game bounds
    */
   postThings = function (num, gameBounds) {
-      thingConfig = {};
-      thing = new APP.Thing(thingConfig, gameBounds);
-      var url = 'http://' + config.host + ':' + config.port;
-          url += '/v1/documents?extension=json&directory=/things/&collection=things';
-      var json = {
-          lat: thing.getLat(),
-          lon: thing.getLon()
-      };
-      json = JSON.stringify(json);
-      $.ajax({
-          type: 'POST',
-          url: url,
-          data: json,
-          // IMPORTANT: Do not set 'dataType: "json"' since REST server
-          // returns an empty body on success, which is invalid JSON
-          headers: {
-              'content-type': 'application/json'
-          }
-      }).done(function (data) {
-          console.log('Thing posted: ' + json);
-          // /v1/documents?uri=/things/4123628437005578381.json
-          thing.setId(data.location.slice(0, data.location.length - 5).substring(26));
+      var thingMgr = APP.ThingMgr(config);
+      var coords = bounds.getRandCoords();
+      thingMgr.createThing({lat: coords.lat, lon: coords.lon}, function (thing) {
+        var id = thing.getId();
+        num--;
+        if (num > 0) {
           things.push(thing);
-          num--;
-          if (num === 0) {
-              console.log('Triggering putThingsDone');
-              $('#' + config.mapCanvasId).trigger('postThingsDone');
-          } else {
-              postThings(num, gameBounds);
-          }
-      }).error(function (data) {
-          console.log(data);
+          postThings(num, gameBounds);
+        } else {
+          console.log('Triggering putThingsDone');
+          $('#' + config.mapCanvasId).trigger('postThingsDone');
+        }
       });
   };
 
@@ -258,7 +238,16 @@ APP.Admin = function (config) {
         things[i].showMarker(map, false);
       }
       // put config after things saved for correct nextThingId
-      putConfig();
+      //putConfig();
+      var configToSave = {
+        lat1: $('#lat1').val(),   // south horiz
+        lon1: $('#lon1').val(),   // west vert
+        lat2: $('#lat2').val(),   // north horiz
+        lon2: $('#lon2').val(),   // east vert
+        mapStyle: $('#mapStyles').val(),
+        numThings: $('#numThings').val()
+      };
+      APP.configMgr.saveConfig(configToSave);
     });
     removeAllThings();
 
