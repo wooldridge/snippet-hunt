@@ -12,9 +12,13 @@ APP.Config = function (myLat, myLon) {
         url,
         myLat,
         myLon,
+        directory,
+        collection,
+        savedConfig,
 
         // methods
         get,
+        saveConfig,
         getSavedConfig,
         getHost,
         getPort;
@@ -22,6 +26,9 @@ APP.Config = function (myLat, myLon) {
     // initialize
     myLat = myLat || 0;
     myLon = myLon || 0;
+
+    directory = 'configs';
+    collection = 'configs';
 
     // initialize properties
     config = {
@@ -38,8 +45,6 @@ APP.Config = function (myLat, myLon) {
       admin: {
         mapCanvasId: 'map-canvas-admin',
         numThings: 10,
-        myLat: myLat,
-        myLon: myLon,
         lat1: myLat - 0.0007,
         lon1: myLon - 0.001,
         lat2: myLat + 0.0007,
@@ -86,25 +91,62 @@ APP.Config = function (myLat, myLon) {
       return result;
     };
 
+
     /**
-     * Get saved config info from db.
+     * Save game-specific config data to db
      */
-    getSavedConfig = function (callback) {
+    saveConfig = function (configToSave, callback) {
       url = 'http://' + config.global.host + ':' + config.global.port;
-      url += '/v1/documents?uri=' + config.global.fileName;
+      url += '/v1/documents?extension=json&directory=/' + directory + '/';
+      url += '&collection=' + collection;
+      console.log('Config.saveConfig url: ' + url);
+      $.ajax({
+        type: 'POST',
+        url: url,
+        data: JSON.stringify(configToSave),
+        headers: {
+          'content-type': 'application/json'
+        }
+      }).done(function (data, textStatus, jqXHR) {
+        console.log('Config.saveConfig: ' + data.headers.location);
+        // data.headers.location:
+        // /v1/documents?uri=/configs/4123628437005578381.json
+        var id = data.headers.location
+             .slice(0, data.headers.location.length - 5)
+             .substring(27);
+        localStorage.setItem('gameId', id);
+        console.log('localStorage gameId: ' + data.headers.location);
+        if(callback) {
+          callback(id);
+        }
+      }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log(textStatus);
+        if (callback) {
+          callback(jqXHR);
+        }
+      });
+    }
+
+    /**
+     * Get game-specific config data from db
+     */
+    getSavedConfig = function (id, callback) {
+      url = 'http://' + config.global.host + ':' + config.global.port;
+      url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
+      console.log('Config.getSavedConfig url: ' + url);
       $.ajax({
           type: 'GET',
-          url: url,
-          headers: {
-              'content-type': 'application/json'
-          }
-      }).done(function (json) {
-          console.log('Config retrieved: ' + json);
+          url: url
+      }).done(function (data, textStatus, jqXHR) {
+          console.log('Config.getSavedConfig: ' + JSON.stringify(data));
           if (callback) {
-            callback(json);
+            callback(data);
           }
-      }).error(function (data) {
-          console.log('Error: ' + json);
+      }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log(textStatus);
+        if (callback) {
+          callback(jqXHR);
+        }
       });
     }
 
@@ -119,6 +161,7 @@ APP.Config = function (myLat, myLon) {
     // Public API
     return {
       get: get,
+      saveConfig: saveConfig,
       getSavedConfig: getSavedConfig,
       getHost: getHost,
       getPort: getPort
