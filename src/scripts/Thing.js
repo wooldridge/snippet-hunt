@@ -12,6 +12,8 @@ APP.Thing = function (config) {
         lat,
         lon,
         marker,
+        markerIcon,
+        markerIconActive,
         limit,
         gameBounds,
 
@@ -26,6 +28,8 @@ APP.Thing = function (config) {
         deg2rad,
         lateId,
         getMarker,
+        getMarkerIcon,
+        getMarkerIconActive,
         showMarker,
         hideMarker;
 
@@ -37,6 +41,9 @@ APP.Thing = function (config) {
     id = config.id || '';
     lat = config.lat;
     lon = config.lon;
+
+    markerIcon = 'images/coin.png';
+    markerIconActive = 'images/coin_flipped.png';
 
     // Limit for interacting with Thing (in meters)
     limit = config.limit || 21;
@@ -110,12 +117,6 @@ APP.Thing = function (config) {
       return deg * (Math.PI/180)
     }
 
-    lateId = function() {
-      setTimeout(function() {
-        return getId();
-      }, 1000);
-    }
-
     getMarker = function () {
       if (marker) {
         return marker;
@@ -124,9 +125,17 @@ APP.Thing = function (config) {
       }
     }
 
+    getMarkerIcon = function () {
+      return markerIcon;
+    }
+
+    getMarkerIconActive = function () {
+      return markerIconActive;
+    }
+
     /**
      * Show a Thing marker on a Google Map
-     * @param map The Google Map
+     * @param map The APP.Map object
      * @param {boolean} interactive Add event handling (true or false)
      */
     showMarker = function (map, interactive) {
@@ -136,7 +145,7 @@ APP.Thing = function (config) {
           anchor: new google.maps.Point(8, 8),
           map: map.getMap(),
           title: getLat().toString()+', '+getLon(),
-          icon: 'images/coin.png'
+          icon: getMarkerIcon()
         });
         if (interactive !== false) {
           google.maps.event.addListener(marker, 'click', function(ev) {
@@ -147,7 +156,7 @@ APP.Thing = function (config) {
               player.position.k,
               player.position.B
             );
-            marker.setIcon('images/coin_flipped.png')
+            marker.setIcon(getMarkerIconActive())
             var msg;
             if (dist * 1000 > limit) {
               msg = 'Thing not in range';
@@ -156,7 +165,7 @@ APP.Thing = function (config) {
               // var errorAudio = $("#errorAudio")[0];
               // errorAudio.play();
               setTimeout(function() {
-                marker.setIcon('images/coin.png')
+                marker.setIcon(getMarkerIcon())
               }, 500);
               $('#msg').show().html('Out of range').fadeOut(1000);
             } else {
@@ -199,6 +208,8 @@ APP.Thing = function (config) {
         setLon: setLon,
         getDistBetwPoints: getDistBetwPoints,
         getMarker: getMarker,
+        getMarkerIcon: getMarkerIcon,
+        getMarkerIconActive: getMarkerIconActive,
         showMarker: showMarker,
         hideMarker: hideMarker,
         limit: limit,

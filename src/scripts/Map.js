@@ -39,8 +39,10 @@ APP.Map = function (config) {
   getMapOptions = function () {
     var options = {
       center: new google.maps.LatLng(config.myLat, config.myLon),
-      styles: config.mapStyles.getStyle(config.style)
     };
+    if (config.mapStyles) {
+      options.styles = config.mapStyles.getStyle(config.style);
+    }
     $.extend(options, config.mapOptions);
     return options;
   };
@@ -108,6 +110,9 @@ APP.Map = function (config) {
   };
 
   showPlayer = function () {
+    if (!map) {
+      showMap();
+    }
     var playerConfig = {
         radius: 20,
         fillOpacity: 0.1,
