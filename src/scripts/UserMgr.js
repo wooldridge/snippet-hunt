@@ -1,64 +1,53 @@
 var APP = APP || {};
 
 /**
- * Class for managing Things.
+ * Class for managing Users.
  * @constructor
  * @param config A configuration object.
  */
-APP.Things = function (config) {
+APP.UserMgr = function (config) {
   'use strict';
     // properties
-  var things,
-      thing,
+  var users,
       directory,
-      collection,
 
     // methods
-    createThing,
-    getThing,
-    getAllThings,
-    updateThing,
-    deleteThing;
+    createUser,
+    getUser,
+    getAllUsers,
+    updateUser,
+    deleteUser;
 
   // initialize properties
   config = config || {};
 
-  things = [];
-  directory = 'things';
-  collection = 'things';
+  users = [];
+  directory = 'users';
 
   /**
-   * Create a Thing.
-   * @param {object} config A Thing config object
+   * Create a User.
    * @param {function} callback A callback to run on success
    */
-  createThing = function (configThing, callback) {
-    thing = new APP.Thing(configThing);
+  createUser = function (user, callback) {
     var url = 'http://' + config.host + ':' + config.port;
-        url += '/v1/documents?extension=json&directory=/' + directory + '/';
-        url += '&collection=' + collection;
-    console.log('Thing.createThing url: ' + url);
-    var json = {
-      lat: thing.getLat(),
-      lon: thing.getLon()
-    };
+      url += '/v1/documents?extension=json&directory=/' + directory + '/';
+    console.log('User.createUser url: ' + url);
     $.ajax({
       type: 'POST',
       url: url,
-      data: JSON.stringify(json),
+      data: JSON.stringify(user),
       headers: {
         'content-type': 'application/json'
       }
     }).done(function (data, textStatus, jqXHR) {
-      console.log('Thing.createThing: ' + data.headers.location);
+      console.log('User.createUser: ' + data.headers.location);
       // data.headers.location:
-      // /v1/documents?uri=/things/4123628437005578381.json
+      // /v1/documents?uri=/users/4123628437005578381.json
       var id = data.headers.location
            .slice(0, data.headers.location.length - 5)
-           .substring(26);
-      thing.setId(id);
+           .substring(25);
       if(callback) {
-        callback(thing);
+        callback(id);
       }
     }).fail(function (jqXHR, textStatus, errorThrown) {
       console.log(textStatus);
@@ -69,44 +58,19 @@ APP.Things = function (config) {
   };
 
   /**
-   * Get Thing by ID.
-   * @param {string} id The Thing ID
+   * Get User by ID.
+   * @param {string} id The User ID
    * @param {function} callback A callback to run on success
    */
-  getThing = function (id, callback) {
+  getUser = function (id, callback) {
     var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
-    console.log('Thing.getThing url: ' + url);
+    console.log('User.getUser url: ' + url);
     $.ajax({
       type: 'GET',
       url: url
     }).done(function (data, textStatus, jqXHR) {
-      console.log('Thing.getThing: ' + JSON.stringify(data));
-      if (callback) {
-        // data is q
-        callback(data);
-      }
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-      console.log(textStatus);
-      if (callback) {
-        callback(jqXHR);
-      }
-    });
-  };
-
-  /**
-   * Get all Things.
-   * @param {function} callback A callback to run on success
-   */
-  getAllThings = function (callback) {
-    var url = 'http://' + config.host + ':' + config.port;
-      url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
-    console.log('Thing.get url: ' + url);
-    $.ajax({
-      type: 'GET',
-      url: url
-    }).done(function (data, textStatus, jqXHR) {
-      console.log('Thing.getAllThings: ' + JSON.stringify(data));
+      console.log('User.getUser: ' + JSON.stringify(data));
       if (callback) {
         callback(data);
       }
@@ -119,22 +83,47 @@ APP.Things = function (config) {
   };
 
   /**
-   * Update a Thing.
+   * Get all Users.
    * @param {function} callback A callback to run on success
    */
-  updateThing = function (id, thing, callback) {
+  getAllUsers = function (callback) {
     var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
-    console.log('Thing.updateThing url: ' + url);
+    console.log('User.get url: ' + url);
+    $.ajax({
+      type: 'GET',
+      url: url
+    }).done(function (data, textStatus, jqXHR) {
+      console.log('User.getAllUsers: ' + JSON.stringify(data));
+      if (callback) {
+        callback(data);
+      }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      console.log(textStatus);
+      if (callback) {
+        callback(jqXHR);
+      }
+    });
+  };
+
+  /**
+   * Update a User.
+   * @param {function} callback A callback to run on success
+   */
+  updateUser = function (id, user, callback) {
+    var url = 'http://' + config.host + ':' + config.port;
+      url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
+    console.log('User.updateUser url: ' + url);
+    var json = JSON.stringify(user);
     $.ajax({
       type: 'PUT',
       url: url,
-      data: JSON.stringify(thing),
+      data: JSON.stringify(user),
       headers: {
         'content-type': 'application/json'
       }
     }).done(function (data, textStatus, jqXHR) {
-      console.log('Thing.updateThing: ' + id);
+      console.log('User.updateUser: ' + id);
       if (callback) {
         callback(data);
       }
@@ -147,18 +136,18 @@ APP.Things = function (config) {
   };
 
   /**
-   * Delete a Thing.
+   * Delete a User.
    * @param {function} callback A callback to run on success
    */
-  deleteThing = function (id, callback) {
+  deleteUser = function (id, callback) {
     var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
-    console.log('Thing.deleteThing url: ' + url);
+    console.log('User.deleteUser url: ' + url);
     $.ajax({
       type: 'DELETE',
       url: url
     }).done(function (data, textStatus, jqXHR) {
-      console.log('Thing.deleteThing: ' + id);
+      console.log('User.deleteUser: ' + id);
       if (callback) {
         callback(data);
       }
@@ -172,11 +161,11 @@ APP.Things = function (config) {
 
   // Public API
   return {
-    createThing: createThing,
-    getThing: getThing,
-    getAllThings: getAllThings,
-    updateThing: updateThing,
-    deleteThing: deleteThing
+    createUser: createUser,
+    getUser: getUser,
+    getAllUsers: getAllUsers,
+    updateUser: updateUser,
+    deleteUser: deleteUser
   };
 
 };

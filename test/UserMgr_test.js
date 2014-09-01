@@ -1,6 +1,6 @@
 var expect = chai.expect;
 
-describe("Users", function() {
+describe("UserMgr", function() {
 
   this.timeout(5000);
 
@@ -15,7 +15,7 @@ describe("Users", function() {
   }
   var id = '';
 
-  var users = new APP.Users(config.get('admin'));
+  var users = new APP.UserMgr(config.get('admin'));
 
   describe("createUser", function() {
     it("should create a User and get an ID", function(done) {

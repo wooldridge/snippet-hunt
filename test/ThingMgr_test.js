@@ -1,6 +1,6 @@
 var expect = chai.expect;
 
-describe("Things", function() {
+describe("ThingMgr", function() {
 
   this.timeout(5000);
 
