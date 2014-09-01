@@ -15,6 +15,8 @@ describe("Things", function() {
   var updatedThing = {};
   var id = '';
 
+  var things = new APP.Things(config.get('admin'));
+
   describe("createThing", function() {
     it("should create a Thing and get an ID", function(done) {
       gameBounds = APP.Bounds(boundsConfig);
@@ -23,7 +25,6 @@ describe("Things", function() {
         lat: coords.lat,
         lon: coords.lon
       }
-      var things = new APP.Things(config);
       things.createThing(createConfig, function (data) {
         thing = data;
         id = thing.getId();
@@ -35,7 +36,6 @@ describe("Things", function() {
 
   describe("getThing", function() {
     it("should get the created Thing", function(done) {
-      var things = new APP.Things(config);
       things.getThing(id, function (data) {
         thing = new APP.Thing(data);
         expect(thing.getLat()).to.be.above(boundsConfig.lat1);
@@ -49,7 +49,6 @@ describe("Things", function() {
 
   describe("updateThing", function() {
     it("should update the created Thing", function(done) {
-      var things = new APP.Things(config);
       var updatedConfig = {
         lat: thing.getLat() + 1,
         lon: thing.getLon() + 1
@@ -69,10 +68,9 @@ describe("Things", function() {
 
   describe("deleteThing", function() {
     it("should delete the updated Thing", function(done) {
-      var users = new APP.Things(config);
-      users.deleteThing(id, function (data) {
+      things.deleteThing(id, function (data) {
         expect(data).to.exist;
-        users.getThing(id, function (data) {
+        things.getThing(id, function (data) {
           expect(data.status).to.equal(404);
           done();
         });

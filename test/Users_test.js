@@ -15,9 +15,10 @@ describe("Users", function() {
   }
   var id = '';
 
+  var users = new APP.Users(config.get('admin'));
+
   describe("createUser", function() {
     it("should create a User and get an ID", function(done) {
-      var users = new APP.Users(config);
       users.createUser(user, function (data) {
         id = data;
         expect(id).to.exist;
@@ -28,7 +29,6 @@ describe("Users", function() {
 
   describe("getUser", function() {
     it("should get the created User", function(done) {
-      var users = new APP.Users(config);
       users.getUser(id, function (data) {
         expect(data.username).to.equal(user.username);
         expect(data.score).to.equal(user.score);
@@ -39,7 +39,6 @@ describe("Users", function() {
 
   describe("updateUser", function() {
     it("should update the created User", function(done) {
-      var users = new APP.Users(config);
       users.updateUser(id, updatedUser, function (data) {
         expect(data).to.exist;
         users.getUser(id, function (data) {
@@ -53,7 +52,6 @@ describe("Users", function() {
 
   describe("deleteUser", function() {
     it("should delete the updated User", function(done) {
-      var users = new APP.Users(config);
       users.deleteUser(id, function (data) {
         expect(data).to.exist;
         users.getUser(id, function (data) {

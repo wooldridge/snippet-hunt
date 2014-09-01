@@ -29,7 +29,7 @@ APP.Users = function (config) {
    * @param {function} callback A callback to run on success
    */
   createUser = function (user, callback) {
-    var url = 'http://' + config.getHost() + ':' + config.getPort();
+    var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?extension=json&directory=/' + directory + '/';
     console.log('User.createUser url: ' + url);
     $.ajax({
@@ -63,7 +63,7 @@ APP.Users = function (config) {
    * @param {function} callback A callback to run on success
    */
   getUser = function (id, callback) {
-    var url = 'http://' + config.getHost() + ':' + config.getPort();
+    var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
     console.log('User.getUser url: ' + url);
     $.ajax({
@@ -87,7 +87,7 @@ APP.Users = function (config) {
    * @param {function} callback A callback to run on success
    */
   getAllUsers = function (callback) {
-    var url = 'http://' + config.getHost() + ':' + config.getPort();
+    var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
     console.log('User.get url: ' + url);
     $.ajax({
@@ -111,7 +111,7 @@ APP.Users = function (config) {
    * @param {function} callback A callback to run on success
    */
   updateUser = function (id, user, callback) {
-    var url = 'http://' + config.getHost() + ':' + config.getPort();
+    var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
     console.log('User.updateUser url: ' + url);
     var json = JSON.stringify(user);
@@ -140,7 +140,7 @@ APP.Users = function (config) {
    * @param {function} callback A callback to run on success
    */
   deleteUser = function (id, callback) {
-    var url = 'http://' + config.getHost() + ':' + config.getPort();
+    var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
     console.log('User.deleteUser url: ' + url);
     $.ajax({

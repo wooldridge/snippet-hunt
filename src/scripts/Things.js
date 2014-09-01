@@ -34,7 +34,7 @@ APP.Things = function (config) {
    */
   createThing = function (configThing, callback) {
     thing = new APP.Thing(configThing);
-    var url = 'http://' + config.getHost() + ':' + config.getPort();
+    var url = 'http://' + config.host + ':' + config.port;
         url += '/v1/documents?extension=json&directory=/' + directory + '/';
         url += '&collection=' + collection;
     console.log('Thing.createThing url: ' + url);
@@ -74,7 +74,7 @@ APP.Things = function (config) {
    * @param {function} callback A callback to run on success
    */
   getThing = function (id, callback) {
-    var url = 'http://' + config.getHost() + ':' + config.getPort();
+    var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
     console.log('Thing.getThing url: ' + url);
     $.ajax({
@@ -99,7 +99,7 @@ APP.Things = function (config) {
    * @param {function} callback A callback to run on success
    */
   getAllThings = function (callback) {
-    var url = 'http://' + config.getHost() + ':' + config.getPort();
+    var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
     console.log('Thing.get url: ' + url);
     $.ajax({
@@ -123,7 +123,7 @@ APP.Things = function (config) {
    * @param {function} callback A callback to run on success
    */
   updateThing = function (id, thing, callback) {
-    var url = 'http://' + config.getHost() + ':' + config.getPort();
+    var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
     console.log('Thing.updateThing url: ' + url);
     $.ajax({
@@ -151,7 +151,7 @@ APP.Things = function (config) {
    * @param {function} callback A callback to run on success
    */
   deleteThing = function (id, callback) {
-    var url = 'http://' + config.getHost() + ':' + config.getPort();
+    var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
     console.log('Thing.deleteThing url: ' + url);
     $.ajax({
