@@ -13,24 +13,18 @@ APP.Admin = function (config) {
       bounds,
       mapConfig,
       map,
-      mapOptions,
-      mapStyles,
       defaultStyleId,
       mapStyleIds,
       selStyleId,
-      mapTypes,
       gameBounds,
-      url,
-      json,
-      thing,
+      coords,
       thingConfig,
+      thingMgr,
       things,
       allMarkers,
 
       // methods
       display,
-      putConfig,
-      putThings,
       postThings,
       removeAllThings;
 
@@ -77,10 +71,10 @@ APP.Admin = function (config) {
     $('#lat2').val(config.lat2);
     $('#lon2').val(config.lon2);
 
+    bounds = new APP.Bounds(boundsConfig);
     map = new APP.Map(mapConfig, bounds);
     map.showMap();
 
-    bounds = new APP.Bounds(boundsConfig);
     map.showRectangle(bounds);
 
     mapStyleIds = config.mapStyles.getStyles();
@@ -118,84 +112,13 @@ APP.Admin = function (config) {
   }
 
   /**
-   * Put config data to db
-   */
-  putConfig = function () {
-    var configToSave = {
-      lat1: $('#lat1').val(),   // south horiz
-      lon1: $('#lon1').val(),   // west vert
-      lat2: $('#lat2').val(),   // north horiz
-      lon2: $('#lon2').val(),   // east vert
-      mapStyle: $('#mapStyles').val(),
-      numThings: $('#numThings').val()
-    };
-    url = 'http://' + config.host + ':' + config.port + '/v1/documents?uri=' + config.fileName;
-    url += '&collection=config'
-    json = JSON.stringify(configToSave);
-    $.ajax({
-        type: 'PUT',
-        url: url,
-        data: json,
-        headers: {
-            'content-type': 'application/json'
-        }
-    }).done(function (data) {
-        console.log('Config posted: ' + json);
-    }).error(function (data) {
-        console.log('Config put error: ' + data);
-    });
-  }
-
-  /**
-   * Put things to db.
-   * @param num Number of Things to add
-   * @param gameBounds Game bounds
-   */
-  putThings = function (num, gameBounds) {
-      //thingConfig = { id: nextThingId };
-      thing = new APP.Thing({}, gameBounds);
-      things.push(thing);
-      //nextThingId++;
-      var url = 'http://' + config.host + ':' + config.port;
-          url += '/v1/documents?uri=thing_' + thing.getId();
-          url += '&collection=thing';
-      var json = {
-          id: thing.getId(),
-          lat: thing.getLat(),
-          lon: thing.getLon()
-      };
-      json = JSON.stringify(json);
-      $.ajax({
-          type: 'PUT',
-          url: url,
-          data: json,
-          // IMPORTANT: Do not set 'dataType: "json"' since REST server
-          // returns an empty body on success, which is invalid JSON
-          headers: {
-              'content-type': 'application/json'
-          }
-      }).done(function (data) {
-          console.log('Thing put: ' + json);
-          num--;
-          if (num === 0) {
-              console.log('Triggering putThingsDone');
-              $('#' + config.mapCanvasId).trigger('putThingsDone');
-          } else {
-              putThings(num, gameBounds);
-          }
-      }).error(function (data) {
-          console.log(data);
-      });
-  };
-
-  /**
    * Post things to db.
    * @param num Number of Things to add
    * @param gameBounds Game bounds
    */
   postThings = function (num, gameBounds) {
-      var thingMgr = APP.ThingMgr(config);
-      var coords = bounds.getRandCoords();
+      thingMgr = APP.ThingMgr(config);
+      coords = gameBounds.getRandCoords();
       thingMgr.createThing({lat: coords.lat, lon: coords.lon}, function (thing) {
         var id = thing.getId();
         num--;
@@ -203,7 +126,7 @@ APP.Admin = function (config) {
           things.push(thing);
           postThings(num, gameBounds);
         } else {
-          console.log('Triggering putThingsDone');
+          console.log('Triggering postThingsDone');
           $('#' + config.mapCanvasId).trigger('postThingsDone');
         }
       });
@@ -237,8 +160,6 @@ APP.Admin = function (config) {
       for (var i = 0; i < things.length; i++) {
         things[i].showMarker(map, false);
       }
-      // put config after things saved for correct nextThingId
-      //putConfig();
       var configToSave = {
         lat1: $('#lat1').val(),   // south horiz
         lon1: $('#lon1').val(),   // west vert
