@@ -5,7 +5,7 @@ var APP = APP || {};
  * @constructor
  * @param config A configuration object.
  */
-APP.ThingsMgr = function (config) {
+APP.ThingMgr = function (config) {
   'use strict';
     // properties
   var things,
