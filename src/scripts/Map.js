@@ -5,7 +5,7 @@ var APP = APP || {};
  * @constructor
  * @param config A configuration object.
  */
-APP.Map = function (config, bounds) {
+APP.Map = function (config) {
   'use strict';
       // properties
   var id, // HTML container ID, e.g. 'map-canvas'
@@ -24,6 +24,7 @@ APP.Map = function (config, bounds) {
       loadMapTypes,
       setMapType,
       showRectangle,
+      getRectangle,
       disableRectangle,
       showMarkers,
       showPlayer,
@@ -67,7 +68,7 @@ APP.Map = function (config, bounds) {
     map.setMapTypeId(styleId);
   };
 
-  showRectangle = function () {
+  showRectangle = function (bounds) {
     rectBounds = new google.maps.LatLngBounds(
       new google.maps.LatLng(bounds.getLat1(), bounds.getLon1()),
       new google.maps.LatLng(bounds.getLat2(), bounds.getLon2())
@@ -89,11 +90,16 @@ APP.Map = function (config, bounds) {
     });
   };
 
+  getRectangle = function () {
+    return rectangle;
+  };
+
   disableRectangle = function () {
     rectangle.setEditable(false);
     rectangle.setDraggable(false);
   };
 
+  // @todo Move this method to Things, showMarkers(map);
   showMarkers = function (things) {
     for (var i = 0; i < things.length; i++) {
       things[i].showMarker(this, true);
@@ -126,6 +132,7 @@ APP.Map = function (config, bounds) {
     loadMapTypes: loadMapTypes,
     setMapType: setMapType,
     showRectangle: showRectangle,
+    getRectangle: getRectangle,
     disableRectangle: disableRectangle,
     showMarkers: showMarkers,
     showPlayer: showPlayer,

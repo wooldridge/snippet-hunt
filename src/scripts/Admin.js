@@ -77,11 +77,11 @@ APP.Admin = function (config) {
     $('#lat2').val(config.lat2);
     $('#lon2').val(config.lon2);
 
-    bounds = new APP.Bounds(boundsConfig);
     map = new APP.Map(mapConfig, bounds);
     map.showMap();
 
-    map.showRectangle();
+    bounds = new APP.Bounds(boundsConfig);
+    map.showRectangle(bounds);
 
     mapStyleIds = config.mapStyles.getStyles();
     defaultStyleId = mapStyleIds[config.mapStyleIndex];
