@@ -2,6 +2,8 @@ var expect = chai.expect;
 
 describe("Users", function() {
 
+  this.timeout(5000);
+
   var config = APP.Config();
   var user = {
     username: 'testname',
