@@ -123,7 +123,7 @@ APP.ThingMgr = function (config) {
       //$('#' + config.mapCanvasId).trigger('getAllThingsDone');
       $('#map-canvas').trigger('getAllThingsDone');
       if (callback) {
-        callback(data);
+        callback(things);
       }
     }).fail(function (jqXHR, textStatus, errorThrown) {
       console.log(textStatus);

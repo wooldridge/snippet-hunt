@@ -176,19 +176,17 @@ APP.Thing = function (config) {
               // okAudio.play();
               setTimeout(function() {
                 marker.setMap(null);
-                $('#map-canvas').trigger('thingRemoved');
               }, 200);
               $('#msg').show().html('Coin collected').fadeOut(1000);
               APP.game.changeScore(1);
               $('#map-canvas').trigger('scoreChanged');
               APP.game.displayScore();
-              APP.game.removeThing(getId());
+              $('#map-canvas').trigger('deleteThing', [id]);
             }
             console.log(msg);
           });
         }
     };
-
 
     /**
      * Hide a Thing marker on a Google Map
