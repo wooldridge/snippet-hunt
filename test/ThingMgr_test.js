@@ -15,7 +15,7 @@ describe("ThingMgr", function() {
   var updatedThing = {};
   var id = '';
 
-  var things = new APP.Things(config.get('admin'));
+  var thingMgr = new APP.ThingMgr(config.get('admin'));
 
   describe("createThing", function() {
     it("should create a Thing and get an ID", function(done) {
@@ -25,7 +25,7 @@ describe("ThingMgr", function() {
         lat: coords.lat,
         lon: coords.lon
       }
-      things.createThing(createConfig, function (data) {
+      thingMgr.createThing(createConfig, function (data) {
         thing = data;
         id = thing.getId();
         expect(thing.getId()).to.exist;
@@ -36,12 +36,21 @@ describe("ThingMgr", function() {
 
   describe("getThing", function() {
     it("should get the created Thing", function(done) {
-      things.getThing(id, function (data) {
+      thingMgr.getThing(id, function (data) {
         thing = new APP.Thing(data);
         expect(thing.getLat()).to.be.above(boundsConfig.lat1);
         expect(thing.getLat()).to.be.below(boundsConfig.lat2);
         expect(thing.getLon()).to.be.above(boundsConfig.lon1);
         expect(thing.getLon()).to.be.below(boundsConfig.lon2);
+        done();
+      });
+    });
+  });
+
+  describe("getAllThings", function() {
+    it("should get all created Things", function(done) {
+      thingMgr.getAllThings(function (data) {
+        expect(data['page-length']).to.be.above(0);
         done();
       });
     });
@@ -54,9 +63,9 @@ describe("ThingMgr", function() {
         lon: thing.getLon() + 1
       };
       updatedThing = new APP.Thing(updatedConfig);
-      things.updateThing(id, updatedConfig, function (data) {
+      thingMgr.updateThing(id, updatedConfig, function (data) {
         expect(data).to.exist;
-        things.getThing(id, function (data) {
+        thingMgr.getThing(id, function (data) {
           updatedThing = new APP.Thing(data);
           expect(updatedThing.getLat()).to.equal(updatedConfig.lat);
           expect(updatedThing.getLon()).to.equal(updatedConfig.lon);
@@ -68,9 +77,9 @@ describe("ThingMgr", function() {
 
   describe("deleteThing", function() {
     it("should delete the updated Thing", function(done) {
-      things.deleteThing(id, function (data) {
+      thingMgr.deleteThing(id, function (data) {
         expect(data).to.exist;
-        things.getThing(id, function (data) {
+        thingMgr.getThing(id, function (data) {
           expect(data.status).to.equal(404);
           done();
         });
