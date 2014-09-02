@@ -70,6 +70,13 @@ APP.Game = function (config, socket) {
     thingMgr = new APP.ThingMgr(APP.configMgr.get('user'));
 
     /**
+     * Display the username in the UI.
+     */
+    displayUser = function () {
+        $('#' + config.userId).html(user.getUsername());
+    };
+
+    /**
      * Display the score in the UI.
      */
     displayScore = function () {
@@ -84,14 +91,7 @@ APP.Game = function (config, socket) {
     };
 
     /**
-     * Display the username in the UI.
-     */
-    displayUser = function () {
-        $('#' + config.userId).html(user.getUsername());
-    };
-
-    /**
-     * Load user data. Display user dialog if needed.
+     * Load user data. Display user form if needed.
      */
     loadUser = function () {
         // Handle submission of user form
