@@ -12,17 +12,19 @@
 <title>AR Game</title>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link type="text/css" href="styles/styles.css" rel="stylesheet">
-<script type="text/javascript" src="/bower_components/jquery/src/jquery.js"></script>
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?AIzaSyDUsZCP04vN4oxSQBcHmz1YGbTq8RTMEvw"></script>
 <script type="text/javascript" src="scripts/Admin.js"></script>
 <script type="text/javascript" src="scripts/Bounds.js"></script>
 <script type="text/javascript" src="scripts/Config.js"></script>
+<script type="text/javascript" src="scripts/ConfigMgr.js"></script>
 <script type="text/javascript" src="scripts/Game.js"></script>
 <script type="text/javascript" src="scripts/Map.js"></script>
 <script type="text/javascript" src="scripts/MapStyles.js"></script>
 <script type="text/javascript" src="scripts/Player.js"></script>
 <script type="text/javascript" src="scripts/Thing.js"></script>
 <script type="text/javascript" src="scripts/User.js"></script>
+<script type="text/javascript" src="scripts/UserMgr.js"></script>
 <script type="text/javascript" src="scripts/geolocationmarker.js"></script>
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -97,15 +99,19 @@
 $(function () {
 
   navigator.geolocation.getCurrentPosition(function (position) {
-    APP.config = new APP.Config(
+    APP.configMgr = new APP.ConfigMgr(
       position.coords.latitude,
       position.coords.longitude
     );
     // For realtime communication betw server and players
     var socket = io.connect('http://10.0.0.8:9055');
-    APP.config.getSavedConfig(function (savedConfig) {
-      APP.game = new APP.Game($.extend(APP.config.get('game'), savedConfig), socket);
-      APP.game.initialize();
+    var gameId = localStorage.getItem('gameId');
+    APP.configMgr.getSavedConfig(gameId, function (savedConfig) {
+      APP.game = new APP.Game(
+        $.extend(APP.configMgr.get('game'), savedConfig),
+        socket
+      );
+      APP.game.display();
     });
   });
 
