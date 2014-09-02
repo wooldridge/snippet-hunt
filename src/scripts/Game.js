@@ -17,6 +17,7 @@ APP.Game = function (config, socket) {
         things,
         score,
         user,
+        userMgr,
 
         // methods
         getById,
@@ -26,7 +27,7 @@ APP.Game = function (config, socket) {
         changeScore,
         displayUser,
         getUser,
-        initialize;
+        display;
 
    /**
     * boundsConfig describes the playing space
@@ -188,7 +189,7 @@ APP.Game = function (config, socket) {
     /**
      * Initialize the game.
      */
-    initialize = function () {
+    display = function () {
         $('#' + config.mapCanvasId).on('getUserError', function () {
             $('#usernameModal').modal({});
         });
@@ -232,7 +233,8 @@ APP.Game = function (config, socket) {
               username: $('#usernameInput').val(),
             }
             user = new APP.User(userConfig);
-            user.saveNewUser(function () {
+            userMgr = new APP.UserMgr(APP.configMgr.get('user'));
+            userMgr.createUser(user.toJSON(), function () {
                 $('#usernameModal').modal('hide');
                 localStorage.setItem('userId', user.getId());
                 $('#' + config.mapCanvasId).trigger('getUserDone');
@@ -249,7 +251,7 @@ APP.Game = function (config, socket) {
     return {
         getAllThings: getAllThings,
         removeThing: removeThing,
-        initialize: initialize,
+        display: display,
         displayScore: displayScore,
         changeScore: changeScore,
         getUser: getUser
