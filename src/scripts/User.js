@@ -11,6 +11,7 @@ APP.User = function (config) {
     var id,
         username,
         score,
+        json,
 
         // methods
         getId,
@@ -18,8 +19,7 @@ APP.User = function (config) {
         getUsername,
         getScore,
         changeScore,
-        saveNewUser,
-        updateUser;
+        toJSON;
 
     // initialize properties
     config = config || {};
@@ -67,6 +67,20 @@ APP.User = function (config) {
         //updateUser(localStorage.getItem('userId'));
     };
 
+    /**
+     * Get a JSON version of the user.
+     */
+    toJSON = function () {
+        json = {
+            username: getUsername() || '',
+            score: getScore() || 0
+        }
+        if (getId()) {
+            json.id = getId();
+        }
+        return JSON.stringify(json);
+    };
+
     // Public API
     return {
         getId: getId,
@@ -74,8 +88,7 @@ APP.User = function (config) {
         getUsername: getUsername,
         getScore: getScore,
         changeScore: changeScore,
-        saveNewUser: saveNewUser,
-        updateUser: updateUser
+        toJSON: toJSON
     };
 
 };
