@@ -135,6 +135,8 @@ APP.Game = function (config, socket) {
               if (things[i].getId() === data.id) {
                 console.log('thing to hide found, calling things[i].hideMarker()');
                 things[i].hideMarker();
+                var snd = new Audio("audio/error.mp3");
+                snd.play();
                 break;
               }
             }
@@ -142,6 +144,12 @@ APP.Game = function (config, socket) {
 
         $('#map-canvas').on('deleteThing', function (ev, id) {
             thingMgr.deleteThing(id, function () {
+                for (var i = 0; i < things.length; i++) {
+                  if (things[i].getId() === id) {
+                    things.splice(i, 1);
+                    break;
+                  }
+                }
                 socket.emit('thingDeleted', { 'id': id });
             });
         });
