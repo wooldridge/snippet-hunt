@@ -32,10 +32,11 @@ APP.UserMgr = function (config) {
     var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?extension=json&directory=/' + directory + '/';
     console.log('User.createUser url: ' + url);
+    user = (typeof user === 'string') ? user : JSON.stringify(user);
     $.ajax({
       type: 'POST',
       url: url,
-      data: JSON.stringify(user),
+      data: user,
       headers: {
         'content-type': 'application/json'
       }
