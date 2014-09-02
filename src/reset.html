@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="UTF-8">
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+
+<div id="container"></div>
+
+<script>
+$(function () {
+  var items = ['userId', 'gameId'];
+  for (var i = 0; i < items.length; i++) {
+    localStorage.removeItem(items[i]);
+    $('#container').append('<div>localStorage.' + items[i] + ' reset</div>')
+  }
+  navigator.geolocation.getCurrentPosition(function (position) {
+    $('#container').append('<div>You are here: lat ' + position.coords.latitude + ' lon ' + position.coords.longitude + '</div>');
+    $('#container').append('<div><a href="admin.html">Admin page</a></div>');
+  });
+});
+</script>
+
+</body>
+</html>
