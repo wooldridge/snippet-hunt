@@ -180,9 +180,6 @@ APP.Game = function (config, socket) {
             return false;
         });
 
-          $('#map-canvas').on('scoreChanged', function () {
-
-          });
     };
 
     // Public API
