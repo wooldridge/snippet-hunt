@@ -192,7 +192,7 @@ console.log('Express started on port ' + config.port);
 
 io.sockets.on('connection', function (socket) {
   console.log('connection established');
-  socket.on('thingRemoved', function (data) {
-      io.sockets.emit('thingRemoved', data);
+  socket.on('thingDeleted', function (data) {
+      io.sockets.emit('thingDeleted', data);
   });
 });
