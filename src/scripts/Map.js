@@ -120,6 +120,7 @@ APP.Map = function (config) {
     };
     player = new GeolocationMarker(map, {}, playerConfig);
 
+    console.log('Player shown')
     $('#' + id).trigger('showPlayerDone');
   };
 
