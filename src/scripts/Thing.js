@@ -162,8 +162,6 @@ APP.Thing = function (config) {
               msg = 'Thing not in range';
               var sndE = new Audio("audio/error2.mp3");
               sndE.play();
-              // var errorAudio = $("#errorAudio")[0];
-              // errorAudio.play();
               setTimeout(function() {
                 marker.setIcon(getMarkerIcon())
               }, 500);
@@ -172,8 +170,6 @@ APP.Thing = function (config) {
               msg = 'Thing in range';
               var sndO = new Audio("audio/ok2.mp3");
               sndO.play();
-              // var okAudio = $("#okAudio")[0];
-              // okAudio.play();
               setTimeout(function() {
                 marker.setMap(null);
               }, 200);
