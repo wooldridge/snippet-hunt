@@ -17,13 +17,15 @@ APP.Game = function (config, socket) {
         things,
         thingMgr,
         user,
+        userId,
         userMgr,
 
         // methods
         displayScore,
         changeScore,
         displayUser,
-        display;
+        loadUser,
+        displayGame;
 
    /**
     * boundsConfig describes the playing space
@@ -89,34 +91,10 @@ APP.Game = function (config, socket) {
     };
 
     /**
-     * Initialize the game.
+     * Load user data. Display user dialog if needed.
      */
-    display = function () {
-
-        if(!localStorage.getItem('userId')) {
-            $('#usernameModal').modal({});
-        } else {
-            userMgr.getUser(localStorage.getItem('userId'), function (data) {
-                if (data.statusText && data.statusText === 'Not Found') {
-                    $('#usernameModal').modal({});
-                } else {
-                    user = new APP.User(data);
-                    displayScore();
-                    displayUser();
-
-                    map.showMap();
-                    map.showPlayer();
-                    thingMgr.getAllThings(function (results) {
-                        things = results;
-                        map.showMarkers(things);
-                    });
-                }
-            });
-        }
-
-
-        /***** Event Handling *****/
-
+    loadUser = function () {
+        // Handle submission of user form
         $('#usernameForm button').click(function () {
             var userConfig = {
               username: $('#usernameInput').val(),
@@ -125,9 +103,37 @@ APP.Game = function (config, socket) {
             userMgr.createUser(user.toJSON(), function (id) {
                 $('#usernameModal').modal('hide');
                 localStorage.setItem('userId', id);
-                $('#' + config.mapCanvasId).trigger('getUserDone');
+                displayGame();
             });
             return false;
+        });
+        // Get user data from localStorage and database
+        userId = localStorage.getItem('userId');
+        if(!userId) {
+            $('#usernameModal').modal({});
+        } else {
+            userMgr.getUser(userId, function (data) {
+                if (data.statusText && data.statusText === 'Not Found') {
+                    $('#usernameModal').modal({});
+                } else {
+                    user = new APP.User(data);
+                    displayGame();
+                }
+            });
+        }
+    };
+
+    /**
+     * Initialize the game.
+     */
+    displayGame = function () {
+        displayScore();
+        displayUser();
+        map.showMap();
+        map.showPlayer();
+        thingMgr.getAllThings(function (results) {
+            things = results;
+            map.showMarkers(things);
         });
 
         $('#map-canvas').on('deleteThing', function (ev, id) {
@@ -165,7 +171,8 @@ APP.Game = function (config, socket) {
     return {
         displayScore: displayScore,
         changeScore: changeScore,
-        display: display
+        loadUser: loadUser,
+        displayGame: displayGame
     };
 
 };
