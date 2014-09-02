@@ -1,7 +1,7 @@
 var APP = APP || {};
 
 /**
- * Class representing an Thing.
+ * Class representing a Thing.
  * @constructor
  * @param config A Thing config object.
  */
@@ -26,11 +26,11 @@ APP.Thing = function (config) {
         setLon,
         getDistBetwPoints,
         deg2rad,
-        lateId,
         getMarker,
         getMarkerIcon,
         getMarkerIconActive,
         showMarker,
+        makeInteractive,
         hideMarker;
 
     // initialize properties
@@ -44,6 +44,7 @@ APP.Thing = function (config) {
 
     markerIcon = 'images/coin.png';
     markerIconActive = 'images/coin_flipped.png';
+    markerIconSmall = 'images/coin_small.png';
 
     // Limit for interacting with Thing (in meters)
     limit = config.limit || 21;
@@ -148,41 +149,51 @@ APP.Thing = function (config) {
           icon: getMarkerIcon()
         });
         if (interactive !== false) {
-          google.maps.event.addListener(marker, 'click', function(ev) {
-            var player = map.getPlayer();
-            var dist = getDistBetwPoints(
-              getLat(),
-              getLon(),
-              player.position.k,
-              player.position.B
-            );
-            marker.setIcon(getMarkerIconActive())
-            var msg;
-            if (dist * 1000 > limit) {
-              msg = 'Thing not in range';
-              var sndE = new Audio("audio/error2.mp3");
-              sndE.play();
-              setTimeout(function() {
-                marker.setIcon(getMarkerIcon())
-              }, 500);
-              $('#msg').show().html('Out of range').fadeOut(1000);
-            } else {
-              msg = 'Thing in range';
-              var sndO = new Audio("audio/ok2.mp3");
-              sndO.play();
-              setTimeout(function() {
-                marker.setMap(null);
-              }, 200);
-              $('#msg').show().html('Coin collected').fadeOut(1000);
-              APP.game.changeScore(1);
-              $('#map-canvas').trigger('scoreChanged');
-              APP.game.displayScore();
-              $('#map-canvas').trigger('deleteThing', [id]);
-            }
-            console.log(msg);
-          });
+          makeInteractive(map, marker);
         }
     };
+
+    /**
+     * Add events to make marker interactive
+     * @param map The APP.Map object
+     * @param marker The marker object
+     */
+    makeInteractive = function (map, marker) {
+      google.maps.event.addListener(marker, 'click', function(ev) {
+        var player = map.getPlayer();
+        var dist = getDistBetwPoints(
+          getLat(),
+          getLon(),
+          player.position.k,
+          player.position.B
+        );
+        marker.setIcon(getMarkerIconActive())
+        var msg;
+        if (dist * 1000 > limit) {
+          msg = 'Out of range';
+          var sndE = new Audio("audio/error2.mp3");
+          sndE.play();
+          setTimeout(function() {
+            marker.setIcon(getMarkerIcon())
+          }, 500);
+          $('#msg').show().html(msg).fadeOut(1000);
+        } else {
+          msg = 'Coin collected';
+          var sndO = new Audio("audio/ok2.mp3");
+          sndO.play();
+          setTimeout(function() {
+            marker.setMap(null);
+          }, 200);
+          $('#msg').show().html(msg).fadeOut(1000);
+          APP.game.changeScore(1);
+          $('#map-canvas').trigger('scoreChanged');
+          APP.game.displayScore();
+          $('#map-canvas').trigger('deleteThing', [id]);
+        }
+        console.log(msg + ': ' + getId());
+      });
+    };
+
 
     /**
      * Hide a Thing marker on a Google Map
@@ -206,6 +217,7 @@ APP.Thing = function (config) {
         getMarkerIcon: getMarkerIcon,
         getMarkerIconActive: getMarkerIconActive,
         showMarker: showMarker,
+        makeInteractive: makeInteractive,
         hideMarker: hideMarker,
         limit: limit,
         marker: marker
