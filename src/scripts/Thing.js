@@ -176,6 +176,7 @@ APP.Thing = function (config) {
               // okAudio.play();
               setTimeout(function() {
                 marker.setMap(null);
+                $('#map-canvas').trigger('thingRemoved');
               }, 200);
               $('#msg').show().html('Coin collected').fadeOut(1000);
               APP.game.changeScore(1);
