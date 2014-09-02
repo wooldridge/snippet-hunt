@@ -64,7 +64,6 @@ APP.User = function (config) {
      */
     changeScore = function (n, callback) {
         score += n;
-        //updateUser(localStorage.getItem('userId'));
     };
 
     /**
@@ -74,9 +73,6 @@ APP.User = function (config) {
         json = {
             username: getUsername() || '',
             score: getScore() || 0
-        }
-        if (getId()) {
-            json.id = getId();
         }
         return JSON.stringify(json);
     };

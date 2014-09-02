@@ -115,11 +115,11 @@ APP.UserMgr = function (config) {
     var url = 'http://' + config.host + ':' + config.port;
       url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
     console.log('User.updateUser url: ' + url);
-    var json = JSON.stringify(user);
+    user = (typeof user === 'string') ? user : JSON.stringify(user);
     $.ajax({
       type: 'PUT',
       url: url,
-      data: JSON.stringify(user),
+      data: user,
       headers: {
         'content-type': 'application/json'
       }
