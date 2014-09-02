@@ -68,6 +68,8 @@ APP.Game = function (config, socket) {
 
     score = config.score || 0;
 
+    userMgr = new APP.UserMgr(APP.configMgr.get('user'));
+
     /**
      * Get a Thing from the database.
      * @param id The ID of the thing.
@@ -121,7 +123,7 @@ APP.Game = function (config, socket) {
             type: 'GET',
             url: url
         }).done(function (data) {
-            console.log('Results retrieved: ' + JSON.stringify(data));
+            console.log('Results retrieved: ' + data['page-length']);
             for (var i = 0; i < data.results.length; i++) {
                 var thingConfig = {
                     // uri: /things/10499283988025584566.json
@@ -228,15 +230,18 @@ APP.Game = function (config, socket) {
             }
         });
 
+        $('#' + config.mapCanvasId).on('scoreChanged', function () {
+            userMgr.updateUser(localStorage.getItem('userId'), user.toJSON());
+        });
+
         $('#usernameForm button').click(function () {
             var userConfig = {
               username: $('#usernameInput').val(),
             }
             user = new APP.User(userConfig);
-            userMgr = new APP.UserMgr(APP.configMgr.get('user'));
-            userMgr.createUser(user.toJSON(), function () {
+            userMgr.createUser(user.toJSON(), function (id) {
                 $('#usernameModal').modal('hide');
-                localStorage.setItem('userId', user.getId());
+                localStorage.setItem('userId', id);
                 $('#' + config.mapCanvasId).trigger('getUserDone');
             });
             return false;
