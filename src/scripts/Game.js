@@ -92,33 +92,6 @@ APP.Game = function (config, socket) {
     };
 
     /**
-     * Get a User from the database.
-     * @param id The ID of the User.
-     */
-    getUser = function (id) {
-        var url = 'http://' + config.host + ':' + config.port;
-            url += '/v1/documents?uri=/users/' + id + '.json';
-        console.log('getUser url: ' + url);
-        $.ajax({
-            type: 'GET',
-            url: url
-        }).done(function (data) {
-            console.log('User retrieved: ' + JSON.stringify(data));
-            localStorage.setItem('userId', id);
-            var userConfig = {
-                id: id,
-                username: data.username,
-                score: data.score
-            }
-            user = new APP.User(userConfig);
-            $('#' + config.mapCanvasId).trigger('getUserDone');
-        }).error(function (data) {
-            console.log(data);
-            $('#' + config.mapCanvasId).trigger('getUserError');
-        });
-    };
-
-    /**
      * Display the score in the UI.
      */
     displayScore = function () {
@@ -169,7 +142,10 @@ APP.Game = function (config, socket) {
         //if(true) {
             $('#usernameModal').modal({});
         } else {
-            getUser(localStorage.getItem('userId'));
+            userMgr.getUser(localStorage.getItem('userId'), function (data) {
+                user = new APP.User(data);
+                $('#' + config.mapCanvasId).trigger('getUserDone');
+            });
         }
 
         socket.on('thingRemoved', function (data) {
