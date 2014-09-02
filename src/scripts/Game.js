@@ -19,6 +19,12 @@ APP.Game = function (config, socket) {
         user,
         userId,
         userMgr,
+        currZoom,
+        newZoom,
+        currThresh,
+        newThresh,
+        smallThresh,
+        tinyThresh,
 
         // methods
         displayScore,
@@ -65,7 +71,9 @@ APP.Game = function (config, socket) {
     map = new APP.Map(mapConfig, bounds);
 
     things = [];
-
+    smallThresh = 18;
+    tinyThresh = 16;
+    currThresh = 'large';
     userMgr = new APP.UserMgr(APP.configMgr.get('user'));
     thingMgr = new APP.ThingMgr(APP.configMgr.get('user'));
 
@@ -130,6 +138,7 @@ APP.Game = function (config, socket) {
         displayScore();
         displayUser();
         map.showMap();
+        currZoom = map.getMap().getZoom();
         map.showPlayer();
         thingMgr.getAllThings(function (results) {
             things = results;
@@ -163,6 +172,29 @@ APP.Game = function (config, socket) {
 
         $('#' + config.mapCanvasId).on('scoreChanged', function () {
             userMgr.updateUser(localStorage.getItem('userId'), user.toJSON());
+        });
+
+        google.maps.event.addListener(map.getMap(), 'zoom_changed', function() {
+            newZoom = map.getMap().getZoom();
+            console.log('Zoom changed: '+ newZoom);
+            // Get curr thresh...
+            if (newZoom <= smallThresh) {
+                if (newZoom <= tinyThresh) {
+                    newThresh = 'tiny';
+                } else {
+                    newThresh = 'small';
+                }
+            } else {
+                newThresh = 'large';
+            }
+            // Has it changed? Then update...
+            if (currThresh !== newThresh) {
+                for (var i = 0; i < things.length; i++) {
+                    things[i].setMarkerIcon(newThresh);
+                }
+            }
+            currZoom = newZoom;
+            currThresh = newThresh;
         });
 
     };

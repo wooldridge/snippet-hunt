@@ -14,6 +14,8 @@ APP.Thing = function (config) {
         marker,
         markerIcon,
         markerIconActive,
+        markerIconSmall,
+        markerIconTiny,
         limit,
         gameBounds,
 
@@ -31,7 +33,8 @@ APP.Thing = function (config) {
         getMarkerIconActive,
         showMarker,
         makeInteractive,
-        hideMarker;
+        hideMarker,
+        setMarkerIcon;
 
     // initialize properties
     config = config || {};
@@ -45,6 +48,7 @@ APP.Thing = function (config) {
     markerIcon = 'images/coin.png';
     markerIconActive = 'images/coin_flipped.png';
     markerIconSmall = 'images/coin_small.png';
+    markerIconTiny = 'images/coin_tiny.png';
 
     // Limit for interacting with Thing (in meters)
     limit = config.limit || 21;
@@ -204,6 +208,21 @@ APP.Thing = function (config) {
         console.log('marker hidden: ' + getId());
     };
 
+    setMarkerIcon = function (size) {
+      if (size === 'small') {
+        marker.setIcon(markerIconSmall);
+      } else if (size === 'large') {
+        marker.setIcon(markerIcon);
+      } else if (size === 'tiny') {
+        marker.setIcon(markerIconTiny);
+      }
+      if (size === 'small' || size === 'tiny') {
+        marker.setClickable(false);
+      } else {
+        marker.setClickable(true);
+      }
+    };
+
     // Public API
     return {
         getId: getId,
@@ -219,6 +238,7 @@ APP.Thing = function (config) {
         showMarker: showMarker,
         makeInteractive: makeInteractive,
         hideMarker: hideMarker,
+        setMarkerIcon: setMarkerIcon,
         limit: limit,
         marker: marker
     };
