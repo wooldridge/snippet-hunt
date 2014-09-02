@@ -67,60 +67,6 @@ APP.User = function (config) {
         //updateUser(localStorage.getItem('userId'));
     };
 
-    // saveNewUser = function (callback) {
-    //   var url = 'http://' + APP.config.getHost() + ':' + APP.config.getPort();
-    //       url += '/v1/documents?extension=json&directory=/users/';
-    //   console.log('saveNewUser url: ' + url);
-    //   var json = {
-    //       username: getUsername(),
-    //       score: getScore()
-    //   };
-    //   json = JSON.stringify(json);
-    //   $.ajax({
-    //       type: 'POST',
-    //       url: url,
-    //       data: json,
-    //       headers: {
-    //         'content-type': 'application/json'
-    //       }
-    //   }).done(function (data) {
-    //       console.log('User posted: ' + data);
-    //       // data.location: /v1/documents?uri=/users/4123628437005578381.json
-    //       id = data.location.slice(0, data.location.length - 5).substring(25);
-    //       if(callback) {
-    //         callback();
-    //       }
-    //   }).error(function (data) {
-    //       console.log(data);
-    //   });
-    // };
-
-    // updateUser = function (id) {
-    //   var url = 'http://' + APP.config.getHost() + ':' + APP.config.getPort();
-    //       url += '/v1/documents?uri=/users/' + id + '.json';
-    //   console.log('updateUser url: ' + url);
-    //   var json = {
-    //       username: getUsername(),
-    //       score: getScore()
-    //   };
-    //   json = JSON.stringify(json);
-    //   $.ajax({
-    //       type: 'PUT',
-    //       url: url,
-    //       data: json,
-    //       headers: {
-    //         'content-type': 'application/json'
-    //       }
-    //   }).done(function (data) {
-    //       console.log('User updated: ' + id);
-    //       console.log('Triggering updateUserDone');
-    //       $('#map-canvas').trigger('updateUserDone');
-    //   }).error(function (data) {
-    //       console.log(data);
-    //   });
-    // };
-
-
     // Public API
     return {
         getId: getId,
