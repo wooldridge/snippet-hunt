@@ -99,14 +99,29 @@ APP.ThingMgr = function (config) {
    * @param {function} callback A callback to run on success
    */
   getAllThings = function (callback) {
-    var url = 'http://' + config.host + ':' + config.port;
-      url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
-    console.log('Thing.get url: ' + url);
+    var url = 'http://' + config.host + ':' + config.port + '/v1/search';
+        url += '?format=json&options=argame';
+        url += '&directory=/things/&pageLength=999';// + config.numThings;
+    console.log('ThingMgr.getAllThings url: ' + url);
     $.ajax({
       type: 'GET',
       url: url
     }).done(function (data, textStatus, jqXHR) {
-      console.log('Thing.getAllThings: ' + JSON.stringify(data));
+      console.log('Results retrieved: ' + data['page-length']);
+      for (var i = 0; i < data.results.length; i++) {
+        var thingConfig = {
+          // uri: /things/10499283988025584566.json
+          id: data.results[i].uri
+              .slice(0, data.results[i].uri.length - 5)
+              .substring(8),
+          lat: data.results[i].metadata[0].lat,
+          lon: data.results[i].metadata[1].lon
+        };
+        thing = new APP.Thing(thingConfig);
+        things.push(thing);
+      }
+      //$('#' + config.mapCanvasId).trigger('getAllThingsDone');
+      $('#map-canvas').trigger('getAllThingsDone');
       if (callback) {
         callback(data);
       }
