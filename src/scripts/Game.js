@@ -15,14 +15,11 @@ APP.Game = function (config, socket) {
         map,
         thing,
         things,
-        score,
         user,
         userMgr,
         thingMgr,
 
         // methods
-        getById,
-        getAllThings,
         removeThing,
         displayScore,
         changeScore,
@@ -67,29 +64,8 @@ APP.Game = function (config, socket) {
 
     things = [];
 
-    score = config.score || 0;
-
     userMgr = new APP.UserMgr(APP.configMgr.get('user'));
     thingMgr = new APP.ThingMgr(APP.configMgr.get('user'));
-
-    /**
-     * Remove a Thing from the database.
-     * @param id The ID of the Thing.
-     */
-    removeThing = function (id) {
-        var url = 'http://' + config.host + ':' + config.port;
-            url += '/v1/documents?uri=/things/' + id + '.json';
-        $.ajax({
-            type: 'DELETE',
-            url: url
-        }).done(function (data) {
-            console.log('Thing deleted: ' + id);
-            $('#' + config.mapCanvasId).trigger('removeThingDone');
-            socket.emit('thingRemoved', { 'id': id });
-        }).error(function (data) {
-            console.log(data);
-        });
-    };
 
     /**
      * Display the score in the UI.
@@ -130,7 +106,8 @@ APP.Game = function (config, socket) {
             map.showPlayer();
         });
         $('#' + config.mapCanvasId).on('showPlayerDone', function () {
-            thingMgr.getAllThings(function (things) {
+            thingMgr.getAllThings(function (results) {
+                things = results;
                 map.showMarkers(things);
             });
         });
@@ -143,13 +120,17 @@ APP.Game = function (config, socket) {
             $('#usernameModal').modal({});
         } else {
             userMgr.getUser(localStorage.getItem('userId'), function (data) {
-                user = new APP.User(data);
-                $('#' + config.mapCanvasId).trigger('getUserDone');
+                if (data.statusText && data.statusText === 'Not Found') {
+                    $('#' + config.mapCanvasId).trigger('getUserError');
+                } else {
+                    user = new APP.User(data);
+                    $('#' + config.mapCanvasId).trigger('getUserDone');
+                }
             });
         }
 
-        socket.on('thingRemoved', function (data) {
-            console.log('thingsRemoved received, cycling through things');
+        socket.on('thingDeleted', function (data) {
+            console.log('thingDeleted received, cycling through things');
             for (var i = 0; i < things.length; i++) {
               if (things[i].getId() === data.id) {
                 console.log('thing to hide found, calling things[i].hideMarker()');
@@ -159,8 +140,10 @@ APP.Game = function (config, socket) {
             }
         });
 
-        $('#' + config.mapCanvasId).on('thingRemoved', function () {
-            thingMgr.updateUser(localStorage.getItem('userId'), user.toJSON());
+        $('#map-canvas').on('deleteThing', function (ev, id) {
+            thingMgr.deleteThing(id, function () {
+                socket.emit('thingDeleted', { 'id': id });
+            });
         });
 
         $('#' + config.mapCanvasId).on('scoreChanged', function () {
@@ -184,7 +167,6 @@ APP.Game = function (config, socket) {
 
     // Public API
     return {
-        getAllThings: getAllThings,
         removeThing: removeThing,
         display: display,
         displayScore: displayScore,
