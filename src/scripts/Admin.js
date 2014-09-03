@@ -24,7 +24,7 @@ APP.Admin = function (config) {
       allMarkers,
 
       // methods
-      display,
+      displayAdmin,
       postThings,
       removeAllThings;
 
@@ -62,7 +62,7 @@ APP.Admin = function (config) {
   /**
    * Display admin view.
    */
-  display = function () {
+  displayAdmin = function () {
 
     // Set form field values
     $('#numThings').val(config.numThings);
@@ -168,7 +168,9 @@ APP.Admin = function (config) {
         mapStyle: $('#mapStyles').val(),
         numThings: $('#numThings').val()
       };
-      APP.configMgr.saveConfig(configToSave);
+      APP.configMgr.saveConfig(configToSave, function () {
+
+      });
     });
     removeAllThings();
 
@@ -182,7 +184,7 @@ APP.Admin = function (config) {
 
   // Public API
   return {
-      display: display
+      displayAdmin: displayAdmin
   };
 
 };
