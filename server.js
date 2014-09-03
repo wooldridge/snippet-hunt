@@ -196,3 +196,10 @@ io.sockets.on('connection', function (socket) {
       io.sockets.emit('thingDeleted', data);
   });
 });
+
+// var repeat = function () {
+//   setInterval(function () {
+//     console.log("ping")
+//   }, 5000);
+// }
+// repeat();
