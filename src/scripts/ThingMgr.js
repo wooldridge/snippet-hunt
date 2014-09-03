@@ -107,7 +107,7 @@ APP.ThingMgr = function (config) {
       type: 'GET',
       url: url
     }).done(function (data, textStatus, jqXHR) {
-      console.log('Results retrieved: ' + data['page-length']);
+      console.log('Results retrieved: ' + data.results.length);
       for (var i = 0; i < data.results.length; i++) {
         var thingConfig = {
           // uri: /things/10499283988025584566.json
@@ -118,7 +118,7 @@ APP.ThingMgr = function (config) {
           lon: data.results[i].metadata[1].lon
         };
         thing = new APP.Thing(thingConfig);
-        things.push(thing);
+        things.push(thing); // @todo side effect, remove from here
       }
       //$('#' + config.mapCanvasId).trigger('getAllThingsDone');
       $('#map-canvas').trigger('getAllThingsDone');
