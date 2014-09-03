@@ -24,11 +24,16 @@ var options = {
   'options': {
     'constraint': [],
     'extract-metadata': {
-      'constraint-value': [],
-      'json-property': []
+      'constraint-value': []
     }
   }
 }
+
+var mlversion = config.version.substring(0,1);
+var jsonkey = (mlversion === '7') ? 'json-key' : 'json-property';
+options.options['extract-metadata'][jsonkey] = [];
+console.log(jsonkey);
+console.log(options);
 
 // Add JSON key constraints
 // for (var k=0; k<keys.length; k++) {
@@ -38,7 +43,8 @@ var options = {
 
 // Add extract-metadata settings
 for (var m=0; m<meta.length; m++) {
-  options.options['extract-metadata']['json-property'].push(meta[m]);
+  //options.options['extract-metadata']['json-property'].push(meta[m]);
+  options.options['extract-metadata'][jsonkey].push(meta[m]);
 }
 
 // Define 'language' range constraint
