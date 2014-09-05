@@ -62,6 +62,15 @@ describe("ConfigMgr", function() {
     });
   });
 
+  describe("deleteSavedConfig", function(done) {
+    it("should delete the Game config", function(done) {
+      configMgr.deleteSavedConfig(id, function (data) {
+        expect(data.statusCode).to.equal(204);
+        done();
+      });
+    });
+  });
+
   describe("getHost", function() {
     it("should get the host", function() {
       var host = configMgr.getHost();

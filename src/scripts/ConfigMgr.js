@@ -15,6 +15,7 @@ APP.ConfigMgr = function (myLat, myLon) {
         directory,
         collection,
         savedConfig,
+        deleteSavedConfig,
 
         // methods
         get,
@@ -103,6 +104,29 @@ APP.ConfigMgr = function (myLat, myLon) {
       });
     }
 
+    /**
+     * Delete game-specific config data from db
+     */
+    deleteSavedConfig = function (id, callback) {
+      url = 'http://' + config.global.host + ':' + config.global.port;
+      url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
+      console.log('Config.getSavedConfig url: ' + url);
+      $.ajax({
+          type: 'DELETE',
+          url: url
+      }).done(function (data, textStatus, jqXHR) {
+          console.log('Config.getSavedConfig: ' + JSON.stringify(data));
+          if (callback) {
+            callback(data);
+          }
+      }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log(textStatus);
+        if (callback) {
+          callback(jqXHR);
+        }
+      });
+    }
+
     getHost = function () {
       return config.global.host;
     }
@@ -116,6 +140,7 @@ APP.ConfigMgr = function (myLat, myLon) {
       get: get,
       saveConfig: saveConfig,
       getSavedConfig: getSavedConfig,
+      deleteSavedConfig: deleteSavedConfig,
       getHost: getHost,
       getPort: getPort
     };
