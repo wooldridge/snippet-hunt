@@ -174,7 +174,7 @@ APP.ThingMgr = function (config) {
       type: 'DELETE',
       url: url
     }).done(function (data, textStatus, jqXHR) {
-      console.log('Thing.deleteThing: ' + id);
+      console.log('Thing.deleteThing statusCode: ' + data.statusCode);
       if (callback) {
         callback(data);
       }
