@@ -18,7 +18,8 @@ APP.ThingMgr = function (config) {
     getThing,
     getAllThings,
     updateThing,
-    deleteThing;
+    deleteThing,
+    deleteAllThings;
 
   // initialize properties
   config = config || {};
@@ -185,13 +186,38 @@ APP.ThingMgr = function (config) {
     });
   };
 
+  /**
+   * Delete all Things.
+   * @param {function} callback A callback to run on success
+   */
+  deleteAllThings = function (callback) {
+    var url = 'http://' + config.host + ':' + config.port;
+      url += '/v1/search?collection=' + collection;
+    console.log('Thing.deleteAllThings url: ' + url);
+    $.ajax({
+      type: 'DELETE',
+      url: url
+    }).done(function (data, textStatus, jqXHR) {
+      console.log('Thing.deleteAllThings statusCode: ' + data.statusCode);
+      if (callback) {
+        callback(data);
+      }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      console.log(textStatus);
+      if (callback) {
+        callback(jqXHR);
+      }
+    });
+  };
+
   // Public API
   return {
     createThing: createThing,
     getThing: getThing,
     getAllThings: getAllThings,
     updateThing: updateThing,
-    deleteThing: deleteThing
+    deleteThing: deleteThing,
+    deleteAllThings: deleteAllThings
   };
 
 };

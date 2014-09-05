@@ -16,10 +16,10 @@ describe("ThingMgr", function() {
   var id = '';
 
   var thingMgr = new APP.ThingMgr(config.get('admin'));
+  var gameBounds = APP.Bounds(boundsConfig);
 
   describe("createThing", function() {
     it("should create a Thing and get an ID", function(done) {
-      gameBounds = APP.Bounds(boundsConfig);
       var coords = gameBounds.getRandCoords();
       var createConfig = {
         lat: coords.lat,
@@ -50,7 +50,8 @@ describe("ThingMgr", function() {
   describe("getAllThings", function() {
     it("should get all created Things", function(done) {
       thingMgr.getAllThings(function (data) {
-        expect(data['page-length']).to.be.above(0);
+        expect(data.length).to.be.above(0);
+        expect(data[0].limit).to.be.above(0);
         done();
       });
     });
@@ -82,6 +83,31 @@ describe("ThingMgr", function() {
         thingMgr.getThing(id, function (data) {
           expect(data.status).to.equal(404);
           done();
+        });
+      });
+    });
+  });
+
+  describe("deleteAllThings", function() {
+    it("should create two things and delete them", function(done) {
+      var coords = gameBounds.getRandCoords();
+      var createConfig = {
+        lat: coords.lat,
+        lon: coords.lon
+      }
+      thingMgr.createThing(createConfig, function (data) {
+        expect(data.getId()).to.exist;
+        var coords = gameBounds.getRandCoords();
+        var createConfig = {
+          lat: coords.lat,
+          lon: coords.lon
+        }
+        thingMgr.createThing(createConfig, function (data) {
+          expect(data.getId()).to.exist;
+          thingMgr.deleteAllThings(function (data) {
+            expect(data.statusCode).to.equal(204);
+            done();
+          });
         });
       });
     });
