@@ -34,6 +34,8 @@ APP.Admin = function (config) {
   things = [];
   allMarkers = [];
 
+  thingMgr = APP.ThingMgr(config);
+
  /**
   * boundsConfig describes the map space
   * @example home: 37.885454, -122.063447
@@ -117,7 +119,6 @@ APP.Admin = function (config) {
    * @param gameBounds Game bounds
    */
   postThings = function (num, gameBounds) {
-      thingMgr = APP.ThingMgr(config);
       coords = gameBounds.getRandCoords();
       thingMgr.createThing({lat: coords.lat, lon: coords.lon}, function (thing) {
         var id = thing.getId();
