@@ -159,6 +159,29 @@ app.delete('/v1/documents', function(req, res){
   });
 });
 
+// Delete all documents in collection: /v1/search?collection=[collection] DELETE
+app.delete('/v1/search', function(req, res){
+  var url = 'http://' + config.mlhost + ':' + config.mlport +
+          '/v1/search?' + buildQuery(req);
+  request({
+    method: "DELETE",
+    url: url,
+    auth: auth
+  }, function (error, response, body) {
+    if (response) {
+      if ((response.statusCode >= 200) && (response.statusCode < 300)) {
+        res.send(response); // Note: body is empty on success
+      } else {
+        console.log('Error: '+ response.statusCode);
+        console.log(body);
+        res.status(response.statusCode).send();
+      }
+    } else {
+    console.log('Error: No response object');
+  }
+  });
+});
+
 // Put a document: /v1/documents PUT
 app.put('/v1/documents', function(req, res){
   var url = 'http://' + config.mlhost + ':' + config.mlport +
