@@ -26,7 +26,8 @@ APP.Admin = function (config) {
       // methods
       displayAdmin,
       postThings,
-      removeAllThings;
+      removeAllThings,
+      removeAllConfigs;
 
   // initialize
   config = config || {};
@@ -137,8 +138,18 @@ APP.Admin = function (config) {
    * Clear all Things from the database.
    */
   removeAllThings = function () {
-      // TBD
+    thingMgr.deleteAllThings(function () {
       $('#' + config.mapCanvasId).trigger('removeAllThingsDone');
+    });
+  };
+
+  /**
+   * Clear all Configs from the database.
+   */
+  removeAllConfigs = function () {
+    APP.configMgr.deleteAllSavedConfigs(function () {
+      $('#' + config.mapCanvasId).trigger('removeAllConfigsDone');
+    });
   };
 
   /**
@@ -155,6 +166,9 @@ APP.Admin = function (config) {
     };
     gameBounds = APP.Bounds(boundsConfig);
     $('#' + config.mapCanvasId).on('removeAllThingsDone', function () {
+      removeAllConfigs();
+    });
+    $('#' + config.mapCanvasId).on('removeAllConfigsDone', function () {
       postThings($('#numThings').val(), gameBounds);
     });
     $('#' + config.mapCanvasId).on('postThingsDone', function () {
@@ -169,8 +183,11 @@ APP.Admin = function (config) {
         mapStyle: $('#mapStyles').val(),
         numThings: $('#numThings').val()
       };
+      localStorage.setItem('gameId', id);
       APP.configMgr.saveConfig(configToSave, function () {
+        APP.configMgr.saveConfig(configToSave, function () {
 
+        });
       });
     });
     removeAllThings();
