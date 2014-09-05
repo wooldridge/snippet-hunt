@@ -45,10 +45,10 @@ APP.Thing = function (config) {
     lat = config.lat;
     lon = config.lon;
 
-    markerIcon = 'images/coin.png';
-    markerIconActive = 'images/coin_flipped.png';
-    markerIconSmall = 'images/coin_small.png';
-    markerIconTiny = 'images/coin_tiny.png';
+    markerIcon = 'images/snippet.png';
+    markerIconActive = 'images/snippet_bright.png';
+    markerIconSmall = 'images/snippet_small.png';
+    markerIconTiny = 'images/snippet_tiny.png';
 
     // Limit for interacting with Thing (in meters)
     limit = config.limit || 21;
