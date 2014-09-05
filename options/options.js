@@ -1,5 +1,5 @@
 var request = require('request'),
-    config = require('./config'),
+    config = require('../config'),
 
     optName = 'argame', // Default search-options set name
 
@@ -29,7 +29,7 @@ var options = {
   }
 }
 
-var mlversion = config.version.substring(0,1);
+var mlversion = config.mlversion.substring(0,1);
 var jsonkey = (mlversion === '7') ? 'json-key' : 'json-property';
 options.options['extract-metadata'][jsonkey] = [];
 console.log(jsonkey);
@@ -131,14 +131,14 @@ console.log(JSON.stringify(options));
 var putOptions = function () {
   request({
     method: 'PUT',
-    url: 'http://' + config.host + ':' + config.port + '/v1/config/query/' + optName,
+    url: 'http://' + config.mlhost + ':' + config.mlport + '/v1/config/query/' + optName,
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(options),
     auth: {
-      user: config.user,
-      pass: config.pass,
+      user: config.mluser,
+      pass: config.mlpass,
       sendImmediately: false
     }
   }, function (error, response, body) {
