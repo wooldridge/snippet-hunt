@@ -183,11 +183,8 @@ APP.Admin = function (config) {
         mapStyle: $('#mapStyles').val(),
         numThings: $('#numThings').val()
       };
-      localStorage.setItem('gameId', id);
-      APP.configMgr.saveConfig(configToSave, function () {
-        APP.configMgr.saveConfig(configToSave, function () {
-
-        });
+      APP.configMgr.saveConfig(configToSave, function (id) {
+        localStorage.setItem('gameId', id);
       });
     });
     removeAllThings();
