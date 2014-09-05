@@ -16,6 +16,7 @@ APP.ConfigMgr = function (myLat, myLon) {
         collection,
         savedConfig,
         deleteSavedConfig,
+        deleteAllSavedConfigs,
 
         // methods
         get,
@@ -110,12 +111,35 @@ APP.ConfigMgr = function (myLat, myLon) {
     deleteSavedConfig = function (id, callback) {
       url = 'http://' + config.global.host + ':' + config.global.port;
       url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
-      console.log('Config.getSavedConfig url: ' + url);
+      console.log('Config.deleteSavedConfig url: ' + url);
       $.ajax({
           type: 'DELETE',
           url: url
       }).done(function (data, textStatus, jqXHR) {
-          console.log('Config.getSavedConfig: ' + JSON.stringify(data));
+          console.log('Config.deleteSavedConfig statusCode: ' + data.statusCode);
+          if (callback) {
+            callback(data);
+          }
+      }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log(textStatus);
+        if (callback) {
+          callback(jqXHR);
+        }
+      });
+    }
+
+    /**
+     * Delete all game-specific config data from db
+     */
+    deleteAllSavedConfigs = function (callback) {
+      url = 'http://' + config.global.host + ':' + config.global.port;
+      url += '/v1/search?collection=' + collection;
+      console.log('Config.deleteAllSavedConfigs url: ' + url);
+      $.ajax({
+          type: 'DELETE',
+          url: url
+      }).done(function (data, textStatus, jqXHR) {
+          console.log('Config.deleteAllSavedConfigs statusCode: ' + data.statusCode);
           if (callback) {
             callback(data);
           }
@@ -141,6 +165,7 @@ APP.ConfigMgr = function (myLat, myLon) {
       saveConfig: saveConfig,
       getSavedConfig: getSavedConfig,
       deleteSavedConfig: deleteSavedConfig,
+      deleteAllSavedConfigs: deleteAllSavedConfigs,
       getHost: getHost,
       getPort: getPort
     };

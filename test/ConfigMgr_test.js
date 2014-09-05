@@ -18,6 +18,15 @@ describe("ConfigMgr", function() {
 
   var configMgr = new APP.ConfigMgr(myLat, myLon);
 
+  var configToSave = {
+    lat1: lat1,   // south horiz
+    lon1: lon1,   // west vert
+    lat2: lat2,   // north horiz
+    lon2: lon2,   // east vert
+    mapStyle: styleIds[0],
+    numThings: 10
+  };
+
   describe("get", function(done) {
     it("should get a config for Admin", function() {
       var adminConfig = configMgr.get('admin');
@@ -34,14 +43,6 @@ describe("ConfigMgr", function() {
   });
 
   describe("saveConfig", function(done) {
-    var configToSave = {
-      lat1: lat1,   // south horiz
-      lon1: lon1,   // west vert
-      lat2: lat2,   // north horiz
-      lon2: lon2,   // east vert
-      mapStyle: styleIds[0],
-      numThings: 10
-    };
     it("should save a game-specific config and set a Game ID", function(done) {
       configMgr.saveConfig(configToSave, function (data) {
         id = data;
@@ -67,6 +68,21 @@ describe("ConfigMgr", function() {
       configMgr.deleteSavedConfig(id, function (data) {
         expect(data.statusCode).to.equal(204);
         done();
+      });
+    });
+  });
+
+  describe("deleteAllSavedConfigs", function() {
+    it("should create two configs and delete them", function(done) {
+      configMgr.saveConfig(configToSave, function (data) {
+        expect(localStorage.getItem('gameId')).to.equal(data);
+        configMgr.saveConfig(configToSave, function (data) {
+          expect(localStorage.getItem('gameId')).to.equal(data);
+          configMgr.deleteAllSavedConfigs(function (data) {
+            expect(data.statusCode).to.equal(204);
+            done();
+          });
+        });
       });
     });
   });
