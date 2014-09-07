@@ -17,6 +17,7 @@ APP.Thing = function (config) {
         markerIconSmall,
         markerIconSmallActive,
         markerIconTiny,
+        markerIconTinyActive,
         markerSize,
         limit,
         gameBounds,
