@@ -15,7 +15,9 @@ APP.Thing = function (config) {
         markerIcon,
         markerIconActive,
         markerIconSmall,
+        markerIconSmallActive,
         markerIconTiny,
+        markerSize,
         limit,
         gameBounds,
 
@@ -45,10 +47,20 @@ APP.Thing = function (config) {
     lat = config.lat;
     lon = config.lon;
 
-    markerIcon = 'images/snippet.png';
-    markerIconActive = 'images/snippet_bright.png';
-    markerIconSmall = 'images/snippet_small.png';
-    markerIconTiny = 'images/snippet_tiny.png';
+    markerIcon = 'images/snippet1_lg.png';
+    markerIconActive = 'images/snippet1_lg_lt.png';
+    markerIconSmall = 'images/snippet1_sm.png';
+    markerIconSmallActive = 'images/snippet1_sm_lt.png';
+    markerIconTiny = '';
+    markerIconTinyActive = '';
+
+    markerSize = 'large';
+
+    // Zoom 20 = 260px
+    // Zoom 19 = 130px
+    // Zoom 18 = 65px
+    // Zoom 17 = 32px
+    // Zoom 16 = 16px
 
     // Limit for interacting with Thing (in meters)
     limit = config.limit || 21;
@@ -131,11 +143,35 @@ APP.Thing = function (config) {
     }
 
     getMarkerIcon = function () {
-      return markerIcon;
+      switch(markerSize) {
+        case 'large':
+          return markerIcon;
+          break;
+        case 'small':
+          return markerIconSmall;
+          break;
+        case 'tiny':
+          return markerIconTiny;
+          break;
+        default:
+          return null;
+      }
     }
 
     getMarkerIconActive = function () {
-      return markerIconActive;
+      switch(markerSize) {
+        case 'large':
+          return markerIconActive;
+          break;
+        case 'small':
+          return markerIconSmallActive;
+          break;
+        case 'tiny':
+          return markerIconTinyActive;
+          break;
+        default:
+          return null;
+      }
     }
 
     /**
@@ -209,14 +245,15 @@ APP.Thing = function (config) {
     };
 
     setMarkerIcon = function (size) {
-      if (size === 'small') {
+      markerSize = size;
+      if (markerSize === 'small') {
         marker.setIcon(markerIconSmall);
-      } else if (size === 'large') {
+      } else if (markerSize === 'large') {
         marker.setIcon(markerIcon);
-      } else if (size === 'tiny') {
+      } else if (markerSize === 'tiny') {
         marker.setIcon(markerIconTiny);
       }
-      if (size === 'small' || size === 'tiny') {
+      if (markerSize === 'tiny') {
         marker.setClickable(false);
       } else {
         marker.setClickable(true);
