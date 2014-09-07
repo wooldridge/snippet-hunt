@@ -55,7 +55,7 @@ APP.Game = function (config, socket) {
       mapOptions: {
         zoom: 18,
         maxZoom: 20,
-        minZoom: 5,
+        minZoom: 17,
         panControl: false,
         zoomControl: true,
         zoomControlOptions: {
