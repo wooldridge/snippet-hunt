@@ -60,7 +60,7 @@ APP.Game = function (config, socket) {
         zoomControl: true,
         zoomControlOptions: {
           style: google.maps.ZoomControlStyle.SMALL,
-          position: google.maps.ControlPosition.TOP_RIGHT
+          position: google.maps.ControlPosition.RIGHT_BOTTOM
         },
         mapTypeControl: false,
         scaleControl: false,
