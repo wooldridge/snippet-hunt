@@ -11,7 +11,10 @@ var request = require('request'),
 meta = [
   'id',
   'lat',
-  'lon'
+  'lon',
+  'value',
+  'username',
+  'score'
 ];
 
 // Get the optional search-options set name
