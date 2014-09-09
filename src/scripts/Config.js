@@ -10,8 +10,8 @@ APP.Config = function (myLat, myLon) {
 
     var config = {
       global: {
-        //host: '172.16.12.136',
-        host: '10.0.0.8',
+        host: '172.16.12.136',
+        //host: '10.0.0.8',
         port: 9055,
         fileName: 'config.json',
         myLat: myLat || null,
@@ -41,7 +41,8 @@ APP.Config = function (myLat, myLon) {
       game: {
         mapCanvasId: 'map-canvas',
         scoreId: 'score',
-        userId: 'username'
+        userId: 'username',
+        playRadius: 20
         // mapConfig: {
         //   //style: config.mapStyle,
         //   myLat: myLat,
