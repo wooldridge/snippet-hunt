@@ -145,6 +145,26 @@ APP.Game = function (config, socket) {
             map.showMarkers(things);
         });
 
+        // Handle leaders link
+        $('a#leadersLink').click(function () {
+            $('#leadersList').empty();
+            $('#leadersModal').modal({});
+            userMgr.getAllUsers(function (users) {
+              $.each(users, function (index, user) {
+                var html =
+                $('#leadersList').append('<li>' +
+                  '<span class="leadersUsername">' + user.getUsername() + ': </span>' +
+                  '<span class="leadersScore">' + user.getScore() + '</span></li>');
+              });
+            });
+            return false;
+        });
+
+        // Handle leaders close
+        $('button#leadersClose').click(function () {
+            $('#leadersModal').modal('hide')
+        });
+
         $('#map-canvas').on('deleteThing', function (ev, id) {
             thingMgr.deleteThing(id, function () {
                 for (var i = 0; i < things.length; i++) {

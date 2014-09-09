@@ -50,7 +50,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Leaders</a></li>
+        <li><a id="leadersLink" href="#">Leaders</a></li>
         <li><a href="#">Settings</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -74,6 +74,22 @@
           <button type="button" class="btn btn-primary">Submit</button>
         </div>
       </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="leadersModal" class="modal fade">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Leaders</h4>
+      </div>
+      <div class="modal-body">
+        <ul id="leadersList"></ul>
+      </div>
+      <div class="modal-footer">
+        <button id="leadersClose" type="button" class="btn btn-primary">Close</button>
+      </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
