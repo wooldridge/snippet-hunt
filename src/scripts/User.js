@@ -24,6 +24,7 @@ APP.User = function (config) {
     // initialize properties
     config = config || {};
 
+    id = config.id || '';
     username = config.username;
     score = config.score || 0;
 

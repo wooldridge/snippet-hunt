@@ -9,20 +9,24 @@ APP.UserMgr = function (config) {
   'use strict';
     // properties
   var users,
+      user,
       directory,
+      collection,
 
     // methods
     createUser,
     getUser,
     getAllUsers,
     updateUser,
-    deleteUser;
+    deleteUser,
+    deleteAllUsers;
 
   // initialize properties
   config = config || {};
 
   users = [];
   directory = 'users';
+  collection = 'users';
 
   /**
    * Create a User.
@@ -30,7 +34,8 @@ APP.UserMgr = function (config) {
    */
   createUser = function (user, callback) {
     var url = 'http://' + config.host + ':' + config.port;
-      url += '/v1/documents?extension=json&directory=/' + directory + '/';
+        url += '/v1/documents?extension=json&directory=/' + directory + '/';
+        url += '&collection=' + collection;
     console.log('User.createUser url: ' + url);
     user = (typeof user === 'string') ? user : JSON.stringify(user);
     $.ajax({
@@ -88,16 +93,32 @@ APP.UserMgr = function (config) {
    * @param {function} callback A callback to run on success
    */
   getAllUsers = function (callback) {
-    var url = 'http://' + config.host + ':' + config.port;
-      url += '/v1/documents?uri=/' + directory + '/' + id + '.json';
-    console.log('User.get url: ' + url);
+    var url = 'http://' + config.host + ':' + config.port + '/v1/search';
+        url += '?format=json&options=argame';
+        url += '&directory=/users/&pageLength=999';
+    console.log('UserMgr.getAllUsers url: ' + url);
     $.ajax({
       type: 'GET',
       url: url
     }).done(function (data, textStatus, jqXHR) {
-      console.log('User.getAllUsers: ' + JSON.stringify(data));
+      console.log('Results retrieved: ' + data.results.length);
+      users = [];
+      for (var i = 0; i < data.results.length; i++) {
+        var userConfig = {
+          // uri: /users/10499283988025584566.json
+          id: data.results[i].uri
+              .slice(0, data.results[i].uri.length - 5)
+              .substring(7),
+          username: data.results[i].metadata[0].username,
+          score: data.results[i].metadata[1].score
+        };
+        user = new APP.User(userConfig);
+        users.push(user); // @todo side effect, remove from here
+      }
+      //$('#' + config.mapCanvasId).trigger('getAllThingsDone');
+      $('#map-canvas').trigger('getAllUsers');
       if (callback) {
-        callback(data);
+        callback(users);
       }
     }).fail(function (jqXHR, textStatus, errorThrown) {
       console.log(textStatus);
@@ -106,6 +127,7 @@ APP.UserMgr = function (config) {
       }
     });
   };
+
 
   /**
    * Update a User.
@@ -160,13 +182,38 @@ APP.UserMgr = function (config) {
     });
   };
 
+
+  /**
+   * Delete all users from db
+   */
+  deleteAllUsers = function (callback) {
+    var url = 'http://' + config.host + ':' + config.port;
+    url += '/v1/search?collection=' + collection;
+    console.log('Config.deleteAllUsers url: ' + url);
+    $.ajax({
+        type: 'DELETE',
+        url: url
+    }).done(function (data, textStatus, jqXHR) {
+        console.log('Config.deleteAllUsers statusCode: ' + data.statusCode);
+        if (callback) {
+          callback(data);
+        }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+      console.log(textStatus);
+      if (callback) {
+        callback(jqXHR);
+      }
+    });
+  }
+
   // Public API
   return {
     createUser: createUser,
     getUser: getUser,
     getAllUsers: getAllUsers,
     updateUser: updateUser,
-    deleteUser: deleteUser
+    deleteUser: deleteUser,
+    deleteAllUsers: deleteAllUsers
   };
 
 };
