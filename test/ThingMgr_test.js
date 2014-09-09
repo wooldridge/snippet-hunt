@@ -11,6 +11,7 @@ describe("ThingMgr", function() {
     lat2: 37.885454 + 0.0007,
     lon2: -122.063447 + 0.001
   };
+  var value = 7;
   var thing = {};
   var updatedThing = {};
   var id = '';
@@ -23,7 +24,8 @@ describe("ThingMgr", function() {
       var coords = gameBounds.getRandCoords();
       var createConfig = {
         lat: coords.lat,
-        lon: coords.lon
+        lon: coords.lon,
+        value: value
       }
       thingMgr.createThing(createConfig, function (data) {
         thing = data;
@@ -42,6 +44,7 @@ describe("ThingMgr", function() {
         expect(thing.getLat()).to.be.below(boundsConfig.lat2);
         expect(thing.getLon()).to.be.above(boundsConfig.lon1);
         expect(thing.getLon()).to.be.below(boundsConfig.lon2);
+        expect(thing.getValue()).to.equal(value);
         done();
       });
     });
@@ -61,7 +64,8 @@ describe("ThingMgr", function() {
     it("should update the created Thing", function(done) {
       var updatedConfig = {
         lat: thing.getLat() + 1,
-        lon: thing.getLon() + 1
+        lon: thing.getLon() + 1,
+        value: thing.getValue() + 1
       };
       updatedThing = new APP.Thing(updatedConfig);
       thingMgr.updateThing(id, updatedConfig, function (data) {
@@ -70,6 +74,7 @@ describe("ThingMgr", function() {
           updatedThing = new APP.Thing(data);
           expect(updatedThing.getLat()).to.equal(updatedConfig.lat);
           expect(updatedThing.getLon()).to.equal(updatedConfig.lon);
+          expect(updatedThing.getValue()).to.equal(updatedConfig.value);
           done();
         });
       });

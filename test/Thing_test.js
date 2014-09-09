@@ -6,7 +6,8 @@ describe("Thing", function() {
 
   var thingConfig = {
     lat: 37,
-    lon: 122
+    lon: 122,
+    value: 7
   }
   var id = '123abc';
   var thing;
@@ -30,6 +31,7 @@ describe("Thing", function() {
       expect(thing).to.be.an('object');
       expect(thing.getLat()).to.equal(thingConfig.lat);
       expect(thing.getLon()).to.equal(thingConfig.lon);
+      expect(thing.getValue()).to.equal(thingConfig.value);
     });
   });
 

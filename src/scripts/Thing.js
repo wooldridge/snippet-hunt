@@ -12,6 +12,7 @@ APP.Thing = function (config) {
         lat,
         lon,
         marker,
+        icon,
         markerIcon,
         markerIconActive,
         markerIconSmall,
@@ -21,6 +22,7 @@ APP.Thing = function (config) {
         markerSize,
         limit,
         gameBounds,
+        value,
 
         // methods
         getId,
@@ -29,6 +31,8 @@ APP.Thing = function (config) {
         setLat,
         getLon,
         setLon,
+        getValue,
+        setValue,
         getDistBetwPoints,
         deg2rad,
         getMarker,
@@ -47,16 +51,23 @@ APP.Thing = function (config) {
     id = config.id || '';
     lat = config.lat;
     lon = config.lon;
+    value = config.value || 1;
 
-    markerIcon = 'images/snippet1_lg.png';
-    markerIconActive = 'images/snippet1_lg_lt.png';
-    markerIconSmall = 'images/snippet1_sm.png';
-    markerIconSmallActive = 'images/snippet1_sm_lt.png';
-    markerIconTiny = '';
-    markerIconTinyActive = '';
+    icon = {
+      size: new google.maps.Size(40, 40),
+      origin: new google.maps.Point(0,0),
+      anchor: new google.maps.Point(20, 20)
+    };
+    markerIcon = $.extend({}, icon, {url: 'images/snippet1_lg.png'});
+    markerIconActive = $.extend({}, icon, {url: 'images/snippet1_lg_lt.png'});
+    markerIconSmall = $.extend({}, icon, {url: 'images/snippet1_sm.png'});
+    markerIconSmallActive = $.extend({}, icon, {url: 'images/snippet1_sm_lt.png'});
+    markerIconTiny = {};
+    markerIconTinyActive = {};
 
-    markerSize = 'large';
+    markerSize = 'large'; // default, will change with zooming
 
+    // Relative zoom sizes:
     // Zoom 20 = 260px
     // Zoom 19 = 130px
     // Zoom 18 = 65px
@@ -64,7 +75,7 @@ APP.Thing = function (config) {
     // Zoom 16 = 16px
 
     // Limit for interacting with Thing (in meters)
-    limit = config.limit || 21;
+    limit = config.limit || 20;
 
     /**
      * Get the ID
@@ -112,6 +123,22 @@ APP.Thing = function (config) {
      */
     setLon = function (newLon) {
         lon = newLon;
+    };
+
+    /**
+     * Get the value
+     * @returns The value
+     */
+    getValue = function () {
+        return value;
+    };
+
+    /**
+     * Set the value
+     * @param val The new value
+     */
+    setValue = function (newVal) {
+        value = newVal;
     };
 
     getDistBetwPoints = function (lat1,lon1,lat2,lon2) {
@@ -182,9 +209,16 @@ APP.Thing = function (config) {
      */
     showMarker = function (map, interactive) {
         var pos = new google.maps.LatLng(getLat(), getLon());
+
+        // var image = {
+        //   url: getMarkerIcon(),
+        //   size: new google.maps.Size(40, 40),
+        //   origin: new google.maps.Point(0,0),
+        //   anchor: new google.maps.Point(20, 20)
+        // };
+
         marker = new google.maps.Marker({
           position: pos,
-          anchor: new google.maps.Point(8, 8),
           map: map.getMap(),
           title: getLat().toString()+', '+getLon(),
           icon: getMarkerIcon()
@@ -226,7 +260,7 @@ APP.Thing = function (config) {
             marker.setMap(null);
           }, 200);
           $('#msg').show().html(msg).fadeOut(1000);
-          APP.game.changeScore(1);
+          APP.game.changeScore(getValue());
           $('#map-canvas').trigger('scoreChanged');
           APP.game.displayScore();
           $('#map-canvas').trigger('deleteThing', [id]);
@@ -269,6 +303,8 @@ APP.Thing = function (config) {
         setLat: setLat,
         getLon: getLon,
         setLon: setLon,
+        getValue: getValue,
+        setValue: setValue,
         getDistBetwPoints: getDistBetwPoints,
         getMarker: getMarker,
         getMarkerIcon: getMarkerIcon,

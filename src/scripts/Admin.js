@@ -118,15 +118,16 @@ APP.Admin = function (config) {
    * Post things to db.
    * @param num Number of Things to add
    * @param gameBounds Game bounds
+   * @param val Value of each thing
    */
-  postThings = function (num, gameBounds) {
+  postThings = function (num, gameBounds, val) {
       coords = gameBounds.getRandCoords();
-      thingMgr.createThing({lat: coords.lat, lon: coords.lon}, function (thing) {
+      thingMgr.createThing({lat: coords.lat, lon: coords.lon, value: val}, function (thing) {
         var id = thing.getId();
         num--;
         if (num > 0) {
           things.push(thing);
-          postThings(num, gameBounds);
+          postThings(num, gameBounds, val);
         } else {
           console.log('Triggering postThingsDone');
           $('#' + config.mapCanvasId).trigger('postThingsDone');
@@ -169,7 +170,7 @@ APP.Admin = function (config) {
       removeAllConfigs();
     });
     $('#' + config.mapCanvasId).on('removeAllConfigsDone', function () {
-      postThings($('#numThings').val(), gameBounds);
+      postThings($('#numThings').val(), gameBounds, 10);
     });
     $('#' + config.mapCanvasId).on('postThingsDone', function () {
       for (var i = 0; i < things.length; i++) {

@@ -41,7 +41,8 @@ APP.ThingMgr = function (config) {
     console.log('Thing.createThing url: ' + url);
     var json = {
       lat: thing.getLat(),
-      lon: thing.getLon()
+      lon: thing.getLon(),
+      value: thing.getValue()
     };
     $.ajax({
       type: 'POST',
@@ -116,7 +117,8 @@ APP.ThingMgr = function (config) {
               .slice(0, data.results[i].uri.length - 5)
               .substring(8),
           lat: data.results[i].metadata[0].lat,
-          lon: data.results[i].metadata[1].lon
+          lon: data.results[i].metadata[1].lon,
+          value: data.results[i].metadata[2].value
         };
         thing = new APP.Thing(thingConfig);
         things.push(thing); // @todo side effect, remove from here
