@@ -9,8 +9,12 @@ APP.Thing = function (config) {
     'use strict';
         // properties
     var id,
+        type,
+        name,
         lat,
         lon,
+        value,
+        zIndex,
         marker,
         icon,
         markerIcon,
@@ -22,17 +26,22 @@ APP.Thing = function (config) {
         markerSize,
         limit,
         gameBounds,
-        value,
 
         // methods
         getId,
         setId,
+        getType,
+        setType,
+        getName,
+        setName,
         getLat,
         setLat,
         getLon,
         setLon,
         getValue,
         setValue,
+        getZIndex,
+        setZIndex,
         getDistBetwPoints,
         deg2rad,
         getMarker,
@@ -49,19 +58,22 @@ APP.Thing = function (config) {
     // location: 37.886, -122.064
 
     id = config.id || '';
+    type = config.type || '';
+    name = config.name || '';
     lat = config.lat;
     lon = config.lon;
     value = config.value || 1;
+    zIndex = config.zIndex || 1;
 
     icon = {
       size: new google.maps.Size(40, 40),
       origin: new google.maps.Point(0,0),
       anchor: new google.maps.Point(20, 20)
     };
-    markerIcon = $.extend({}, icon, {url: 'images/snippet1_lg.png'});
-    markerIconActive = $.extend({}, icon, {url: 'images/snippet1_lg_lt.png'});
-    markerIconSmall = $.extend({}, icon, {url: 'images/snippet1_sm.png'});
-    markerIconSmallActive = $.extend({}, icon, {url: 'images/snippet1_sm_lt.png'});
+    markerIcon = $.extend({}, icon, {url: 'images/' + type + '_lg.png'});
+    markerIconActive = $.extend({}, icon, {url: 'images/' + type + '_lg_lt.png'});
+    markerIconSmall = $.extend({}, icon, {url: 'images/' + type + '_sm.png'});
+    markerIconSmallActive = $.extend({}, icon, {url: 'images/' + type + '_sm_lt.png'});
     markerIconTiny = {};
     markerIconTinyActive = {};
 
@@ -86,11 +98,43 @@ APP.Thing = function (config) {
     };
 
     /**
-     * Get the ID
+     * Set the ID
      * @returns The ID
      */
     setId = function (theId) {
         id = theId;
+    };
+
+    /**
+     * Get the type
+     * @returns The type
+     */
+    getType = function () {
+        return type;
+    };
+
+    /**
+     * Set the type
+     * @returns The type
+     */
+    setType = function (theType) {
+        type = theType;
+    };
+
+    /**
+     * Get the name
+     * @returns The name
+     */
+    getName = function () {
+        return name;
+    };
+
+    /**
+     * Set the name
+     * @returns The name
+     */
+    setName = function (theName) {
+        name = theName;
     };
 
     /**
@@ -139,6 +183,22 @@ APP.Thing = function (config) {
      */
     setValue = function (newVal) {
         value = newVal;
+    };
+
+    /**
+     * Get the zIndex
+     * @returns The zIndex
+     */
+    getZIndex = function () {
+        return zIndex;
+    };
+
+    /**
+     * Set the zIndex
+     * @param newZ The new zIndex
+     */
+    setZIndex = function (newZ) {
+        zIndex = newZ;
     };
 
     getDistBetwPoints = function (lat1,lon1,lat2,lon2) {
@@ -220,8 +280,9 @@ APP.Thing = function (config) {
         marker = new google.maps.Marker({
           position: pos,
           map: map.getMap(),
-          title: getLat().toString()+', '+getLon(),
-          icon: getMarkerIcon()
+          title: getName(),
+          icon: getMarkerIcon(),
+          zIndex: getZIndex()
         });
         if (interactive !== false) {
           makeInteractive(map, marker);
@@ -245,21 +306,21 @@ APP.Thing = function (config) {
         marker.setIcon(getMarkerIconActive())
         var msg;
         if (dist * 1000 > limit) {
-          msg = 'Out of range';
+          msg = getName() + ' out of range';
           var sndE = new Audio("audio/error2.mp3");
           sndE.play();
           setTimeout(function() {
             marker.setIcon(getMarkerIcon())
           }, 500);
-          $('#msg').show().html(msg).fadeOut(1000);
+          $('#msg').show().html(msg).delay(1000).fadeOut(1000);
         } else {
-          msg = 'Coin collected';
+          msg = 'You got ' + getName() + '!';
           var sndO = new Audio("audio/ok2.mp3");
           sndO.play();
           setTimeout(function() {
             marker.setMap(null);
           }, 200);
-          $('#msg').show().html(msg).fadeOut(1000);
+          $('#msg').show().html(msg).delay(1000).fadeOut(1000);
           APP.game.changeScore(getValue());
           $('#map-canvas').trigger('scoreChanged');
           APP.game.displayScore();
@@ -299,12 +360,18 @@ APP.Thing = function (config) {
     return {
         getId: getId,
         setId: setId,
+        getType: getType,
+        setType: setType,
+        getName: getName,
+        setName: setName,
         getLat: getLat,
         setLat: setLat,
         getLon: getLon,
         setLon: setLon,
         getValue: getValue,
         setValue: setValue,
+        getZIndex: getZIndex,
+        setZIndex: setZIndex,
         getDistBetwPoints: getDistBetwPoints,
         getMarker: getMarker,
         getMarkerIcon: getMarkerIcon,
