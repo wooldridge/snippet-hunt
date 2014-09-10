@@ -24,6 +24,7 @@ body {
 }
 #score, #username {
   font-weight: bold;
+  font-size: 1.8em;
 }
 #msg {
   font-weight: normal;
@@ -83,6 +84,28 @@ div#usernameForm {
   height: 500px;
   width: 680px;
   padding: 0px
+}
+
+ul#leadersList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul#leadersList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+span.leadersUsername {
+  display: inline-block;
+  width: 80%;
+}
+span.leadersScore {
+  display: inline-block;
+  width: 20%;
+  text-align: right;
 }
 
 /* navbar */
