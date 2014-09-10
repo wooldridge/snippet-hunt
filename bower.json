@@ -17,6 +17,7 @@
   "dependencies": {
     "chai": "~1.9.1",
     "jquery": "~2.1.1",
-    "mocha": "~1.21.4"
+    "mocha": "~1.21.4",
+    "jquery-validation": "~1.2.8"
   }
 }
