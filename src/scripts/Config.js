@@ -10,8 +10,8 @@ APP.Config = function (myLat, myLon) {
 
     var config = {
       global: {
-        host: '172.16.12.136',
-        //host: '10.0.0.8',
+        //host: '172.16.12.136',
+        host: '10.0.0.8',
         port: 9055,
         fileName: 'config.json',
         myLat: myLat || null,
@@ -51,6 +51,14 @@ APP.Config = function (myLat, myLon) {
       },
       user: {
         score: 0
+      },
+      things: {
+        types: [
+          {type: 'snippet', name: 'Snippet', value: 10, defaultNum: 100, zIndex: 1},
+          {type: 'gary', name: 'Gary', value: 100, defaultNum: 1, zIndex: 10},
+          {type: 'chris', name: 'Chris', value: 100, defaultNum: 1, zIndex: 10},
+          {type: 'david', name: 'David', value: 100, defaultNum: 1, zIndex: 10}
+        ]
       }
     };
 
