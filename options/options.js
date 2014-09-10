@@ -10,9 +10,12 @@ var request = require('request'),
 
 meta = [
   'id',
+  'type',
+  'name',
   'lat',
   'lon',
   'value',
+  'zIndex',
   'username',
   'score'
 ];
