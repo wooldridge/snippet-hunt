@@ -40,9 +40,12 @@ APP.ThingMgr = function (config) {
         url += '&collection=' + collection;
     console.log('Thing.createThing url: ' + url);
     var json = {
+      type: thing.getType(),
+      name: thing.getName(),
       lat: thing.getLat(),
       lon: thing.getLon(),
-      value: thing.getValue()
+      value: thing.getValue(),
+      zIndex: thing.getZIndex()
     };
     $.ajax({
       type: 'POST',
@@ -116,9 +119,12 @@ APP.ThingMgr = function (config) {
           id: data.results[i].uri
               .slice(0, data.results[i].uri.length - 5)
               .substring(8),
-          lat: data.results[i].metadata[0].lat,
-          lon: data.results[i].metadata[1].lon,
-          value: data.results[i].metadata[2].value
+          type: data.results[i].metadata[0].type,
+          name: data.results[i].metadata[1].name,
+          lat: data.results[i].metadata[2].lat,
+          lon: data.results[i].metadata[3].lon,
+          value: data.results[i].metadata[4].value,
+          zIndex: data.results[i].metadata[5].zIndex
         };
         thing = new APP.Thing(thingConfig);
         things.push(thing); // @todo side effect, remove from here
