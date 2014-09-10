@@ -114,25 +114,39 @@ APP.Admin = function (config) {
     });
   }
 
+
   /**
    * Post things to db.
-   * @param num Number of Things to add
-   * @param gameBounds Game bounds
-   * @param val Value of each thing
+   * @param thingsTypes Things config object
+   * @param numTypes Number of thing types to load
+   * @param numItems Number of things for the first item type being loaded
+   * @param gameBounds The game bounds
    */
-  postThings = function (num, gameBounds, val) {
-      coords = gameBounds.getRandCoords();
-      thingMgr.createThing({lat: coords.lat, lon: coords.lon, value: val}, function (thing) {
+  postThings = function (thingsTypes, numTypes, numItems, gameBounds) {
+    coords = gameBounds.getRandCoords();
+    thingMgr.createThing(
+      { type: thingsTypes[numTypes-1]['type'],
+        name: thingsTypes[numTypes-1]['name'],
+        lat: coords.lat,
+        lon: coords.lon,
+        value: thingsTypes[numTypes-1]['value'],
+        zIndex: thingsTypes[numTypes-1]['zIndex'] },
+      function (thing) {
         var id = thing.getId();
-        num--;
-        if (num > 0) {
+        numItems--;
+        // Cycle through items until 0
+        if (numItems > 0) {
           things.push(thing);
-          postThings(num, gameBounds, val);
+          postThings(thingsTypes, numTypes, numItems, gameBounds);
+        // If items 0, cycle through next item type
+        } else if (--numTypes > 0) {
+          postThings(thingsTypes, numTypes, thingsTypes[numTypes-1]['defaultNum'], gameBounds);
+        // If items and type 0, done
         } else {
           console.log('Triggering postThingsDone');
           $('#' + config.mapCanvasId).trigger('postThingsDone');
         }
-      });
+    });
   };
 
   /**
@@ -170,7 +184,10 @@ APP.Admin = function (config) {
       removeAllConfigs();
     });
     $('#' + config.mapCanvasId).on('removeAllConfigsDone', function () {
-      postThings($('#numThings').val(), gameBounds, 10);
+      var thingsConfig = APP.configMgr.get('things');
+      var thingsTypes = thingsConfig.types;
+      postThings(thingsTypes, thingsTypes.length,
+                 thingsTypes[thingsTypes.length-1]['defaultNum'], gameBounds);
     });
     $('#' + config.mapCanvasId).on('postThingsDone', function () {
       for (var i = 0; i < things.length; i++) {
