@@ -10,7 +10,7 @@ APP.Config = function (myLat, myLon) {
 
     var config = {
       global: {
-        //host: '172.16.12.136',
+        //host: 'ancient-ridge-4998.herokuapp.com',
         host: '10.0.0.8',
         port: 9055,
         fileName: 'config.json',
