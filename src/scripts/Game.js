@@ -43,7 +43,7 @@ APP.Game = function (config, socket) {
     lon1: config.lon1,
     lat2: config.lat2,
     lon2: config.lon2
-  }
+  };
   bounds = new APP.Bounds(boundsConfig);
 
   mapConfig = {
@@ -67,7 +67,7 @@ APP.Game = function (config, socket) {
       streetViewControl: false,
       overviewMapControl: false
     }
-  }
+  };
   map = new APP.Map(mapConfig, bounds);
 
   things = [];
@@ -114,7 +114,7 @@ APP.Game = function (config, socket) {
         submitHandler: function (form) {
           var userConfig = {
             username: $('#usernameInput').val(),
-          }
+          };
           user = new APP.User(userConfig);
           userMgr.createUser(user.toJSON(), function (id) {
               $('#usernameModal').modal('hide');
@@ -185,7 +185,7 @@ APP.Game = function (config, socket) {
 
       // Handle leaders close
       $('button#leadersClose').click(function () {
-          $('#leadersModal').modal('hide')
+          $('#leadersModal').modal('hide');
       });
 
       $('#map-canvas').on('deleteThing', function (ev, id) {

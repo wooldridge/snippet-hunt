@@ -79,7 +79,7 @@ APP.Map = function (config) {
       bounds: rectBounds,
       editable: true,
       draggable: true
-    }
+    };
     $.extend(rectOptions, config.rectOptions);
     rectangle = new google.maps.Rectangle(rectOptions);
     rectangle.setMap(map);
@@ -120,16 +120,16 @@ APP.Map = function (config) {
     };
     player = new GeolocationMarker(map, {}, playerConfig);
 
-    console.log('Player shown')
+    console.log('Player shown');
     $('#' + id).trigger('showPlayerDone');
   };
 
   getPlayer = function () {
-    return player
+    return player;
   };
 
   getMap = function () {
-    return map
+    return map;
   };
 
   // Public API

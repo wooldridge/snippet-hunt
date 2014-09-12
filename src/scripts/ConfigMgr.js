@@ -10,8 +10,6 @@ APP.ConfigMgr = function (myLat, myLon) {
         // properties
     var config,
         url,
-        myLat,
-        myLon,
         directory,
         collection,
         savedConfig,
@@ -42,7 +40,7 @@ APP.ConfigMgr = function (myLat, myLon) {
      */
     get = function (id) {
       var result = {};
-      $.extend(result, config[id], config['global']);
+      $.extend(result, config[id], config.global);
       return result;
     };
 
@@ -80,7 +78,7 @@ APP.ConfigMgr = function (myLat, myLon) {
           callback(jqXHR);
         }
       });
-    }
+    };
 
     /**
      * Get game-specific config data from db
@@ -103,7 +101,7 @@ APP.ConfigMgr = function (myLat, myLon) {
           callback(jqXHR);
         }
       });
-    }
+    };
 
     /**
      * Delete game-specific config data from db
@@ -126,7 +124,7 @@ APP.ConfigMgr = function (myLat, myLon) {
           callback(jqXHR);
         }
       });
-    }
+    };
 
     /**
      * Delete all game-specific config data from db
@@ -149,15 +147,15 @@ APP.ConfigMgr = function (myLat, myLon) {
           callback(jqXHR);
         }
       });
-    }
+    };
 
     getHost = function () {
       return config.global.host;
-    }
+    };
 
     getPort = function () {
       return config.global.port;
-    }
+    };
 
     // Public API
     return {
