@@ -74,7 +74,7 @@ APP.User = function (config) {
         json = {
             username: getUsername() || '',
             score: getScore() || 0
-        }
+        };
         return JSON.stringify(json);
     };
 

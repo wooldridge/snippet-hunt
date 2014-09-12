@@ -204,7 +204,7 @@ APP.UserMgr = function (config) {
         callback(jqXHR);
       }
     });
-  }
+  };
 
   // Public API
   return {

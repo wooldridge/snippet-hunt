@@ -216,11 +216,11 @@ APP.Thing = function (config) {
       var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
       var d = R * c; // Distance in km
       return d;
-    }
+    };
 
     deg2rad = function (deg) {
-      return deg * (Math.PI/180)
-    }
+      return deg * (Math.PI/180);
+    };
 
     getMarker = function () {
       if (marker) {
@@ -228,39 +228,33 @@ APP.Thing = function (config) {
       } else {
         return null;
       }
-    }
+    };
 
     getMarkerIcon = function () {
       switch(markerSize) {
         case 'large':
           return markerIcon;
-          break;
         case 'small':
           return markerIconSmall;
-          break;
         case 'tiny':
           return markerIconTiny;
-          break;
         default:
           return null;
       }
-    }
+    };
 
     getMarkerIconActive = function () {
       switch(markerSize) {
         case 'large':
           return markerIconActive;
-          break;
         case 'small':
           return markerIconSmallActive;
-          break;
         case 'tiny':
           return markerIconTinyActive;
-          break;
         default:
           return null;
       }
-    }
+    };
 
     /**
      * Show a Thing marker on a Google Map
@@ -303,14 +297,14 @@ APP.Thing = function (config) {
           player.position.k,
           player.position.B
         );
-        marker.setIcon(getMarkerIconActive())
+        marker.setIcon(getMarkerIconActive());
         var msg;
         if (dist * 1000 > limit) {
           msg = getName() + ' out of range';
           var sndE = new Audio("audio/error2.mp3");
           sndE.play();
           setTimeout(function() {
-            marker.setIcon(getMarkerIcon())
+            marker.setIcon(getMarkerIcon());
           }, 500);
           $('#msg').show().html(msg).delay(1000).fadeOut(1000);
         } else {
