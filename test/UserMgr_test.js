@@ -8,15 +8,15 @@ describe("UserMgr", function() {
   var user = {
     username: 'testname',
     score: 0
-  }
+  };
   var user2 = {
     username: 'testname2',
     score: 1
-  }
+  };
   var updatedUser = {
     username: 'testname3',
     score: 10
-  }
+  };
   var id = '';
 
   var userMgr = new APP.UserMgr(config.get('admin'));

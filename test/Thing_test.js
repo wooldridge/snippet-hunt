@@ -8,7 +8,7 @@ describe("Thing", function() {
     lat: 37,
     lon: 122,
     value: 7
-  }
+  };
   var id = '123abc';
   var thing;
   var marker;
@@ -20,7 +20,7 @@ describe("Thing", function() {
     myLon: 122,
     mapOptions: {},
     rectOptions: {}
-  }
+  };
   $('body').append('<div id="' + mapConfig.id + '"></div>');
   var map = new APP.Map(mapConfig);
   var googleMap;

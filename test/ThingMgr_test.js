@@ -26,7 +26,7 @@ describe("ThingMgr", function() {
         lat: coords.lat,
         lon: coords.lon,
         value: value
-      }
+      };
       thingMgr.createThing(createConfig, function (data) {
         thing = data;
         id = thing.getId();
@@ -99,14 +99,14 @@ describe("ThingMgr", function() {
       var createConfig = {
         lat: coords.lat,
         lon: coords.lon
-      }
+      };
       thingMgr.createThing(createConfig, function (data) {
         expect(data.getId()).to.exist;
         var coords = gameBounds.getRandCoords();
         var createConfig = {
           lat: coords.lat,
           lon: coords.lon
-        }
+        };
         thingMgr.createThing(createConfig, function (data) {
           expect(data.getId()).to.exist;
           thingMgr.deleteAllThings(function (data) {

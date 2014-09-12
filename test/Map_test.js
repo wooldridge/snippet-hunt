@@ -15,7 +15,7 @@ describe("Map", function() {
     mapOptions: {},
     rectOptions: {},
     mapStyles: new APP.MapStyles()
-  }
+  };
 
   $('body').append('<div id="' + mapConfig.id + '"></div>');
 
@@ -51,7 +51,7 @@ describe("Map", function() {
         lon1: 122,
         lat2: 38,
         lon2: 123
-      }
+      };
       var bounds = new APP.Bounds(boundsConfig);
       map.showRectangle(bounds);
       rectangle = map.getRectangle();

@@ -9,7 +9,7 @@ describe("Bounds", function() {
     lon1: 122,
     lat2: 38,
     lon2: 123
-  }
+  };
 
   describe("getRandCoords", function() {
     var bounds = new APP.Bounds(boundsConfig);

@@ -7,7 +7,7 @@ describe("User", function() {
   var userConfig = {
     username: 'testname',
     score: 0
-  }
+  };
   var id = '123abc';
   var user;
 
