@@ -23,7 +23,7 @@ var buildQuery = function (req) {
     queryArr.push(qkeys[i] + '=' + req.query[qkeys[i]]);
   }
   return queryArr.join('&');
-}
+};
 
 // Auth object
 // TODO Assumes digest auth, support others
@@ -31,7 +31,7 @@ var auth = {
   user: config.mluser,
   pass: config.mlpass,
   sendImmediately: false
-}
+};
 
 var oneDay = 86400000; // for caching
 app.use(express.compress()); // gzip compression

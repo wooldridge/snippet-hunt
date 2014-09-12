@@ -8,8 +8,7 @@ var APP = APP || {};
 APP.Admin = function (config) {
   'use strict';
       // properties
-  var config,
-      boundsConfig,
+  var boundsConfig,
       bounds,
       mapConfig,
       map,
@@ -47,7 +46,7 @@ APP.Admin = function (config) {
     lon1: config.lon1,
     lat2: config.lat2,
     lon2: config.lon2
-  }
+  };
 
   mapConfig = {
     id: config.mapCanvasId,
@@ -56,7 +55,7 @@ APP.Admin = function (config) {
     myLon: config.myLon,
     mapOptions: config.mapOptions,
     rectOptions: config.rectOptions
-  }
+  };
 
   if (config.mapStyles) {
     mapConfig.mapStyles = config.mapStyles;
@@ -112,7 +111,7 @@ APP.Admin = function (config) {
       $('#lat2').val(lat2);
       $('#lon2').val(lon2);
     });
-  }
+  };
 
 
   /**
@@ -125,12 +124,12 @@ APP.Admin = function (config) {
   postThings = function (thingsTypes, numTypes, numItems, gameBounds) {
     coords = gameBounds.getRandCoords();
     thingMgr.createThing(
-      { type: thingsTypes[numTypes-1]['type'],
-        name: thingsTypes[numTypes-1]['name'],
+      { type: thingsTypes[numTypes-1].type,
+        name: thingsTypes[numTypes-1].name,
         lat: coords.lat,
         lon: coords.lon,
-        value: thingsTypes[numTypes-1]['value'],
-        zIndex: thingsTypes[numTypes-1]['zIndex'] },
+        value: thingsTypes[numTypes-1].value,
+        zIndex: thingsTypes[numTypes-1].zIndex },
       function (thing) {
         var id = thing.getId();
         numItems--;
@@ -140,7 +139,7 @@ APP.Admin = function (config) {
           postThings(thingsTypes, numTypes, numItems, gameBounds);
         // If items 0, cycle through next item type
         } else if (--numTypes > 0) {
-          postThings(thingsTypes, numTypes, thingsTypes[numTypes-1]['defaultNum'], gameBounds);
+          postThings(thingsTypes, numTypes, thingsTypes[numTypes-1].defaultNum, gameBounds);
         // If items and type 0, done
         } else {
           console.log('Triggering postThingsDone');
@@ -187,7 +186,7 @@ APP.Admin = function (config) {
       var thingsConfig = APP.configMgr.get('things');
       var thingsTypes = thingsConfig.types;
       postThings(thingsTypes, thingsTypes.length,
-                 thingsTypes[thingsTypes.length-1]['defaultNum'], gameBounds);
+                 thingsTypes[thingsTypes.length-1].defaultNum, gameBounds);
     });
     $('#' + config.mapCanvasId).on('postThingsDone', function () {
       for (var i = 0; i < things.length; i++) {
