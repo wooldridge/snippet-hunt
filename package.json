@@ -12,6 +12,7 @@
     "corsproxy": "0.2.x",
     "request": "2.x",
     "express": "^3.16.7",
-    "socket.io": "^1.0.6"
+    "socket.io": "^1.0.6",
+    "jshint": "^2.5.5"
   }
 }
