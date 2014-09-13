@@ -21,7 +21,7 @@ at: `http://localhost:8000/appservices/`
 3. Set up a REST server for the database on port `8077`. You can do this at:
 `http://localhost:8000/appservices/`
 4. In the root directory, run `npm install` to load dependencies.
-5. In the `options` directory, run `node options` to define search options for
+5. In the root directory, run `node options` to define search options for
 the REST server.
 6. In the root directory, run `node server` to start the middle-tier NodeJS Express
 server to serve the application and handle REST calls.
