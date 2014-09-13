@@ -39,6 +39,7 @@ app.use(express.compress()); // gzip compression
 // Serve static files
 app.use(express.static(__dirname + '/src', { maxAge: oneDay }));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
+app.use('/vendor', express.static(__dirname + '/vendor'));
 app.use('/test', express.static(__dirname + '/test'));
 
 // Make a search request: /v1/search GET
