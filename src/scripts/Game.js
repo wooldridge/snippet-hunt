@@ -160,10 +160,12 @@ APP.Game = function (config, socket) {
       });
 
       function compare(u1, u2) {
-        if (u1.getScore() > u2.getScore())
-           return -1;
-        if (u1.getScore() < u2.getScore())
+        if (u1.getScore() > u2.getScore()) {
+          return -1;
+        }
+        if (u1.getScore() < u2.getScore()) {
           return 1;
+        }
         return 0;
       }
 
