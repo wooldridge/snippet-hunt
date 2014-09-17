@@ -9,27 +9,23 @@
                maximum-scale=1,
                user-scalable=0"
 />
-<title>AR Game</title>
+<title><!--@echo title--> | v<!--@echo version--> | <!--@echo NODE_ENV--></title>
+<meta name="description" content="<!--@echo description-->">
+
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link type="text/css" href="styles/styles.css" rel="stylesheet">
-<script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
-<script type="text/javascript" src="/bower_components/jquery-validation/dist/jquery.validate.min.js"></script>
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?AIzaSyDUsZCP04vN4oxSQBcHmz1YGbTq8RTMEvw"></script>
-<script type="text/javascript" src="/vendor/geolocationmarker.js"></script>
-<script type="text/javascript" src="scripts/Admin.js"></script>
-<script type="text/javascript" src="scripts/Bounds.js"></script>
-<script type="text/javascript" src="scripts/Config.js"></script>
-<script type="text/javascript" src="scripts/ConfigMgr.js"></script>
-<script type="text/javascript" src="scripts/Game.js"></script>
-<script type="text/javascript" src="scripts/Map.js"></script>
-<script type="text/javascript" src="scripts/MapStyles.js"></script>
-<script type="text/javascript" src="scripts/Player.js"></script>
-<script type="text/javascript" src="scripts/Thing.js"></script>
-<script type="text/javascript" src="scripts/ThingMgr.js"></script>
-<script type="text/javascript" src="scripts/User.js"></script>
-<script type="text/javascript" src="scripts/UserMgr.js"></script>
-<script type="text/javascript" src="/socket.io/socket.io.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<!-- @if NODE_ENV == 'DEVELOPMENT' -->
+
+<link rel="stylesheet" href="styles/<!-- @echo name -->.css">
+
+<!-- @endif -->
+
+<!-- @if NODE_ENV == 'PRODUCTION' -->
+
+<link rel="stylesheet" href="styles/<!-- @echo name -->.min.css">
+
+<!-- @endif -->
+
 </head>
 <body>
 
@@ -51,7 +47,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-        <li><a id="leadersLink" href="#">Leaders</a></li>
+        <li><a id="leadersLink" href="#">Top</a></li>
         <!-- <li><a href="#">Settings</a></li> -->
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -83,7 +79,7 @@
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Leaders</h4>
+        <h4 class="modal-title">Top Players</h4>
       </div>
       <div class="modal-body">
         <ul id="leadersList"></ul>
@@ -100,6 +96,35 @@
 <audio id="ambAudio" loop="loop" autoplay="autoplay" preload="auto">
   <source src="audio/ambient.mp3" type="audio/mpeg">
 </audio>
+
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="/bower_components/jquery-validation/dist/jquery.validate.min.js"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?AIzaSyDUsZCP04vN4oxSQBcHmz1YGbTq8RTMEvw"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/vendor/geolocationmarker.js"></script>
+
+<!-- @if NODE_ENV == 'DEVELOPMENT' -->
+
+<script type="text/javascript" src="scripts/Admin.js"></script>
+<script type="text/javascript" src="scripts/Bounds.js"></script>
+<script type="text/javascript" src="scripts/Config.js"></script>
+<script type="text/javascript" src="scripts/ConfigMgr.js"></script>
+<script type="text/javascript" src="scripts/Game.js"></script>
+<script type="text/javascript" src="scripts/Map.js"></script>
+<script type="text/javascript" src="scripts/MapStyles.js"></script>
+<script type="text/javascript" src="scripts/Thing.js"></script>
+<script type="text/javascript" src="scripts/ThingMgr.js"></script>
+<script type="text/javascript" src="scripts/User.js"></script>
+<script type="text/javascript" src="scripts/UserMgr.js"></script>
+
+<!-- @endif -->
+
+<!-- @if NODE_ENV == 'PRODUCTION' -->
+
+<script type="text/javascript" src="scripts/<!-- @echo name -->.min.js"></script>
+
+<!-- @endif -->
 
 <script>
 $(function () {

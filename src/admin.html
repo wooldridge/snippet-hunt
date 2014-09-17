@@ -9,19 +9,20 @@
                maximum-scale=1,
                user-scalable=0"
 />
-<title>AR Game Admin</title>
-<link type="text/css" href="styles/styles.css" rel="stylesheet">
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?AIzaSyDUsZCP04vN4oxSQBcHmz1YGbTq8RTMEvw"></script>
-<script type="text/javascript" src="scripts/Config.js"></script>
-<script type="text/javascript" src="scripts/ConfigMgr.js"></script>
-<script type="text/javascript" src="scripts/Bounds.js"></script>
-<script type="text/javascript" src="scripts/Game.js"></script>
-<script type="text/javascript" src="scripts/Map.js"></script>
-<script type="text/javascript" src="scripts/MapStyles.js"></script>
-<script type="text/javascript" src="scripts/Thing.js"></script>
-<script type="text/javascript" src="scripts/ThingMgr.js"></script>
-<script type="text/javascript" src="scripts/Admin.js"></script>
+<title><!--@echo title--> Admin | v<!--@echo version--> | <!--@echo NODE_ENV--></title>
+
+<!-- @if NODE_ENV == 'DEVELOPMENT' -->
+
+<link rel="stylesheet" href="styles/<!-- @echo name -->.css">
+
+<!-- @endif -->
+
+<!-- @if NODE_ENV == 'PRODUCTION' -->
+
+<link rel="stylesheet" href="styles/<!-- @echo name -->.min.css">
+
+<!-- @endif -->
+
 </head>
 <body>
 
@@ -65,6 +66,33 @@
   </div>
 
 </div>
+
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="/bower_components/jquery-validation/dist/jquery.validate.min.js"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?AIzaSyDUsZCP04vN4oxSQBcHmz1YGbTq8RTMEvw"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/vendor/geolocationmarker.js"></script>
+
+<!-- @if NODE_ENV == 'DEVELOPMENT' -->
+
+<script type="text/javascript" src="scripts/Admin.js"></script>
+<script type="text/javascript" src="scripts/Bounds.js"></script>
+<script type="text/javascript" src="scripts/Config.js"></script>
+<script type="text/javascript" src="scripts/ConfigMgr.js"></script>
+<script type="text/javascript" src="scripts/Game.js"></script>
+<script type="text/javascript" src="scripts/Map.js"></script>
+<script type="text/javascript" src="scripts/MapStyles.js"></script>
+<script type="text/javascript" src="scripts/Thing.js"></script>
+<script type="text/javascript" src="scripts/ThingMgr.js"></script>
+
+<!-- @endif -->
+
+<!-- @if NODE_ENV == 'PRODUCTION' -->
+
+<script type="text/javascript" src="scripts/<!-- @echo name -->.min.js"></script>
+
+<!-- @endif -->
 
 <script>
 $(function () {
