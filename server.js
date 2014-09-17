@@ -221,9 +221,12 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
-// var repeat = function () {
-//   setInterval(function () {
-//     console.log("ping")
-//   }, 5000);
-// }
-// repeat();
+var repeat = function () {
+  setInterval(function () {
+    console.log("ping");
+    var User = require('./src/scripts/User');
+    var testUser = new User();
+    console.log(testUser.getScore());
+  }, 1000);
+}
+repeat();
