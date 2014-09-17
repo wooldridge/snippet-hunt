@@ -1,7 +1,9 @@
 {
-  "name": "argame",
+  "title": "Snippet Hunt",
+  "name": "snippet-hunt",
   "description": "An augmented-reality game.",
   "version": "0.0.1",
+  "homepage": "http://www.snippethunt.com",
   "author": {
     "name": "Mike Wooldridge",
     "email": "mike@hellion.org"
@@ -25,6 +27,7 @@
     "grunt-contrib-htmlmin": "^0.3.0",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-env": "^0.4.1",
-    "grunt-preprocess": "^4.0.0"
+    "grunt-preprocess": "^4.0.0",
+    "grunt-contrib-copy": "^0.5.0"
   }
 }
