@@ -12,6 +12,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-htmlmin");
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-preprocess');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Project configuration.
   grunt.initConfig({
@@ -129,6 +130,19 @@ module.exports = function(grunt) {
           './build/index.html': './src/index.html',
           './build/admin.html': './src/admin.html'
         }
+      }
+    },
+    watch : {
+      files : [
+        './src/scripts/**/*',
+        './src/styles/**/*',
+        './src/index.html',
+        './src/admin.html',
+        './src/reset.html'
+      ],
+      tasks : 'default',
+      options: {
+        livereload: 35739
       }
     }
   });
