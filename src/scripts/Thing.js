@@ -379,3 +379,5 @@ APP.Thing = function (config) {
     };
 
 };
+
+module.exports = APP.Thing;

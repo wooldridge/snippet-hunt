@@ -89,3 +89,5 @@ APP.User = function (config) {
     };
 
 };
+
+module.exports = APP.User;
