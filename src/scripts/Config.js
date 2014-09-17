@@ -28,7 +28,17 @@ APP.Config = function (myLat, myLon) {
         lon2: myLon + 0.001,
         mapStyleIndex: 0,
         mapOptions: {
-          zoom: 18
+          zoom: 18,
+          panControl: false,
+          zoomControl: true,
+          zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.SMALL,
+            position: google.maps.ControlPosition.RIGHT_BOTTOM
+          },
+          mapTypeControl: true,
+          scaleControl: false,
+          streetViewControl: false,
+          overviewMapControl: false
         },
         rectOptions: {
           strokeColor: '#666666',

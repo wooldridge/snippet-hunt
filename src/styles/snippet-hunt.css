@@ -31,9 +31,20 @@ body {
   padding-left: 10px;
   color: #999;
 }
+#map-canvas-admin {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+}
 #container {
-  width: 1030px;
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  background-color: rgba(255,255,255,0.8);
+  width: 350px;
   padding: 20px;
+  z-index: 20;
 }
 form#adminForm {
   padding: 20px;
@@ -77,13 +88,6 @@ div#usernameForm {
 #gameLink {
   padding-left: 130px;
   display: none;
-}
-#map-canvas-admin {
-  position: relative;
-  float: right;
-  height: 500px;
-  width: 680px;
-  padding: 0px
 }
 
 ul#leadersList {
