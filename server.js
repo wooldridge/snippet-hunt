@@ -211,22 +211,99 @@ app.put('/v1/documents', function(req, res){
   });
 });
 
+var deleteOne = function (uri, callback) {
+  var url = 'http://' + config.mlhost + ':' + config.mlport +
+          '/v1/documents?uri=' + uri;
+  request({
+    method: "DELETE",
+    url: url,
+    auth: auth
+  }, function (error, response, body) {
+    if (response) {
+      if ((response.statusCode >= 200) && (response.statusCode < 300)) {
+        console.log('deleteOne success: ' + url);
+        //res.send(response); // Note: body is empty on success
+        if (callback) {
+          callback();
+        }
+      } else {
+        console.log('Error: '+ response.statusCode);
+        console.log(body);
+        //res.status(response.statusCode).send();
+      }
+    } else {
+    console.log('Error: No response object');
+  }
+  });
+}
+
+var getAllThings = function (callback) {
+  var url = 'http://' + config.mlhost + ':' + config.mlport + '/v1/search';
+      url += '?format=json&options=argame';
+      url += '&directory=/things/&pageLength=999';// + config.numThings;
+  request({
+    method: "GET",
+    url: url,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    auth: auth
+  }, function (error, response, body) {
+    if (response) {
+      if ((response.statusCode >= 200) && (response.statusCode < 300)) {
+        //res.set('Content-Type', 'application/json');
+        console.log('getAllThings success: ' + JSON.parse(body).total);
+        //res.send(JSON.parse(body));
+        if (callback) {
+          callback(JSON.parse(body));
+        }
+      } else {
+        console.log('Error: '+ response.statusCode);
+        console.log(body);
+        //res.status(response.statusCode).send();
+      }
+    } else {
+      console.log('Error: No response object');
+    }
+  });
+}
+
 var io = require('socket.io').listen(app.listen(config.port));
 console.log('Express started on port ' + config.port);
 
 io.sockets.on('connection', function (socket) {
+
   console.log('connection established');
+
   socket.on('thingDeleted', function (data) {
-      io.sockets.emit('thingDeleted', data);
+    io.sockets.emit('thingDeleted', data);
   });
+
+
 });
 
-var repeat = function () {
-  setInterval(function () {
-    console.log("ping");
-    var User = require('./src/scripts/User');
-    var testUser = new User();
-    console.log(testUser.getScore());
-  }, 1000);
-}
-repeat();
+var User = require('./src/scripts/User');
+
+setInterval(function () {
+  console.log("ping");
+  var testUser = new User();
+  console.log(testUser.getScore());
+  getAllThings(function (data) {
+    if (data.total > 0) {
+      var rnd = Math.floor(Math.random() * (data.total - 1));
+      console.log('will delete: ' + data.results[rnd].uri);
+      deleteOne(data.results[rnd].uri, function () {
+        var id = data.results[rnd].uri
+                 .slice(0, data.results[rnd].uri.length - 5)
+                 .substring(8);
+        console.log('deleted: ' + id);
+        io.sockets.emit('thingDeleted', { id: id });
+      });
+    }
+  });
+  // 1. clear all users
+  // 2. send alert via socket
+  // 3. create new users
+  // 4. send alert via socket
+}, 1000);
+
