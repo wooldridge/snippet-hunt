@@ -1,5 +1,7 @@
 var APP = APP || {};
 
+var module = {};
+
 /**
  * Class representing a User.
  * @constructor
