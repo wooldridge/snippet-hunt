@@ -23,19 +23,14 @@ APP.Marker = function (config) {
         markerIconSmallActive,
         markerIconTiny,
         markerIconTinyActive,
-        limit,
-        gameBounds,
 
         // methods
-        getMarker,
-        getType,
-        setType,
-        getName,
-        setName,
         getLat,
         setLat,
         getLon,
         setLon,
+        getName,
+        setName,
         getSize,
         setSize,
         getZIndex,
@@ -53,14 +48,14 @@ APP.Marker = function (config) {
 
     // location: 37.886, -122.064
 
-    lat = config.lat;
-    lon = config.lon;
+    lat = config.lat || 0;
+    lon = config.lon || 0;
     pos = new google.maps.LatLng(getLat(), getLon());
 
-    map = config.map;
+    map = config.map || null;
     name = config.name || '';
-    zIndex = config.zIndex || 1;
     size = config.size || 'large';
+    zIndex = config.zIndex || 1;
 
     icon = {
       size: new google.maps.Size(40, 40),
@@ -82,57 +77,6 @@ APP.Marker = function (config) {
     // Zoom 18 = 65px
     // Zoom 17 = 32px
     // Zoom 16 = 16px
-
-    // Limit for interacting with Thing (in meters)
-    limit = config.limit || 20;
-
-    /**
-     * Get the ID
-     * @returns The ID
-     */
-    getId = function () {
-        return id;
-    };
-
-    /**
-     * Set the ID
-     * @returns The ID
-     */
-    setId = function (theId) {
-        id = theId;
-    };
-
-    /**
-     * Get the type
-     * @returns The type
-     */
-    getType = function () {
-        return type;
-    };
-
-    /**
-     * Set the type
-     * @returns The type
-     */
-    setType = function (theType) {
-        type = theType;
-    };
-
-    /**
-     * Get the name
-     * @returns The name
-     */
-    getName = function () {
-        return name;
-    };
-
-    /**
-     * Set the name
-     * @returns The name
-     */
-    setName = function (theName) {
-        name = theName;
-    };
 
     /**
      * Get the latitude
@@ -164,6 +108,22 @@ APP.Marker = function (config) {
      */
     setLon = function (newLon) {
         lon = newLon;
+    };
+
+    /**
+     * Get the name
+     * @returns The name
+     */
+    getName = function () {
+        return name;
+    };
+
+    /**
+     * Set the name
+     * @returns The name
+     */
+    setName = function (theName) {
+        name = theName;
     };
 
     /**
@@ -316,16 +276,12 @@ APP.Marker = function (config) {
 
     // Public API
     return {
-        getId: getId,
-        setId: setId,
-        getType: getType,
-        setType: setType,
-        getName: getName,
-        setName: setName,
         getLat: getLat,
         setLat: setLat,
         getLon: getLon,
         setLon: setLon,
+        getName: getName,
+        setName: setName,
         getSize: getSize,
         setSize: setSize,
         getZIndex: getZIndex,
