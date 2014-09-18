@@ -1,5 +1,7 @@
 var APP = APP || {};
 
+var module = {};
+
 /**
  * Class representing a map Marker.
  * @constructor
@@ -12,13 +14,13 @@ APP.Marker = function (config) {
         lat,
         lon,
         pos,
-        map,
         title,
         icon,
         zIndex,
         size,
         type,
         limit,
+        value,
         googleMarker,
         markerIcon,
         markerIconActive,
@@ -42,6 +44,8 @@ APP.Marker = function (config) {
         setZIndex,
         getType,
         setType,
+        getValue,
+        setValue,
         getGoogleMarker,
         getMarkerIcon,
         getMarkerIconActive,
@@ -63,12 +67,11 @@ APP.Marker = function (config) {
     lon = config.lon || 0;
     pos = new google.maps.LatLng(lat, lon);
 
-    map = config.map || null;
     name = config.name || '';
     size = config.size || 'large';
     zIndex = config.zIndex || 1;
     type = config.type || '';
-
+    value = config.value || 1;
     limit = config.limit || 20;
 
     icon = {
@@ -202,6 +205,23 @@ APP.Marker = function (config) {
         type = newType;
     };
 
+
+    /**
+     * Get the value
+     * @returns The value
+     */
+    getValue = function () {
+        return value;
+    };
+
+    /**
+     * Set the value
+     * @param newValue The new value
+     */
+    setValue = function (newValue) {
+        value = newValue;
+    };
+
     getMarkerIcon = function () {
       switch(size) {
         case 'large':
@@ -233,11 +253,10 @@ APP.Marker = function (config) {
     };
 
     /**
-     * Show a Thing marker on a Google Map
+     * Show a marker on a Google Map
      * @param map The APP.Map object
-     * @param {boolean} interactive Add event handling (true or false)
      */
-    showMarker = function (map, interactive) {
+    showMarker = function (map) {
         googleMarker = new google.maps.Marker({
           position: pos,
           map: map.getMap(),
@@ -245,9 +264,6 @@ APP.Marker = function (config) {
           icon: getMarkerIcon(size),
           zIndex: zIndex
         });
-        if (interactive !== false) {
-          makeInteractive();
-        }
     };
 
    getDistBetwPoints = function (lat1,lon1,lat2,lon2) {
@@ -273,8 +289,9 @@ APP.Marker = function (config) {
 
     /**
      * Add events to make marker interactive
+     * @param map The APP.Map object
      */
-    makeInteractive = function () {
+    makeInteractive = function (map) {
       google.maps.event.addListener(googleMarker, 'click', function(ev) {
         var player = map.getPlayer();
         var dist = getDistBetwPoints(
@@ -316,7 +333,7 @@ APP.Marker = function (config) {
      * @param map The Google Map
      */
     hideMarker = function () {
-        marker.setMap(null);
+        googleMarker.setMap(null);
         console.log('marker hidden: ' + getId());
     };
 
