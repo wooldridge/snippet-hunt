@@ -1,5 +1,7 @@
 var APP = APP || {};
 
+var module = {};
+
 /**
  * Class representing a Thing.
  * @constructor
@@ -262,76 +264,28 @@ APP.Thing = function (config) {
      * @param {boolean} interactive Add event handling (true or false)
      */
     showMarker = function (map, interactive) {
-        var pos = new google.maps.LatLng(getLat(), getLon());
-
-        // var image = {
-        //   url: getMarkerIcon(),
-        //   size: new google.maps.Size(40, 40),
-        //   origin: new google.maps.Point(0,0),
-        //   anchor: new google.maps.Point(20, 20)
-        // };
-
-        marker = new google.maps.Marker({
-          position: pos,
-          map: map.getMap(),
-          title: getName(),
-          icon: getMarkerIcon(),
-          zIndex: getZIndex()
-        });
-        if (interactive !== false) {
-          makeInteractive(map, marker);
-        }
+      marker = new APP.Marker(config);
+      // marker = new APP.Marker({
+      //   lat: lat,
+      //   lon: lon,
+      //   map: map,
+      //   name: name,
+      //   type: type,
+      //   zIndex: zIndex,
+      //   value: value
+      // });
+      marker.showMarker(map);
+      if (interactive !== false) {
+        marker.makeInteractive(map);
+      }
     };
-
-    /**
-     * Add events to make marker interactive
-     * @param map The APP.Map object
-     * @param marker The marker object
-     */
-    makeInteractive = function (map, marker) {
-      google.maps.event.addListener(marker, 'click', function(ev) {
-        var player = map.getPlayer();
-        var dist = getDistBetwPoints(
-          getLat(),
-          getLon(),
-          player.position.k,
-          player.position.B
-        );
-        marker.setIcon(getMarkerIconActive());
-        var msg;
-        if (dist * 1000 > limit) {
-          msg = getName() + ' out of range';
-          var sndE = new Audio("audio/error2.mp3");
-          sndE.play();
-          setTimeout(function() {
-            marker.setIcon(getMarkerIcon());
-          }, 500);
-          $('#msg').show().html(msg).delay(1000).fadeOut(1000);
-        } else {
-          msg = 'You got ' + getName() + '!';
-          var sndO = new Audio("audio/ok2.mp3");
-          sndO.play();
-          setTimeout(function() {
-            marker.setMap(null);
-          }, 200);
-          $('#msg').show().html(msg).delay(1000).fadeOut(1000);
-          APP.game.changeScore(getValue());
-          $('#map-canvas').trigger('scoreChanged');
-          APP.game.displayScore();
-          $('#map-canvas').trigger('deleteThing', [id]);
-        }
-        console.log(msg + ': ' + getId());
-      });
-    };
-
 
     /**
      * Hide a Thing marker on a Google Map
      * @param map The Google Map
      */
     hideMarker = function () {
-        marker.setMap(null);
-        console.log('marker hidden: ' + getId());
+        marker.hideMarker();
     };
 
     setMarkerIcon = function (size) {
