@@ -1,7 +1,5 @@
 var APP = APP || {};
 
-var module = {};
-
 /**
  * Class representing a User.
  * @constructor
@@ -92,4 +90,7 @@ APP.User = function (config) {
 
 };
 
-module.exports = APP.User;
+if (typeof window === 'undefined') {
+    module.exports = APP.User;
+}
+
