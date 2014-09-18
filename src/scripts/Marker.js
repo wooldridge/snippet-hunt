@@ -8,15 +8,18 @@ var APP = APP || {};
 APP.Marker = function (config) {
     'use strict';
         // properties
-    var lat,
+    var id,
+        lat,
         lon,
         pos,
-        marker,
         map,
         title,
         icon,
         zIndex,
         size,
+        type,
+        limit,
+        googleMarker,
         markerIcon,
         markerIconActive,
         markerIconSmall,
@@ -25,6 +28,8 @@ APP.Marker = function (config) {
         markerIconTinyActive,
 
         // methods
+        getId,
+        setId,
         getLat,
         setLat,
         getLon,
@@ -35,10 +40,14 @@ APP.Marker = function (config) {
         setSize,
         getZIndex,
         setZIndex,
-        getMarker,
+        getType,
+        setType,
+        getGoogleMarker,
         getMarkerIcon,
         getMarkerIconActive,
         showMarker,
+        getDistBetwPoints,
+        deg2rad,
         makeInteractive,
         hideMarker,
         setMarkerIcon;
@@ -46,16 +55,21 @@ APP.Marker = function (config) {
     // initialize properties
     config = config || {};
 
+    id = config.id || 0;
+
     // location: 37.886, -122.064
 
     lat = config.lat || 0;
     lon = config.lon || 0;
-    pos = new google.maps.LatLng(getLat(), getLon());
+    pos = new google.maps.LatLng(lat, lon);
 
     map = config.map || null;
     name = config.name || '';
     size = config.size || 'large';
     zIndex = config.zIndex || 1;
+    type = config.type || '';
+
+    limit = config.limit || 20;
 
     icon = {
       size: new google.maps.Size(40, 40),
@@ -69,14 +83,28 @@ APP.Marker = function (config) {
     markerIconTiny = {};
     markerIconTinyActive = {};
 
-    markerSize = 'large'; // default, will change with zooming
-
     // Relative zoom sizes:
     // Zoom 20 = 260px
     // Zoom 19 = 130px
     // Zoom 18 = 65px
     // Zoom 17 = 32px
     // Zoom 16 = 16px
+
+    /**
+     * Get the ID
+     * @returns The ID
+     */
+    getId = function () {
+        return id;
+    };
+
+    /**
+     * Set the ID
+     * @returns The ID
+     */
+    setId = function (theId) {
+        id = theId;
+    };
 
     /**
      * Get the latitude
@@ -139,7 +167,7 @@ APP.Marker = function (config) {
      * @param val The new size
      */
     setSize = function (newSize) {
-        value = newSize;
+        size = newSize;
     };
 
     /**
@@ -158,12 +186,20 @@ APP.Marker = function (config) {
         zIndex = newZ;
     };
 
-    getMarker = function () {
-      if (marker) {
-        return marker;
-      } else {
-        return null;
-      }
+    /**
+     * Get the type
+     * @returns The type
+     */
+    getType = function () {
+        return type;
+    };
+
+    /**
+     * Set the type
+     * @param newType The new type
+     */
+    setType = function (newType) {
+        type = newType;
     };
 
     getMarkerIcon = function () {
@@ -192,13 +228,17 @@ APP.Marker = function (config) {
       }
     };
 
+    getGoogleMarker = function () {
+      return googleMarker || null;
+    };
+
     /**
      * Show a Thing marker on a Google Map
      * @param map The APP.Map object
      * @param {boolean} interactive Add event handling (true or false)
      */
     showMarker = function (map, interactive) {
-        marker = new google.maps.Marker({
+        googleMarker = new google.maps.Marker({
           position: pos,
           map: map.getMap(),
           title: name,
@@ -210,11 +250,32 @@ APP.Marker = function (config) {
         }
     };
 
+   getDistBetwPoints = function (lat1,lon1,lat2,lon2) {
+      if (!lat1 || !lon1 || !lat2 || !lon2) {
+        throw new Error("Missing lat/lon param(s)");
+      }
+      var R = 6371; // Radius of the earth in km
+      var dLat = deg2rad(lat2 - lat1);
+      var dLon = deg2rad(lon2 - lon1);
+      var a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2)
+        ;
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      var d = R * c; // Distance in km
+      return d;
+    };
+
+    deg2rad = function (deg) {
+      return deg * (Math.PI/180);
+    };
+
     /**
      * Add events to make marker interactive
      */
     makeInteractive = function () {
-      google.maps.event.addListener(marker, 'click', function(ev) {
+      google.maps.event.addListener(googleMarker, 'click', function(ev) {
         var player = map.getPlayer();
         var dist = getDistBetwPoints(
           getLat(),
@@ -222,14 +283,14 @@ APP.Marker = function (config) {
           player.position.k,
           player.position.B
         );
-        marker.setIcon(getMarkerIconActive());
+        googleMarker.setIcon(getMarkerIconActive());
         var msg;
         if (dist * 1000 > limit) {
           msg = getName() + ' out of range';
           var sndE = new Audio("audio/error2.mp3");
           sndE.play();
           setTimeout(function() {
-            marker.setIcon(getMarkerIcon());
+            googleMarker.setIcon(getMarkerIcon());
           }, 500);
           $('#msg').show().html(msg).delay(1000).fadeOut(1000);
         } else {
@@ -237,7 +298,7 @@ APP.Marker = function (config) {
           var sndO = new Audio("audio/ok2.mp3");
           sndO.play();
           setTimeout(function() {
-            marker.setMap(null);
+            googleMarker.setMap(null);
           }, 200);
           $('#msg').show().html(msg).delay(1000).fadeOut(1000);
           APP.game.changeScore(getValue());
@@ -276,6 +337,8 @@ APP.Marker = function (config) {
 
     // Public API
     return {
+        getId: getId,
+        setId: setId,
         getLat: getLat,
         setLat: setLat,
         getLon: getLon,
@@ -286,7 +349,9 @@ APP.Marker = function (config) {
         setSize: setSize,
         getZIndex: getZIndex,
         setZIndex: setZIndex,
-        getMarker: getMarker,
+        getType: getType,
+        setType: setType,
+        getGoogleMarker: getGoogleMarker,
         getMarkerIcon: getMarkerIcon,
         getMarkerIconActive: getMarkerIconActive,
         showMarker: showMarker,
