@@ -122,7 +122,8 @@ module.exports = function(grunt) {
       dev : {
         files: {
           './build/index.html': './src/index.html',
-          './build/admin.html': './src/admin.html'
+          './build/admin.html': './src/admin.html',
+          './build/reset.html': './src/reset.html'
         }
       },
       prod : {
