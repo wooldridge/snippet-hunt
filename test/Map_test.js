@@ -4,7 +4,7 @@ describe("Map", function() {
 
   this.timeout(5000);
 
-  var mapStyles = APP.MapStyles();
+  var mapStyles = new APP.MapStyles();
   var styleIds = mapStyles.getStyles();
 
   var mapConfig = {
@@ -14,7 +14,7 @@ describe("Map", function() {
     myLon: 122,
     mapOptions: {},
     rectOptions: {},
-    mapStyles: new APP.MapStyles()
+    mapStyles: mapStyles
   };
 
   $('body').append('<div id="' + mapConfig.id + '"></div>');
