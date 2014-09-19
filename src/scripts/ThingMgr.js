@@ -45,6 +45,7 @@ APP.ThingMgr = function (config) {
       lat: thing.getLat(),
       lon: thing.getLon(),
       value: thing.getValue(),
+      exp: thing.getExp(),
       zIndex: thing.getZIndex()
     };
     $.ajax({
@@ -124,7 +125,8 @@ APP.ThingMgr = function (config) {
           lat: data.results[i].metadata[2].lat,
           lon: data.results[i].metadata[3].lon,
           value: data.results[i].metadata[4].value,
-          zIndex: data.results[i].metadata[5].zIndex
+          exp: data.results[i].metadata[5].exp,
+          zIndex: data.results[i].metadata[6].zIndex
         };
         thing = new APP.Thing(thingConfig);
         things.push(thing); // @todo side effect, remove from here

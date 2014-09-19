@@ -129,6 +129,7 @@ APP.Admin = function (config) {
         lat: coords.lat,
         lon: coords.lon,
         value: thingsTypes[numTypes-1].value,
+        exp: thingsTypes[numTypes-1].exp,
         zIndex: thingsTypes[numTypes-1].zIndex },
       function (thing) {
         var id = thing.getId();

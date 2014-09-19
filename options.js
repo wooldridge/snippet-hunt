@@ -33,6 +33,7 @@ meta = [
   'lat',
   'lon',
   'value',
+  'exp',
   'zIndex',
   'username',
   'score'

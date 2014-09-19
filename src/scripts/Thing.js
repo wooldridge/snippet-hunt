@@ -16,6 +16,7 @@ APP.Thing = function (config) {
         lat,
         lon,
         value,
+        exp,
         zIndex,
         marker,
         icon,
@@ -42,6 +43,8 @@ APP.Thing = function (config) {
         setLon,
         getValue,
         setValue,
+        getExp,
+        setExp,
         getZIndex,
         setZIndex,
         getDistBetwPoints,
@@ -188,6 +191,22 @@ APP.Thing = function (config) {
     };
 
     /**
+     * Get the expiration date
+     * @returns The expiration date
+     */
+    getExp = function () {
+        return exp;
+    };
+
+    /**
+     * Set the expiration date
+     * @param val The new expiration date
+     */
+    setExp = function (newExp) {
+        exp = newExp;
+    };
+
+    /**
      * Get the zIndex
      * @returns The zIndex
      */
@@ -318,6 +337,8 @@ APP.Thing = function (config) {
         setLon: setLon,
         getValue: getValue,
         setValue: setValue,
+        getExp: getExp,
+        setExp: setExp,
         getZIndex: getZIndex,
         setZIndex: setZIndex,
         getDistBetwPoints: getDistBetwPoints,
