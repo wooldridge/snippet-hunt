@@ -1,6 +1,7 @@
 {
   "title": "Snippet Hunt",
   "name": "snippet-hunt",
+  "subdomain": "snippet-hunt",
   "description": "An augmented-reality game.",
   "version": "0.0.1",
   "homepage": "http://www.snippethunt.com",
