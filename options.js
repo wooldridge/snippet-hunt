@@ -72,26 +72,16 @@ for (var m=0; m<meta.length; m++) {
   options.options['extract-metadata'][jsonkey].push(meta[m]);
 }
 
-// Define 'language' range constraint
-// var constr = { 'name': 'language',
-//   'range': {
-//     'collation': 'http://marklogic.com/collation/',
-//     'type': 'xs:string',
-//     'facet': true,
-//     'facet-option': [
-//       'frequency-order',
-//       'descending'
-//     ],
-//     'element': {
-//       'ns': 'http://marklogic.com/xdmp/json/basic',
-//       'name': 'language'
-//     }
-//   }
-// };
-// Add 'language' range constraint
-// options.options.constraint.push(constr);
-// Add 'language' extract-metadata setting
-// options.options['extract-metadata']['constraint-value'].push({ 'ref': 'language'});
+// Define 'exp' range constraint
+var constr = { 'name': 'exp',
+  'range': {
+    'type': 'xs:int',
+    'facet': false,
+    'json-property': 'exp'
+  }
+};
+// Add 'exp' range constraint
+options.options.constraint.push(constr);
 
 // Define 'watchers' range constraint
 // var constr = { 'name': 'watchers',
