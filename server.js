@@ -285,9 +285,9 @@ io.sockets.on('connection', function (socket) {
 var User = require('./src/scripts/User');
 
 setInterval(function () {
-  console.log("ping");
+  //console.log("ping");
   var testUser = new User();
-  console.log(testUser.getScore());
+  //console.log(testUser.getScore());
   getAllThings(function (data) {
     if (data.total > 0) {
       var rnd = Math.floor(Math.random() * (data.total - 1));
@@ -305,5 +305,5 @@ setInterval(function () {
   // 2. send alert via socket
   // 3. create new users
   // 4. send alert via socket
-}, 1000);
+}, 5000);
 
