@@ -67,7 +67,6 @@ APP.Admin = function (config) {
   displayAdmin = function () {
 
     // Set form field values
-    $('#numThings').val(config.numThings);
     $('#lat1').val(config.lat1);
     $('#lon1').val(config.lon1);
     $('#lat2').val(config.lat2);

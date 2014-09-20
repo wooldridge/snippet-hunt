@@ -69,9 +69,6 @@ form#adminForm button {
 form#adminForm input {
   width: 130px;
 }
-form#adminForm input#numThings {
-  width: 70px;
-}
 form#adminForm button {
   width: 125px;
 }

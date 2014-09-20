@@ -107,7 +107,7 @@ APP.ThingMgr = function (config) {
   getAllThings = function (callback) {
     var url = 'http://' + config.host + ':' + config.port + '/v1/search';
         url += '?format=json&options=argame';
-        url += '&directory=/things/&pageLength=999';// + config.numThings;
+        url += '&directory=/things/&pageLength=999';
     console.log('ThingMgr.getAllThings url: ' + url);
     $.ajax({
       type: 'GET',

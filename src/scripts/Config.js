@@ -12,20 +12,16 @@ APP.Config = function (myLat, myLon) {
 
     var config = {
       global: {
-        //host: 'ancient-ridge-4998.herokuapp.com',
         host: '10.0.0.8',
         //host: 'localhost',
         //host: '172.16.12.136',
-        port: 9055,
+        port: 8055,
         fileName: 'config.json',
         myLat: myLat || null,
-        myLon: myLon || null,
-        nextThingId: 1001,
-        nextUserId: 1001
+        myLon: myLon || null
       },
       admin: {
         mapCanvasId: 'map-canvas-admin',
-        numThings: 10,
         lat1: myLat - 0.0007,
         lon1: myLon - 0.001,
         lat2: myLat + 0.0007,
