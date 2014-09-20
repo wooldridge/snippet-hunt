@@ -42,29 +42,4 @@ describe("Thing", function() {
     });
   });
 
-  describe("showMarker", function() {
-    it("should show a marker for the Thing", function(done) {
-      map.showMap();
-      googleMap = map.getMap();
-      google.maps.event.addListenerOnce(googleMap, 'idle', function(){
-        thing.showMarker(map);
-        expect(thing.getMarker().icon).is.equal(thing.getMarkerIcon());
-        done();
-      });
-    });
-    it("should handle a click on the marker", function(done) {
-      marker = thing.getMarker();
-      google.maps.event.addListener(marker, 'click', function(){
-        expect(this).to.have.property('map');
-        expect(this).to.have.property('position');
-        done();
-      });
-      map.showPlayer();
-      player = map.getPlayer();
-      google.maps.event.addListener(player, 'position_changed', function(){
-        google.maps.event.trigger(marker, 'click');
-      });
-    });
-  });
-
 });
