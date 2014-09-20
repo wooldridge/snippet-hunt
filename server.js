@@ -313,37 +313,25 @@ io.sockets.on('connection', function (socket) {
 var User = require('./src/scripts/User');
 
 setInterval(function () {
-  //console.log("ping");
-  var testUser = new User();
-  //console.log(testUser.getScore());
-  getAllThings(function (data) {
-    var current = Math.floor(new Date() / 1000);
-    if (data.total > 0) {
-      var rnd = Math.floor(Math.random() * (data.total - 1));
-      console.log('will delete: ' + data.results[rnd].uri);
-      // deleteOne(data.results[rnd].uri, function () {
-      //   var id = data.results[rnd].uri
-      //            .slice(0, data.results[rnd].uri.length - 5)
-      //            .substring(8);
-      //   console.log('deleted: ' + id);
-      //   io.sockets.emit('thingDeleted', { id: id });
-      // });
-      var count = 0;
-      for (var i = 0; i < data.results.length; i++) {
-        if (data.results[i].metadata[5].exp < current) {
-          console.log(data.results[i].uri + ' has expired: ' + data.results[i].metadata[5].exp);
-        }
-      }
-    }
-  });
   var current = Math.floor(new Date() / 1000);
   console.log('current: ' + current);
   getExpThings(current, function (data) {
     console.log('getExpThings: ' + data.total);
+    // To store IDs for things that have expired and need deletion
+    var deletedArr = [];
+    for (var i = 0; i < data.results.length; i++) {
+      console.log(data.results[i].uri + ' has expired: ' +
+                  data.results[i].metadata[5].exp);
+      // Delete things one at a time
+      deleteOne(data.results[i].uri);
+      var id = data.results[i].uri
+               .slice(0, data.results[i].uri.length - 5)
+               .substring(8);
+      // Extract thing ID because that's what we need to emit
+      deletedArr.push(id);
+    }
+    // Emit all the IDs to players all at once as array
+    io.sockets.emit('thingDeleted', { ids: deletedArr });
   });
-  // 1. clear all users
-  // 2. send alert via socket
-  // 3. create new users
-  // 4. send alert via socket
-}, 5000);
+}, 10000);
 
