@@ -152,8 +152,8 @@ var putOptions = function () {
     },
     body: JSON.stringify(options),
     auth: {
-      user: config.mluser,
-      pass: config.mlpass,
+      user: config.mladminuser,
+      pass: config.mladminpass,
       sendImmediately: false
     }
   }, function (error, response, body) {
