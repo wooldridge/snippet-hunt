@@ -5,10 +5,8 @@ var config = {
   mlversion: '8',
   mlhost:    'localhost',
   mlport:    '8077', // Your app accesses MarkLogic here
-  mladminuser:    'REST-ADMIN-USER',
-  mladminpass:    'REST-ADMIN-PASSWORD'
-  mluser:    'REST-WRITER-USER',
-  mlpass:    'REST-WRITER-PASSWORD'
+  mluser:    'REST-ADMIN-USER',
+  mlpass:    'REST-ADMIN-PASSWORD'
 };
 
 module.exports = config;
