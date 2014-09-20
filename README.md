@@ -31,6 +31,6 @@ versions of Chrome, Firefox, Safari, or IE).
    install` to install browser dependencies.
 9. In the root directory, run `node server` to start the NodeJS
    server to start the application.
-10. In a web browser, open the project: `http://localhost:8055`
+10. In a web browser, open the project: `http://localhost:8066`
 11. When the browser asks for permission to access location information, allow
     it.

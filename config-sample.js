@@ -4,7 +4,7 @@ var config = {
   // MarkLogic server
   mlversion: '8',
   mlhost:    'localhost',
-  mlport:    '8077', // Your app accesses MarkLogic here
+  mlport:    '8066', // Your app accesses MarkLogic here
   mluser:    'REST-WRITER-USER',
   mlpass:    'REST-WRITER-PASSWORD'
 };
