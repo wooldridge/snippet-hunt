@@ -292,13 +292,13 @@ setInterval(function () {
     if (data.total > 0) {
       var rnd = Math.floor(Math.random() * (data.total - 1));
       console.log('will delete: ' + data.results[rnd].uri);
-      deleteOne(data.results[rnd].uri, function () {
-        var id = data.results[rnd].uri
-                 .slice(0, data.results[rnd].uri.length - 5)
-                 .substring(8);
-        console.log('deleted: ' + id);
-        io.sockets.emit('thingDeleted', { id: id });
-      });
+      // deleteOne(data.results[rnd].uri, function () {
+      //   var id = data.results[rnd].uri
+      //            .slice(0, data.results[rnd].uri.length - 5)
+      //            .substring(8);
+      //   console.log('deleted: ' + id);
+      //   io.sockets.emit('thingDeleted', { id: id });
+      // });
     }
   });
   // 1. clear all users
