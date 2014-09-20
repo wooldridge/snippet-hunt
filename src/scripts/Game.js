@@ -198,21 +198,25 @@ APP.Game = function (config, socket) {
                   break;
                 }
               }
-              socket.emit('thingDeleted', { 'id': id });
+              socket.emit('thingDeleted', { 'ids': [ id ] });
           });
       });
 
       socket.on('thingDeleted', function (data) {
-          console.log('thingDeleted received, cycling through things');
-          for (var i = 0; i < things.length; i++) {
-            if (things[i].getId() === data.id) {
-              console.log('thing to hide found, calling things[i].hideMarker()');
-              things[i].hideMarker();
-              var snd = new Audio("audio/error.mp3");
-              snd.play();
-              break;
-            }
+        // data = { ids: ['id1', 'id2' ... 'idn'] }
+        var found = false;
+        console.log('thingDeleted received, cycling through things');
+        for (var i = 0; i < things.length; i++) {
+          if (data.ids.indexOf(things[i].getId()) > -1) {
+            console.log('thing to hide found: ' + things[i].getId());
+            things[i].hideMarker();
+            found = true;
           }
+        }
+        if (found) {
+          var snd = new Audio("audio/error.mp3");
+          snd.play();
+        }
       });
 
       $('#' + config.mapCanvasId).on('scoreChanged', function () {
