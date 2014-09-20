@@ -23,15 +23,14 @@ describe("ConfigMgr", function() {
     lon1: lon1,   // west vert
     lat2: lat2,   // north horiz
     lon2: lon2,   // east vert
-    mapStyle: styleIds[0],
-    numThings: 10
+    mapStyle: styleIds[0]
   };
 
   describe("get", function(done) {
     it("should get a config for Admin", function() {
       var adminConfig = configMgr.get('admin');
       expect(adminConfig.host).to.exist;
-      expect(adminConfig.numThings).to.exist;
+      expect(adminConfig.lat1).to.exist;
       expect(adminConfig.score).to.not.exist;
     });
     it("should get a config for Game", function() {

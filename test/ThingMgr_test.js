@@ -11,7 +11,11 @@ describe("ThingMgr", function() {
     lat2: 37.885454 + 0.0007,
     lon2: -122.063447 + 0.001
   };
+  var type = 'theType';
+  var name = 'theName';
   var value = 7;
+  var exp = '2014-12-31T12:59';
+  var zIndex = 10;
   var thing = {};
   var updatedThing = {};
   var id = '';
@@ -23,8 +27,12 @@ describe("ThingMgr", function() {
     it("should create a Thing and get an ID", function(done) {
       var coords = gameBounds.getRandCoords();
       var createConfig = {
+        type: type,
+        name: name,
         lat: coords.lat,
         lon: coords.lon,
+        exp: exp,
+        zIndex: zIndex,
         value: value
       };
       thingMgr.createThing(createConfig, function (data) {
