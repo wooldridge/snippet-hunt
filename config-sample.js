@@ -1,10 +1,10 @@
 var config = {
   // Node.js server
-  port:  '8055',  // Users access your app here
+  port:  '8066',  // Users access your app here
   // MarkLogic server
   mlversion: '8',
   mlhost:    'localhost',
-  mlport:    '8066', // Your app accesses MarkLogic here
+  mlport:    '8077', // Your app accesses MarkLogic here
   mluser:    'REST-WRITER-USER',
   mlpass:    'REST-WRITER-PASSWORD'
 };
