@@ -114,13 +114,17 @@ APP.Admin = function (config) {
   };
 
   /**
-   * Return number of seconds since Epoch + lifespan value.
-   * This gives us a way to measure when a thing should disappear.
+   * Return expiration date as time since Epoch.
    */
   getExp = function (lifespan) {
-    // lifetime is in seconds
-    var secNow = new Date() / 1000;
-    return Math.floor(secNow + lifespan);
+    // Lifetime is in seconds
+    var secondsNow = new Date() / 1000;
+    // How much should the lifespan randomly deviate?
+    var devRange = lifespan * 0.50;
+    // Calculate the deviation for this thing
+    var dev = Math.floor(Math.random() * devRange - (devRange / 2));
+    console.log('dev: ' + dev + ' devRange: ' + devRange);
+    return Math.floor(secondsNow + lifespan + dev);
   };
 
   /**
