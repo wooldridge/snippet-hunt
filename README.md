@@ -19,18 +19,23 @@ versions of Chrome, Firefox, Safari, or IE).
 2. Start MarkLogic Server.
 3. Set up a MarkLogic database named `argame` using the default settings. You
    can do this at: `http://localhost:8000/appservices/`
-4. Set up a REST server for the `argame` database on port `8077`. You can do
+4. In the `argame` database, set up an Element Range Index for `exp` property.
+5. Set up a REST server for the `argame` database on port `8077`. You can do
    this at: `http://localhost:8000/appservices/`
-5. Set up a MarkLogic user that has `rest-writer` privileges.
-6. Open `config-sample.js` and enter the server settings for your environment.
+6. Set up a MarkLogic user that has `rest-admin` privileges.
+7. Open `config-sample.js` and enter the server settings for your environment.
    Save the file in the root directory as `config.js`.
-7. In the root directory, run `npm install` to load Node.js dependencies.
-8. In the root directory, run `node options` to define search options for
+8. In the root directory, run `npm install` to load Node.js dependencies.
+9. In the root directory, run `node options` to define search options for
    the REST server.
-9. Install bower with `npm install -g bower`. In the root directory, run `bower
+10. Install bower with `npm install -g bower`. In the root directory, run `bower
    install` to install browser dependencies.
-9. In the root directory, run `node server` to start the NodeJS
-   server to start the application.
-10. In a web browser, open the project: `http://localhost:8066`
-11. When the browser asks for permission to access location information, allow
+11. Set the Node.js environment variable:
+    `export NODE_ENV=[DEVELOPMENT|PRODUCTION]`
+12. Install grunt with `npm install -g grunt-cli`. In the root directory, run
+   `grunt` to build the application.
+13. In the root directory, run `node server` to start the NodeJS to start the
+    application.
+14. In a web browser, open the project: `http://localhost:8066`
+15. When the browser asks for permission to access location information, allow
     it.
