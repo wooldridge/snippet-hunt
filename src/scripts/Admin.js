@@ -24,6 +24,7 @@ APP.Admin = function (config) {
 
       // methods
       displayAdmin,
+      getExp,
       postThings,
       removeAllThings,
       removeAllConfigs;
@@ -112,6 +113,15 @@ APP.Admin = function (config) {
     });
   };
 
+  /**
+   * Return number of seconds since Epoch + lifespan value.
+   * This gives us a way to measure when a thing should disappear.
+   */
+  getExp = function (lifespan) {
+    // lifetime is in seconds
+    var secNow = new Date() / 1000;
+    return Math.floor(secNow + lifespan);
+  };
 
   /**
    * Post things to db.
@@ -128,7 +138,7 @@ APP.Admin = function (config) {
         lat: coords.lat,
         lon: coords.lon,
         value: thingsTypes[numTypes-1].value,
-        exp: thingsTypes[numTypes-1].exp,
+        exp: getExp(thingsTypes[numTypes-1].lifespan),
         zIndex: thingsTypes[numTypes-1].zIndex },
       function (thing) {
         var id = thing.getId();

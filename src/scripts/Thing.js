@@ -69,7 +69,7 @@ APP.Thing = function (config) {
     lon = config.lon;
     value = config.value || 1;
     zIndex = config.zIndex || 1;
-    exp = config.lifetime || 0; // @todo fix, should convert lifetime to data str
+    exp = config.exp || 0;
 
     icon = {
       size: new google.maps.Size(40, 40),
