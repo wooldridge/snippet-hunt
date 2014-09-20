@@ -64,10 +64,10 @@ APP.Config = function (myLat, myLon) {
       },
       things: {
         types: [
-          {type: 'snippet', name: 'Snippet', value: 10, lifespan: 5, defaultNum: 100, zIndex: 1},
-          {type: 'gary', name: 'Gary', value: 100, lifespan: 10, defaultNum: 1, zIndex: 10},
-          {type: 'chris', name: 'Chris', value: 100, lifespan: 10, defaultNum: 1, zIndex: 10},
-          {type: 'david', name: 'David', value: 100, lifespan: 10, defaultNum: 1, zIndex: 10}
+          {type: 'snippet', name: 'Snippet', value: 10, lifespan: 120, defaultNum: 100, zIndex: 1},
+          {type: 'gary', name: 'Gary', value: 100, lifespan: 600, defaultNum: 1, zIndex: 10},
+          {type: 'chris', name: 'Chris', value: 100, lifespan: 600, defaultNum: 1, zIndex: 10},
+          {type: 'david', name: 'David', value: 100, lifespan: 600, defaultNum: 1, zIndex: 10}
         ]
       }
     };
