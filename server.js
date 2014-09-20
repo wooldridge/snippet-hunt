@@ -268,18 +268,46 @@ var getAllThings = function (callback) {
   });
 }
 
+// Get expired things: is current > exp date?
+var getExpThings = function (current, callback) {
+  var url = 'http://' + config.mlhost + ':' + config.mlport + '/v1/search';
+      url += '?q=exp LT ' + current + '&format=json&options=argame';
+      url += '&directory=/things/&pageLength=999';// + config.numThings;
+  console.log('getExpThings url: ' + url);
+  request({
+    method: "GET",
+    url: url,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    auth: auth
+  }, function (error, response, body) {
+    if (response) {
+      if ((response.statusCode >= 200) && (response.statusCode < 300)) {
+        //res.set('Content-Type', 'application/json');
+        console.log('getExpThings success: ' + JSON.parse(body).total);
+        //res.send(JSON.parse(body));
+        if (callback) {
+          callback(JSON.parse(body));
+        }
+      } else {
+        console.log('Error: '+ response.statusCode);
+        console.log(body);
+        //res.status(response.statusCode).send();
+      }
+    } else {
+      console.log('Error: No response object');
+    }
+  });
+}
+
 var io = require('socket.io').listen(app.listen(config.port));
 console.log('Express started on port ' + config.port);
-
 io.sockets.on('connection', function (socket) {
-
   console.log('connection established');
-
   socket.on('thingDeleted', function (data) {
     io.sockets.emit('thingDeleted', data);
   });
-
-
 });
 
 var User = require('./src/scripts/User');
@@ -289,6 +317,7 @@ setInterval(function () {
   var testUser = new User();
   //console.log(testUser.getScore());
   getAllThings(function (data) {
+    var current = Math.floor(new Date() / 1000);
     if (data.total > 0) {
       var rnd = Math.floor(Math.random() * (data.total - 1));
       console.log('will delete: ' + data.results[rnd].uri);
@@ -299,7 +328,18 @@ setInterval(function () {
       //   console.log('deleted: ' + id);
       //   io.sockets.emit('thingDeleted', { id: id });
       // });
+      var count = 0;
+      for (var i = 0; i < data.results.length; i++) {
+        if (data.results[i].metadata[5].exp < current) {
+          console.log(data.results[i].uri + ' has expired: ' + data.results[i].metadata[5].exp);
+        }
+      }
     }
+  });
+  var current = Math.floor(new Date() / 1000);
+  console.log('current: ' + current);
+  getExpThings(current, function (data) {
+    console.log('getExpThings: ' + data.total);
   });
   // 1. clear all users
   // 2. send alert via socket
