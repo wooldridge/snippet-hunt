@@ -117,7 +117,7 @@ APP.Admin = function (config) {
    * Return expiration date as time since Epoch.
    */
   getExp = function (lifespan) {
-    // Lifetime is in seconds
+    // Lifespan is in seconds
     var secondsNow = new Date() / 1000;
     // How much should the lifespan randomly deviate?
     var devRange = lifespan * 0.50;
@@ -217,14 +217,12 @@ APP.Admin = function (config) {
       APP.configMgr.saveConfig(configToSave, function (id) {
         localStorage.setItem('gameId', id);
       });
-    });
-    removeAllThings();
-
-    setTimeout(function () {
       $('#adminForm button').html("Game Saved");
       $('#adminForm button').prop('disabled', true);
       $('#gameLink').show();
-    }, 800);
+    });
+    removeAllThings();
+
     return false;
   });
 
