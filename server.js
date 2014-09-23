@@ -312,26 +312,26 @@ io.sockets.on('connection', function (socket) {
 
 var User = require('./src/scripts/User');
 
-setInterval(function () {
-  var current = Math.floor(new Date() / 1000);
-  console.log('current: ' + current);
-  getExpThings(current, function (data) {
-    console.log('getExpThings: ' + data.total);
-    // To store IDs for things that have expired and need deletion
-    var deletedArr = [];
-    for (var i = 0; i < data.results.length; i++) {
-      console.log(data.results[i].uri + ' has expired: ' +
-                  data.results[i].metadata[5].exp);
-      // Delete things one at a time
-      deleteOne(data.results[i].uri);
-      var id = data.results[i].uri
-               .slice(0, data.results[i].uri.length - 5)
-               .substring(8);
-      // Extract thing ID because that's what we need to emit
-      deletedArr.push(id);
-    }
-    // Emit all the IDs to players all at once as array
-    io.sockets.emit('thingDeleted', { ids: deletedArr });
-  });
-}, 10000);
+// setInterval(function () {
+//   var current = Math.floor(new Date() / 1000);
+//   console.log('current: ' + current);
+//   getExpThings(current, function (data) {
+//     console.log('getExpThings: ' + data.total);
+//     // To store IDs for things that have expired and need deletion
+//     var deletedArr = [];
+//     for (var i = 0; i < data.results.length; i++) {
+//       console.log(data.results[i].uri + ' has expired: ' +
+//                   data.results[i].metadata[5].exp);
+//       // Delete things one at a time
+//       deleteOne(data.results[i].uri);
+//       var id = data.results[i].uri
+//                .slice(0, data.results[i].uri.length - 5)
+//                .substring(8);
+//       // Extract thing ID because that's what we need to emit
+//       deletedArr.push(id);
+//     }
+//     // Emit all the IDs to players all at once as array
+//     io.sockets.emit('thingDeleted', { ids: deletedArr });
+//   });
+// }, 10000);
 
