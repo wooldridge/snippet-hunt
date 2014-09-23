@@ -50,6 +50,7 @@ APP.Config = function (myLat, myLon) {
       },
       game: {
         mapCanvasId: 'map-canvas',
+        mapStyle: 'midnightCommander',
         scoreId: 'score',
         userId: 'username',
         playRadius: 30 // @todo make configurable in Marker

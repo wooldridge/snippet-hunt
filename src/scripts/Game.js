@@ -48,7 +48,7 @@ APP.Game = function (config, socket) {
 
   mapConfig = {
     id: config.mapCanvasId,
-    style: config.mapStyle,
+    style: config.mapStyle || 'midnightCommander', // @todo fix saved config
     mapStyles: config.mapStyles,
     myLat: config.myLat,
     myLon: config.myLon,
@@ -152,6 +152,7 @@ APP.Game = function (config, socket) {
       displayScore();
       //displayUser();
       map.showMap();
+      // @todo This is a fix for Safari not
       currZoom = map.getMap().getZoom();
       map.showPlayer();
       thingMgr.getAllThings(function (results) {
