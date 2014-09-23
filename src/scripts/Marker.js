@@ -292,6 +292,7 @@ APP.Marker = function (config) {
      * @param map The APP.Map object
      */
     makeInteractive = function (map) {
+      var currName = getName();
       google.maps.event.addListener(googleMarker, 'click', function(ev) {
         var player = map.getPlayer();
         var dist = getDistBetwPoints(
@@ -303,7 +304,7 @@ APP.Marker = function (config) {
         googleMarker.setIcon(getMarkerIconActive());
         var msg;
         if (dist * 1000 > limit) {
-          msg = getName() + ' out of range';
+          msg = currName + ' out of range';
           var sndE = new Audio("audio/error2.mp3");
           sndE.play();
           setTimeout(function() {
@@ -311,7 +312,7 @@ APP.Marker = function (config) {
           }, 500);
           $('#msg').show().html(msg).delay(1000).fadeOut(1000);
         } else {
-          msg = 'You got ' + getName() + '!';
+          msg = 'You got ' + currName + '!';
           var sndO = new Audio("audio/ok2.mp3");
           sndO.play();
           setTimeout(function() {
@@ -379,4 +380,6 @@ APP.Marker = function (config) {
 
 };
 
-module.exports = APP.Marker;
+if (typeof window === 'undefined') {
+    module.exports = APP.Marker;
+}
