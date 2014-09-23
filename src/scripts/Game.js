@@ -53,7 +53,7 @@ APP.Game = function (config, socket) {
     myLat: config.myLat,
     myLon: config.myLon,
     mapOptions: {
-      zoom: 18,
+      zoom: 19,
       maxZoom: 20,
       minZoom: 17,
       panControl: false,

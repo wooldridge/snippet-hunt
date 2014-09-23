@@ -52,7 +52,7 @@ APP.Config = function (myLat, myLon) {
         mapCanvasId: 'map-canvas',
         scoreId: 'score',
         userId: 'username',
-        playRadius: 20
+        playRadius: 30 // @todo make configurable in Marker
         // mapConfig: {
         //   //style: config.mapStyle,
         //   myLat: myLat,

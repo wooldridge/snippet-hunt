@@ -114,9 +114,10 @@ APP.Map = function (config) {
       showMap();
     }
     var playerConfig = {
-        radius: 20,
+        radius: 30,
         fillOpacity: 0.1,
-        strokeOpacity: 0.2
+        strokeOpacity: 0.6,
+        strokeColor: 'yellow'
     };
     player = new GeolocationMarker(map, {}, playerConfig);
 

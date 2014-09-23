@@ -72,7 +72,7 @@ APP.Marker = function (config) {
     zIndex = config.zIndex || 1;
     type = config.type || '';
     value = config.value || 1;
-    limit = config.limit || 20;
+    limit = config.limit || 30; // @todo currently not passed in
 
     icon = {
       size: new google.maps.Size(40, 40),
@@ -303,7 +303,7 @@ APP.Marker = function (config) {
         );
         googleMarker.setIcon(getMarkerIconActive());
         var msg;
-        if (dist * 1000 > limit) {
+        if (dist * 1000 > limit) { // @todo hardcoded limit, fix
           msg = currName + ' out of range';
           var sndE = new Audio("audio/error2.mp3");
           sndE.play();
