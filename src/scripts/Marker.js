@@ -54,7 +54,7 @@ APP.Marker = function (config) {
         deg2rad,
         makeInteractive,
         hideMarker,
-        setMarkerIcon;
+        setIcon;
 
     // initialize properties
     config = config || {};
@@ -338,19 +338,8 @@ APP.Marker = function (config) {
         console.log('marker hidden: ' + getId());
     };
 
-    setMarkerIcon = function () {
-      if (size === 'small') {
-        marker.setIcon(markerIconSmall);
-      } else if (size === 'large') {
-        marker.setIcon(markerIcon);
-      } else if (size === 'tiny') {
-        marker.setIcon(markerIconTiny);
-      }
-      if (size === 'tiny') {
-        marker.setClickable(false);
-      } else {
-        marker.setClickable(true);
-      }
+    setIcon = function (icon) {
+      marker.setIcon(icon);
     };
 
     // Public API
@@ -375,7 +364,7 @@ APP.Marker = function (config) {
         showMarker: showMarker,
         makeInteractive: makeInteractive,
         hideMarker: hideMarker,
-        setMarkerIcon: setMarkerIcon
+        setIcon: setIcon
     };
 
 };
