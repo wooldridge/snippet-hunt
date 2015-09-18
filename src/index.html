@@ -141,7 +141,8 @@ $(function () {
       position.coords.longitude
     );
     // For realtime communication betw server and players
-    var socket = io.connect('http://' + APP.configMgr.getHost());
+    var socket = io.connect('http://' + APP.configMgr.getHost() +
+                            ':' + APP.configMgr.getPort());
     //var gameId = localStorage.getItem('gameId');
     //APP.configMgr.getSavedConfig(gameId, function (savedConfig) {
       APP.game = new APP.Game(
