@@ -298,8 +298,8 @@ APP.Marker = function (config) {
         var dist = getDistBetwPoints(
           getLat(),
           getLon(),
-          player.position.k,
-          player.position.B
+          player.position.lat(),
+          player.position.lng()
         );
         googleMarker.setIcon(getMarkerIconActive());
         var msg;
