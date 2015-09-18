@@ -141,12 +141,17 @@ options.options.constraint.push(constr);
 
 // Log to console for debugging
 console.log(JSON.stringify(options));
+console.log(JSON.stringify(config));
+
+var url = 'http://' + config.mlhost + ':' + config.mlport + '/v1/config/query/' + optName;
+console.log('URL: ' + url);
 
 // Send options PUT
 var putOptions = function () {
   request({
     method: 'PUT',
-    url: 'http://' + config.mlhost + ':' + config.mlport + '/v1/config/query/' + optName,
+    //url: 'http://' + config.mlhost + ':' + config.mlport + '/v1/config/query/' + optName,
+    url: url,
     headers: {
       'Content-Type': 'application/json'
     },
@@ -166,6 +171,7 @@ var putOptions = function () {
       }
     } else {
       console.log('Error: No response object');
+      console.log(JSON.stringify(response));
     }
   });
 }
