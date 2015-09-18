@@ -12,8 +12,8 @@ APP.Config = function (myLat, myLon) {
 
     var config = {
       global: {
-        //host: '10.0.0.8',
-        host: 'localhost',
+        host: '10.0.0.14',
+        //host: 'localhost',
         //host: '172.16.12.136',
         port: 8066,
         fileName: 'config.json',
