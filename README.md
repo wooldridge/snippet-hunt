@@ -14,7 +14,7 @@ versions of Chrome, Firefox, Safari, or IE).
 
 <img src="https://raw.githubusercontent.com/wooldridge/snippet-hunt/master/src/images/player-snippet-map.png" alt="Snippet Hunt" style="width: 538px;"/>
 
-<em>Collecting snippets and MarkLogic executives scores a player points.<em>
+<em>Collecting snippets and MarkLogic executives scores a player points.</em>
 
 ## Setting Up the Game
 
