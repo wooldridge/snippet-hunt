@@ -12,6 +12,7 @@ scripting.
 A web browser with HTML5 geolocation capabilities is require to play (e.g., new
 versions of Chrome, Firefox, Safari, or IE).
 
+<img src="https://raw.githubusercontent.com/wooldridge/snippet-hunt/master/src/images/player-snippet-map.png" alt="Snippet Hunt" style="width: 538px;"/>
 
 ## Setting Up the Game
 
